@@ -1,0 +1,4 @@
+name: authentication
+author: Shock
+version: 1.0
+main: br.com.hevermc.authentication.Authentication

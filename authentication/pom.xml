@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hevermc</groupId>
-	<artifactId>commons</artifactId>
+	<artifactId>authentication</artifactId>
 	<version>1.0</version>
 	<dependencies>
 		<dependency>
@@ -33,12 +33,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>net.md-5</groupId>
-			<artifactId>bungeecord-api</artifactId>
-			<version>1.8-SNAPSHOT</version>
-		</dependency>
-
 
 	</dependencies>
 
@@ -48,10 +42,6 @@
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-		</repository>
-		<repository>
-			<id>bungeecord-repo</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
 		</repository>
 
 	</repositories>
