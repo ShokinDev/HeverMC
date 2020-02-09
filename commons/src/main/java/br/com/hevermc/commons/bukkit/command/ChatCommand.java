@@ -12,7 +12,7 @@ public class ChatCommand extends HeverCommand {
 		super("chat");
 	}
 
-	public boolean chat = true;
+	public static boolean chat = true;
 
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {

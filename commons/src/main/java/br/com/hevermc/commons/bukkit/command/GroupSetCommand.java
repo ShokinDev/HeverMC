@@ -2,6 +2,7 @@ package br.com.hevermc.commons.bukkit.command;
 
 import java.util.Arrays;
 
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -9,6 +10,7 @@ import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.account.loader.PlayerLoader;
 import br.com.hevermc.commons.bukkit.command.commons.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
+import br.com.hevermc.commons.enums.Tags;
 
 public class GroupSetCommand extends HeverCommand {
 
@@ -24,7 +26,7 @@ public class GroupSetCommand extends HeverCommand {
 			HeverPlayer hp = toHeverPlayer(p);
 			if (hasGroup(p, Groups.GERENTE, true)) {
 				if (args.length < 2) {
-					p.sendMessage("§cVocê deve usar §c§l/groupset <nickname> <grupo>");
+					p.sendMessage("§aVocê deve usar §e/groupset <nickname> <grupo>");
 				} else {
 					Groups togroup = Groups.getGroup(args[1]);
 					HeverPlayer htarget;
@@ -44,6 +46,11 @@ public class GroupSetCommand extends HeverCommand {
 						p.sendMessage("§cVocê não pode alterar seu propío grupo!");
 					} else {
 						htarget.setGroup(togroup);
+						if (Bukkit.getPlayer(args[0]) != null) {
+							htarget.setTag(Tags.getTags(togroup));
+						} else {
+
+						}
 						p.sendMessage("§aVocê alterou o cargo de §b" + htarget.getName() + " §apara §b"
 								+ htarget.getGroup().getName() + " §acom sucesso!");
 					}

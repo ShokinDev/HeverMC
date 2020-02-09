@@ -1,19 +1,16 @@
-package br.com.hevermc.commons.bukkit.account;
+package br.com.hevermc.commons.bungee.account;
 
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import br.com.hevermc.commons.bukkit.Commons;
-import br.com.hevermc.commons.bukkit.api.ReflectionAPI;
+import br.com.hevermc.commons.bungee.Commons;
+import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Ranks;
 import br.com.hevermc.commons.enums.Tags;
 import lombok.Getter;
 import lombok.Setter;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @Getter
 public class HeverPlayer {
-
 	String name;
 	@Setter
 	String ip;
@@ -27,12 +24,13 @@ public class HeverPlayer {
 	long firstLogin;
 	@Setter
 	long lastLogin;
+	@Setter
 	Groups group;
 	@Setter
 	Ranks rank;
 	Tags tag;
 
-	public HeverPlayer(Player p) {
+	public HeverPlayer(ProxiedPlayer p) {
 		this.name = p.getName().toLowerCase();
 		this.ip = p.getAddress().getHostName();
 	}
@@ -41,11 +39,15 @@ public class HeverPlayer {
 		this.name = name;
 		this.ip = ip;
 	}
+	public boolean groupIsLarger(ProxiedPlayer p, Groups group) {
+		HeverPlayer hp = new PlayerLoader(p).getHP();
+		if (p.getServer().getInfo().getName().equals("login"))
+			return false;
+		if (hp.getGroup().ordinal() >= group.ordinal())
+			return true;
 
-	public void setGroup(Groups group) {
-		this.group = group;
-		Commons.getManager().getBungeeChannel().sendPluginMessage(Bukkit.getPlayer("Shokiin"),
-				"updateGroup(" + this.name + ",groupTo:" + group.toString() + ")", "BungeeCord");
+		return false;
+
 	}
 
 	public void load() {
@@ -65,8 +67,7 @@ public class HeverPlayer {
 					Commons.getManager().getSQLManager().getString("hever_ranking", "name", "ranking", getName()));
 			Commons.getManager().log("Conta de " + this.name + " foi carregada!");
 		} catch (Exception e) {
-			Commons.getManager().log("Não foi possivel carregar a conta de " + this.name + "!");
-			e.printStackTrace();
+			Commons.getManager().log("Não foi possivel carregar a conta de " + this.name);
 		}
 	}
 
@@ -85,14 +86,10 @@ public class HeverPlayer {
 			Commons.getManager().getSQLManager().updateString("hever_ranking", "ranking", "name", getRank().toString(),
 					getName());
 			Commons.getManager().log("Conta de " + this.name + " foi atualizada!");
-
-			Commons.getManager().getBungeeChannel().sendPluginMessage(Bukkit.getPlayer("Shokiin"),
-					"updateAll(" + this.name + ")", "BungeeCord");
 		} catch (Exception e) {
 			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);
 		}
 	}
-
 	public void unload() {
 		try {
 
@@ -109,46 +106,6 @@ public class HeverPlayer {
 		} catch (Exception e) {
 			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);
 		}
-	}
-
-	public boolean groupIsLarger(Groups group) {
-		if (getGroup().ordinal() >= group.ordinal())
-			return true;
-		return false;
-	}
-
-	public void setTag(Tags tag) {
-		Player p = Bukkit.getPlayer(name);
-		this.tag = tag;
-		if (p != null) {
-			if (tag != Tags.MEMBRO) {
-				ReflectionAPI.tag(p, tag.getPrefix() + " " + tag.getColor(),
-						" §7(" + getRank().getColor() + getRank().getSymbol() + "§7)", tag.getOrdem());
-			} else {
-				ReflectionAPI.tag(p, tag.getColor(), " §7(" + getRank().getColor() + getRank().getSymbol() + "§7)",
-						tag.getOrdem());
-
-			}
-		}
-	}
-
-	public void setTag_Alternative(Player target, Tags tag) {
-		Player p = Bukkit.getPlayer(name);
-		this.tag = tag;
-		if (p != null) {
-			if (tag != Tags.MEMBRO) {
-				ReflectionAPI.tag(target, p, tag.getPrefix() + " " + tag.getColor(),
-						" §7(" + getRank().getColor() + getRank().getSymbol() + "§7)", tag.getOrdem());
-			} else {
-				ReflectionAPI.tag(target, p, tag.getColor(),
-						" §7(" + getRank().getColor() + getRank().getSymbol() + "§7)", tag.getOrdem());
-
-			}
-		}
-	}
-
-	public String getSuffix() {
-		return " §7(" + getRank().getColor() + getRank().getSymbol() + "§7)";
 	}
 
 }

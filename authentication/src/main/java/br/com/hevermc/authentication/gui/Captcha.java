@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public class Captcha {
 
@@ -15,13 +16,20 @@ public class Captcha {
 
 		int captchablock = new Random().nextInt(inv.getSize());
 		ItemStack is = new ItemStack(Material.OBSIDIAN);
-		
-		for (int i = 26; i > 0;i--)
-			inv.setItem(i, is);
-		
-		inv.setItem(captchablock, new ItemStack(Material.DIAMOND_BLOCK));
+		ItemMeta im = is.getItemMeta();
+		im.setDisplayName("§cObsidian");
+		is.setItemMeta(im);
 
+		for (int i = 0; i < inv.getSize(); i++)
+			inv.setItem(i, is);
+
+		ItemStack is2 = new ItemStack(Material.DIAMOND_BLOCK);
+		ItemMeta im2 = is2.getItemMeta();
+		im2.setDisplayName("§aBloco de Diamante");
+		is2.setItemMeta(im2);
 		
+		inv.setItem(captchablock, is2);
+
 		p.openInventory(inv);
 	}
 

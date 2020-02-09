@@ -1,4 +1,4 @@
-package br.com.hevermc.commons.bukkit.api;
+package br.com.hevermc.authentication.api;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -60,7 +60,6 @@ public class ReflectionAPI {
 		}
 		return null;
 	}
-
 
 	public static void tag(Player p, String prefix, String suffix, String ordem) {
 		try {

@@ -2,8 +2,12 @@ package br.com.hevermc.authentication.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import br.com.hevermc.authentication.Authentication;
+import br.com.hevermc.authentication.api.BarUtil;
 import br.com.hevermc.authentication.api.LoginPlayer;
+import br.com.hevermc.authentication.api.ReflectionAPI;
 import br.com.hevermc.authentication.api.loader.PlayerLoader;
 import br.com.hevermc.authentication.command.commons.HeverCommand;
 
@@ -35,7 +39,29 @@ public class RegisterCommand extends HeverCommand {
 					lp.setPin(Integer.parseInt(args[2]));
 					lp.setLogged(true);
 					lp.update();
+					BarUtil.updateBar(p, "§a§l§k!!!§f§l AGORA VOCÊ ESTÁ §e§lAUTENTICADO §a§l§k!!!", 50);
 					p.sendMessage("§aVocê foi registrado com sucesso!");
+					ReflectionAPI.sendTitle(p, "§3§lAUTENTICADO", "§fAgora você está §alogado§f!", 15, 15,15);
+
+					new BukkitRunnable() {
+						
+						@Override
+						public void run() {
+							if (!p.isOnline() || p == null) {
+								cancel();
+								return;
+							}
+							p.sendMessage("§aVocê está sendo conectado ao §blobby§f!");
+							Authentication.getManager().getBungeeChannel().connect(p, "lobby");
+						}
+					}.runTaskTimer(Authentication.getInstance(), 15L, 15L);
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							BarUtil.removeBar(p);
+	
+						}
+					}.runTaskLater(Authentication.getInstance(), 30L);
 				}
 			}
 		}

@@ -72,32 +72,38 @@ public class ScoreboardManager {
 		}
 		return cor1 + "LOGIN";
 	}
-	
+
 	public void build(Player p) {
 		Scoreboard score = Bukkit.getScoreboardManager().getNewScoreboard();
 		Objective obj = score.registerNewObjective("lobby", "score");
-		
+
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
 		obj.setDisplayName("§6§lHEVER§f§lMC");
 		LineAdder add = new LineAdder(score, obj);
 
-		add.addLine("  ", " §a  ", "  §e§f ", 6);
+		add.addLine("  ", "§f              ", " ", 6);
 		add.addLine("  ", " §fVocê está no servidor  ", " ", 5);
 		add.addLine("  ", " §fde autenticação, para  ", " ", 4);
 		add.addLine("  ", " §fprosseguir ao §alobby  ", " ", 3);
 		add.addLine("  ", " §fsiga os passos descritos ", " ", 2);
 		add.addLine("  ", " §fem seu chat! ", " ", 1);
 		add.addLine("  ", " §a  ", " ", 0);
-		
+		add.addLine("", " §ahevermc", ".com.br ", -1);
+
 		p.setScoreboard(score);
-		
+
 		new BukkitRunnable() {
-			
+
 			@Override
 			public void run() {
+				if (p == null || !p.isOnline()) {
+					cancel();
+					return;
+				}
+				
 				obj.setDisplayName(effect());
 			}
-		}.runTaskTimer(Authentication.getInstace(), 0, 3);
+		}.runTaskTimer(Authentication.getInstance(), 0, 3);
 	}
 
 }

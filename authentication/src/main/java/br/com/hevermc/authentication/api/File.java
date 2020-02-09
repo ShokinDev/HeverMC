@@ -16,7 +16,7 @@ public class File {
 	}
 
 	public void setup() {
-		file = new java.io.File(Authentication.getInstace().getDataFolder(), name + ".yml");
+		file = new java.io.File(Authentication.getInstance().getDataFolder(), name + ".yml");
 		if (file.exists()) {
 			file.mkdir();
 		} else {

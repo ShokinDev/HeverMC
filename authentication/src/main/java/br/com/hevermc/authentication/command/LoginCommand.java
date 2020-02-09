@@ -2,8 +2,13 @@ package br.com.hevermc.authentication.command;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import br.com.hevermc.authentication.Authentication;
+import br.com.hevermc.authentication.api.BarUtil;
+import br.com.hevermc.authentication.api.BungeeChannelApi;
 import br.com.hevermc.authentication.api.LoginPlayer;
+import br.com.hevermc.authentication.api.ReflectionAPI;
 import br.com.hevermc.authentication.api.loader.PlayerLoader;
 import br.com.hevermc.authentication.command.commons.HeverCommand;
 
@@ -30,7 +35,31 @@ public class LoginCommand extends HeverCommand {
 				} else {
 					lp.setLogged(true);
 					lp.update();
+					BarUtil.updateBar(p, "§a§l§k!!!§f§l AGORA VOCÊ ESTÁ §e§lAUTENTICADO §a§l§k!!!", 50);
 					p.sendMessage("§aVocê foi autenticado com sucesso!");
+					ReflectionAPI.sendTitle(p, "§3§lAUTENTICADO", "§fAgora você está §alogado§f!", 15, 15, 15);
+		
+					new BukkitRunnable() {
+
+						@Override
+						public void run() {
+							if (!p.isOnline() || p == null) {
+								cancel();
+								System.out.println("[DEBUG] redirect to lobby canceled");
+								return;
+							}
+							p.sendMessage("§aVocê está sendo conectado ao §blobby§a!");
+							new BungeeChannelApi(Authentication.getInstance()).connect(p, "lobby");
+						}
+					}.runTaskTimer(Authentication.getInstance(), 0, 35L);
+					new BukkitRunnable() {
+						@Override
+						public void run() {
+							BarUtil.removeBar(p);
+
+						}
+					}.runTaskLater(Authentication.getInstance(), 30L);
+		
 				}
 			}
 		}

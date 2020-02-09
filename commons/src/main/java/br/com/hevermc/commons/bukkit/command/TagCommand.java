@@ -66,7 +66,7 @@ public class TagCommand extends HeverCommand {
 				}
 				p.spigot().sendMessage(a);
 			} else {
-				Tags tag = Tags.getTags(args[0]);
+				Tags tag = Tags.getTags(Groups.getGroup(args[0]));
 				if (tag == null) {
 					p.sendMessage("§cEsta tag não existe!");
 				} else
@@ -77,7 +77,7 @@ public class TagCommand extends HeverCommand {
 				} else 
 					if (hasGroup(p, tag.getGroup(), true)) {
 						hp.setTag(tag);
-						p.sendMessage("§aVocê alterou sua tag para " + tag.getPrefix() + "§a!");
+						p.sendMessage("§aVocê alterou sua tag para " + tag.getColor() + tag.getGroup().getName() + "§a!");
 					}
 				}
 			}

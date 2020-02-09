@@ -1,5 +1,6 @@
 package br.com.hevermc.authentication.events;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -8,8 +9,11 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,7 +22,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.hevermc.authentication.Authentication;
+import br.com.hevermc.authentication.api.BarUtil;
 import br.com.hevermc.authentication.api.LoginPlayer;
+import br.com.hevermc.authentication.api.ReflectionAPI;
 import br.com.hevermc.authentication.api.loader.PlayerLoader;
 import br.com.hevermc.authentication.gui.Captcha;
 import br.com.hevermc.authentication.score.ScoreboardManager;
@@ -32,23 +38,43 @@ public class GeneralEvents implements Listener {
 		final LoginPlayer lp = new PlayerLoader(p).load().lp();
 		new ScoreboardManager().build(p);
 		p.teleport(p.getWorld().getSpawnLocation());
+		p.getInventory().clear();
+		p.setMaxHealth(4);
+		p.setFoodLevel(20);
+		BarUtil.setBar(p, (lp.isRegistred() ? "§a§l§k!!!§f§l USE: §e§l/LOGIN <SENHA> §A§L§K!!!"
+				: "§a§l§k!!!§f§l USE: §e§l/REGISTER <SENHA> <SENHA> §A§L§K!!!"), 100);
+		ReflectionAPI.tab(p,
+				"\n§6§lHEVER§f§lMC\n", "\n§fTwitter: §e@HeverNetwork_ §7| §fDiscord: §ediscord.hevermc.com.br §7| §fSite: §ewww.hevermc.com.br\n§fCaso tenha algum problema visite nosso §eDiscord§f!\n");
+		for (Entity entitys : p.getWorld().getEntities()) {
+			if (!(entitys instanceof Player)) {
+				entitys.remove();
+			}
+		}
 		new BukkitRunnable() {
 
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
-
 				new Captcha(p);
 			}
-		}.runTaskLater(Authentication.getInstace(), 5l);
+		}.runTaskLater(Authentication.getInstance(), 5l);
 		new BukkitRunnable() {
 
 			public void run() {
 				if (!lp.isCaptcha()) {
 					p.kickPlayer("§cVocê demorou de mais para efetuar o captcha!");
+				} else {
+					new BukkitRunnable() {
+
+						@Override
+						public void run() {
+							if (!lp.isLogged())
+								p.kickPlayer("§cVocê demorou de mais para logar!");
+
+						}
+					}.runTaskLater(Authentication.getInstance(), 150L);
 				}
 			}
-		}.runTaskLater(Authentication.getInstace(), 150L);
+		}.runTaskLater(Authentication.getInstance(), 150L);
 	}
 
 	@EventHandler
@@ -68,11 +94,15 @@ public class GeneralEvents implements Listener {
 
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					new Captcha(p);
 				}
-			}.runTaskLater(Authentication.getInstace(), 3l);
+			}.runTaskLater(Authentication.getInstance(), 3l);
 		}
+	}
+
+	@EventHandler
+	public void onFood(FoodLevelChangeEvent e) {
+		e.setCancelled(true);
 	}
 
 	@EventHandler
@@ -101,7 +131,7 @@ public class GeneralEvents implements Listener {
 							cancel();
 						}
 					}
-				}.runTaskTimer(Authentication.getInstace(), 0, 30L);
+				}.runTaskTimer(Authentication.getInstance(), 0, 30L);
 
 			} else {
 				p.kickPlayer("§cVocê errou o captcha!");
@@ -116,6 +146,11 @@ public class GeneralEvents implements Listener {
 
 	@EventHandler
 	public void onBlock(BlockBreakEvent e) {
+		e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onChat(AsyncPlayerChatEvent e) {
 		e.setCancelled(true);
 	}
 
@@ -144,10 +179,14 @@ public class GeneralEvents implements Listener {
 	public void onSpawnEntity(EntitySpawnEvent e) {
 		e.setCancelled(true);
 	}
+
 	@EventHandler
-	
-	public void onCancelCommands() {
-		
+	public void onCancelCommands(PlayerCommandPreprocessEvent e) {
+		if (!(e.getMessage().toLowerCase().startsWith("/register")
+				|| e.getMessage().toLowerCase().startsWith("/login"))) {
+			e.getPlayer().sendMessage("§cVocê não pode executar este tipo de ação aqui!");
+			e.setCancelled(true);
+		}
 	}
 
 }
