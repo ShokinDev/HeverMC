@@ -86,16 +86,17 @@ public class ScoreboardManager {
 		obj.setDisplayName("§6§lHEVER§f§lMC");
 		LineAdder add = new LineAdder(score, obj);
 
-		add.addLine("  ", "§f              ", " ", 8);
-		add.addLine(" ", "§fGrupo: ", "", 7);
-		add.addLine(" ", "§fRank: ", "", 6);
-		add.addLine("  ", " §a  ", "", 5);
-		add.addLine(" ", "§fCash: ", "", 4);
-		add.addLine("  ", " §a  ", " ", 3);
+		add.addLine("  ", "§f              ", " ", 9);
+		add.addLine(" ", "§fGrupo: ", "", 8);
+		add.addLine(" ", "§fRank: ", "", 7);
+		add.addLine("  ", "§f       §a   ", " ", 6);
+		add.addLine(" ", "§fCash: ", "", 5);
+		add.addLine(" ", "§fExperiência: ", "", 4);
+		add.addLine(" §a ", "§f       §b   ", " ", 3);
 		add.addLine(" ", "§fOnline: ", "", 2);
 		add.addLine(" ", "§fLobby: ", "§e#1", 1);
 		add.addLine("  ", " §a  ", "", 0);
-		add.addLine("", "§ahevermc", ".com.br ", -1);
+		add.addLine("§awww.", "hevermc", ".com.br ", -1);
 
 		p.setScoreboard(score);
 
@@ -109,6 +110,7 @@ public class ScoreboardManager {
 				}
 				
 				obj.setDisplayName(effect());
+				updateInfos(p);
 			}
 		}.runTaskTimer(Lobby.getInstance(), 0, 3);
 	}
@@ -117,14 +119,17 @@ public class ScoreboardManager {
 		HeverPlayer hp = new PlayerLoader(p).load().getHP();
 		Scoreboard score = p.getScoreboard();
 		
-		Team group = score.getTeam("line7");
+		Team group = score.getTeam("line8");
 		group.setSuffix(Tags.getTags(hp.getGroup()).getColor() + hp.getGroup().getName());
 		
-		Team rank = score.getTeam("line6");
+		Team rank = score.getTeam("line7");
 		rank.setSuffix(hp.getRank().getColor() + hp.getRank().toString());
 
-		Team cash = score.getTeam("line4");
+		Team cash = score.getTeam("line5");
 		cash.setSuffix("§3" + hp.getCash());
+		
+		Team xp = score.getTeam("line4");
+		xp.setSuffix("§a" + hp.getXp());
 
 		Team online = score.getTeam("line2");
 		Commons.getManager().getBungeeChannel().getPlayerCount("ALL").whenComplete((result, error) -> {

@@ -15,7 +15,7 @@ public class Commons extends Plugin {
 	@Override
 	public void onEnable() {
 		getProxy().getPluginManager().registerListener(this, new GeneralEvents());
-		Commons.getManager().setMaintenance(true);
+		Commons.getManager().setMaintenance(false);
 		instance = this;
 		new CommandLoader();
 		getManager().setup();

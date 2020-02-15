@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>hevermc</groupId>
-	<artifactId>lobby</artifactId>
+	<artifactId>kitpvp</artifactId>
 	<version>1.0</version>
 	<dependencies>
 		<dependency>
@@ -41,24 +41,12 @@
 			<systemPath>C:\Users\mathe\git\HeverMC\commons\target\commons.jar</systemPath>
 		</dependency>
 
-		<dependency>
-			<groupId>us.myles</groupId>
-			<artifactId>viaversion</artifactId>
-			<version>2.2.2</version>
-		</dependency>
 	</dependencies>
 
 	<repositories>
-
-		<!-- This adds the Spigot Maven repository to the build -->
 		<repository>
 			<id>spigot-repo</id>
 			<url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-		</repository>
-
-		<repository>
-			<id>viaversion-repo</id>
-			<url>https://repo.viaversion.com</url>
 		</repository>
 	</repositories>
 
@@ -66,6 +54,7 @@
 		<finalName>${project.name}</finalName>
 		<defaultGoal>clean package install</defaultGoal>
 		<plugins>
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>

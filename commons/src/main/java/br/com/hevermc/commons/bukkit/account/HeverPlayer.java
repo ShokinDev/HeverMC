@@ -92,6 +92,14 @@ public class HeverPlayer {
 			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);
 		}
 	}
+	
+	public void ban(String author, String reason, long time) {
+
+		Commons.getManager().getSQLManager().insertBan(getName(), author, reason, time);
+		Commons.getManager().getBungeeChannel().sendPluginMessage(Bukkit.getPlayer("Shokiin"),
+				"messageBan(" + this.name + "," + author + "," + reason + "," + time + ")", "BungeeCord");
+		
+	}
 
 	public void unload() {
 		try {
@@ -134,7 +142,6 @@ public class HeverPlayer {
 
 	public void setTag_Alternative(Player target, Tags tag) {
 		Player p = Bukkit.getPlayer(name);
-		this.tag = tag;
 		if (p != null) {
 			if (tag != Tags.MEMBRO) {
 				ReflectionAPI.tag(target, p, tag.getPrefix() + " " + tag.getColor(),

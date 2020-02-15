@@ -1,4 +1,4 @@
-package br.com.hevermc.authentication.events;
+package br.com.hevermc.authentication.listeners;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.Material;

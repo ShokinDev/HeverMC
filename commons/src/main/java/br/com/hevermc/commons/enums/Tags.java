@@ -15,7 +15,7 @@ public enum Tags {
 	YOUTUBERPLUS("§3§lYT+", "§3", "k", Groups.YOUTUBERPLUS, true),
 	DESIGNER("§2§lDESIGNER", "§2", "j", Groups.DESIGNER, true),
 	BUILDER("§e§lBUILDER", "§e", "i", Groups.BUILDER, false),
-	TRIAL("§d§lTRIAL", "§d", "h", Groups.BUILDER, false),
+	TRIAL("§d§lTRIAL", "§d", "h", Groups.TRIAL, false),
 	MOD("§5§lMOD", "§5", "g", Groups.MOD, false),
 	MODGC("§5§lMODGC", "§5", "f", Groups.MODGC, true), 
 	MODPLUS("§5§LMOD+", "§5", "e", Groups.MODPLUS, false),

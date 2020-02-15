@@ -18,6 +18,7 @@ public class Sql {
 	@Setter
 	Connection connection;
 
+//host, port, user, pw, db
 	public Sql(String host, int port, String user, String password, String database) {
 		this.host = host;
 		this.port = port;
@@ -29,11 +30,14 @@ public class Sql {
 
 	public void setup() {
 		try {
-			setConnection(DriverManager.getConnection(
-					"jdbc:mysql://" + this.host + ":" + this.port + "/" + this.database,
-					this.user, this.password));
+			String driverName = "com.mysql.jdbc.Driver";
+			Class.forName(driverName);
+			setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, user,
+					password));
+			// DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database, username,
+			// password);
 			System.out.print("aaa mysql conectqado");
-		} catch (SQLException e) {
+		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 	}

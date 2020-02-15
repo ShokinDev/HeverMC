@@ -25,10 +25,10 @@ public class ServerCommand extends HeverCommand implements TabExecutor {
 				if (args.length == 0) {
 					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/server <servidor>"));
 				} else {
-					if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
+					if (Commons.getInstance().getProxy().getServerInfo(args[0]) == null) {
 						p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
 					} else {
-						p.connect(Commons.getInstance().getProxy().getServerInfo(args[1]));
+						p.connect(Commons.getInstance().getProxy().getServerInfo(args[0]));
 					}
 				}
 			}

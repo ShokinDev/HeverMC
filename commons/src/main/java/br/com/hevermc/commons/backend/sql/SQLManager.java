@@ -6,31 +6,72 @@ import java.sql.SQLException;
 import java.util.Date;
 
 public class SQLManager extends Sql {
-	
+//host, port, user, pw, db
 	public SQLManager() {
-		super("191.232.235.215", 3306, "u56_B8peQjU3bc", "9i4XkokKD0igiKykdr1F3JxX", "s56_hever");
+		super("18.229.96.83", 3306, "u1777_5sP72amPG7", "BVpWvPLcO=+c6PUlOaSzYrpG", "s1777_hevermc");
 		tables();
 	}
 
 	public void tables() {
 		PreparedStatement stm = null;
+		PreparedStatement stm1 = null;
 		PreparedStatement stm2 = null;
 		PreparedStatement stm3 = null;
+		PreparedStatement stm4 = null;
 		try {
 			stm = getConnection().prepareStatement(
 					"CREATE TABLE IF NOT EXISTS `hever_players` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
 							+ "`ip` VARCHAR(999) NULL, `cash` INT NULL, `last_login` LONG NULL, `first_login` LONG NULL, PRIMARY KEY (`id`));");
 			stm.executeUpdate();
 
-			stm2 = getConnection().prepareStatement(
+			stm1 = getConnection().prepareStatement(
 					"CREATE TABLE IF NOT EXISTS `hever_groups` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
 							+ "`group` VARCHAR(99) NULL, `expireIn` LONG NULL, PRIMARY KEY (`id`));");
+			stm1.executeUpdate();
+
+			stm2 = getConnection().prepareStatement(
+					"CREATE TABLE IF NOT EXISTS `hever_ranking` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
+							+ "`ranking` VARCHAR(999) NULL, `xp` INT NULL, PRIMARY KEY (`id`));");
 			stm2.executeUpdate();
 
 			stm3 = getConnection().prepareStatement(
-					"CREATE TABLE IF NOT EXISTS `hever_ranking` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
-							+ "`ranking` VARCHAR(999) NULL, `xp` INT NULL, PRIMARY KEY (`id`));");
+					"CREATE TABLE IF NOT EXISTS `hever_bans` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
+							+ "`author` VARCHAR(16) NULL, `reason` VARCHAR(999) NULL, `time` LONG NULL, PRIMARY KEY (`id`));");
 			stm3.executeUpdate();
+
+			stm4 = getConnection().prepareStatement(
+					"CREATE TABLE IF NOT EXISTS `hever_kitpvp` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
+							+ "`kills` INT NULL, `deaths` INT NULL, `ks` INT NULL, `kitList` VARCHAR(999) NULL, PRIMARY KEY (`id`));");
+			stm4.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void delete(String table, String where, String where_args) {
+		PreparedStatement stm_1;
+		try {
+			stm_1 = getConnection()
+					.prepareStatement("DELETE FROM `" + table + "` WHERE `" + where + "` = ?");
+			stm_1.setString(1, where_args);
+			stm_1.executeUpdate();
+		} catch (SQLException e) {
+			System.out.println("MYSQL - " + e.getMessage());
+			System.out.println("Erro ao inserir player");
+		}
+	}
+
+	public void insertBan(String name, String author, String reason, long time) {
+		PreparedStatement stm = null;
+		try {
+
+			stm = getConnection()
+					.prepareStatement("INSERT INTO `hever_bans`(`name`, `author`, `reason`, `time`) VALUES (?,?,?,?)");
+			stm.setString(1, name);
+			stm.setString(2, author);
+			stm.setString(3, reason);
+			stm.setLong(4, time);
+			stm.executeUpdate();
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -133,12 +174,12 @@ public class SQLManager extends Sql {
 		return 0;
 	}
 
-	
 	public void updateString(String table, String set, String where, String args1, String args2) {
 		PreparedStatement stm_1;
 		try {
 			;
-			stm_1 = getConnection().prepareStatement("UPDATE `" + table + "` SET `" + set + "` = ? WHERE `" + where + "` = ?");
+			stm_1 = getConnection()
+					.prepareStatement("UPDATE `" + table + "` SET `" + set + "` = ? WHERE `" + where + "` = ?");
 			stm_1.setString(1, args1);
 			stm_1.setString(2, args2);
 			stm_1.executeUpdate();
@@ -151,7 +192,8 @@ public class SQLManager extends Sql {
 	public void updateInt(String table, String set, String where, int args1, String args2) {
 		PreparedStatement stm_1;
 		try {
-			stm_1 = getConnection().prepareStatement("UPDATE `" + table + "` SET `" + set + "` = ? WHERE `" + where + "` = ?");
+			stm_1 = getConnection()
+					.prepareStatement("UPDATE `" + table + "` SET `" + set + "` = ? WHERE `" + where + "` = ?");
 			stm_1.setInt(1, args1);
 			stm_1.setString(2, args2);
 			stm_1.executeUpdate();
@@ -165,7 +207,8 @@ public class SQLManager extends Sql {
 	public void updateLong(String table, String set, String where, long args1, String args2) {
 		PreparedStatement stm_1;
 		try {
-			stm_1 = getConnection().prepareStatement("UPDATE `" + table + "` SET `" + set + "` = ? WHERE `" + where + "` = ?");
+			stm_1 = getConnection()
+					.prepareStatement("UPDATE `" + table + "` SET `" + set + "` = ? WHERE `" + where + "` = ?");
 			stm_1.setLong(1, args1);
 			stm_1.setString(2, args2);
 			stm_1.executeUpdate();

@@ -1,7 +1,6 @@
 package br.com.hevermc.commons.bungee.account;
 
 import br.com.hevermc.commons.bungee.Commons;
-import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Ranks;
 import br.com.hevermc.commons.enums.Tags;
@@ -29,6 +28,15 @@ public class HeverPlayer {
 	@Setter
 	Ranks rank;
 	Tags tag;
+	@Setter
+	@Getter
+	boolean banned;
+	@Setter
+	@Getter
+	String ban_reason;
+	@Setter
+	@Getter
+	String ban_author;
 
 	public HeverPlayer(ProxiedPlayer p) {
 		this.name = p.getName().toLowerCase();
@@ -39,15 +47,21 @@ public class HeverPlayer {
 		this.name = name;
 		this.ip = ip;
 	}
-	public boolean groupIsLarger(ProxiedPlayer p, Groups group) {
-		HeverPlayer hp = new PlayerLoader(p).getHP();
-		if (p.getServer().getInfo().getName().equals("login"))
-			return false;
-		if (hp.getGroup().ordinal() >= group.ordinal())
+
+	public boolean groupIsLarger(Groups group) {
+		if (getGroup().ordinal() >= group.ordinal())
 			return true;
 
 		return false;
+	}
 
+	public boolean groupIsLarger(ProxiedPlayer p, Groups group) {
+		if (p.getServer().getInfo().getName().equals("login"))
+			return false;
+		if (getGroup().ordinal() >= group.ordinal())
+			return true;
+
+		return false;
 	}
 
 	public void load() {
@@ -65,7 +79,12 @@ public class HeverPlayer {
 					Commons.getManager().getSQLManager().getString("hever_groups", "name", "group", getName()));
 			rank = Ranks.getRank(
 					Commons.getManager().getSQLManager().getString("hever_ranking", "name", "ranking", getName()));
+			banned = Commons.getManager().getSQLManager().checkString("hever_bans", "name", getName());
 			Commons.getManager().log("Conta de " + this.name + " foi carregada!");
+			if (banned) {
+				ban_author = Commons.getManager().getSQLManager().getString("hever_bans", "name", "author", getName());
+				ban_reason = Commons.getManager().getSQLManager().getString("hever_bans", "name", "reason", getName());
+			}
 		} catch (Exception e) {
 			Commons.getManager().log("Não foi possivel carregar a conta de " + this.name);
 		}
@@ -90,6 +109,7 @@ public class HeverPlayer {
 			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);
 		}
 	}
+
 	public void unload() {
 		try {
 

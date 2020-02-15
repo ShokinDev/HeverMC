@@ -5,7 +5,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import br.com.hevermc.authentication.api.File;
 import br.com.hevermc.authentication.command.commons.loader.CommandLoader;
-import br.com.hevermc.authentication.events.GeneralEvents;
+import br.com.hevermc.authentication.listeners.GeneralEvents;
 import lombok.Getter;
 
 public class Authentication extends JavaPlugin {
