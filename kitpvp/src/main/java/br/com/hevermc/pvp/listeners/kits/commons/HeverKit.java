@@ -41,7 +41,6 @@ public class HeverKit {
 		if (cooldown.containsKey(p)) {
 			if (new Date().after(cooldown.get(p))) {
 				cooldown.remove(p);
-				p.sendMessage("§aAgora você pode usar sua habilidade!");
 				return false;
 			}
 			return true;

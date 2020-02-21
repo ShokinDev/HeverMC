@@ -38,6 +38,9 @@ public class Commons extends Plugin {
 				} else {
 					i++;
 				}
+				if (bcs[i] == null)
+					return;
+
 				for (ProxiedPlayer all : Commons.getInstance().getProxy().getPlayers()) {
 					all.sendMessage(TextComponent.fromLegacyText(""));
 					all.sendMessage(TextComponent.fromLegacyText("§6§LHEVER§F§LMC §7»§f " + bcs[i]));

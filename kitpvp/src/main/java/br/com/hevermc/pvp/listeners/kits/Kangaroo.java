@@ -15,6 +15,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.util.Vector;
 
+import br.com.hevermc.pvp.api.PlayerLoader;
+import br.com.hevermc.pvp.api.PvPPlayer;
 import br.com.hevermc.pvp.enums.Kits;
 import br.com.hevermc.pvp.listeners.kits.commons.HeverKit;
 
@@ -27,7 +29,13 @@ public class Kangaroo implements Listener {
 	@EventHandler
 	public void onInteract(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
+		PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
 		kit.setPlayer(p);
+		if (pvp.isCombat()) {
+			p.sendMessage("§cVocê não pode usar o kangaroo em combate!");
+			return;
+		}
+		
 		if (kit.isItem()) {
 			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK
 					|| event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)

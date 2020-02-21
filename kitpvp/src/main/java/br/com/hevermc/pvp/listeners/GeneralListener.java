@@ -145,7 +145,9 @@ public class GeneralListener implements Listener {
 				if (pvpp.isProtectArea()) {
 					pvpp.setProtectArea(false);
 					p.sendMessage("§cVocê perdeu sua proteção.");
-					pvpp.setKit(p, Kits.FPS);
+					if (pvpp.getKit() != Kits.FPS)
+
+						pvpp.setKit(p, Kits.FPS);
 				}
 			}
 
@@ -161,7 +163,34 @@ public class GeneralListener implements Listener {
 	public void onInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
+		if (e.getClickedBlock() != null) {
+			if (e.getClickedBlock().getType() == Material.WALL_SIGN
+					|| e.getClickedBlock().getType() == Material.SIGN_POST
+					|| e.getClickedBlock().getType() == Material.SIGN) {
+				Sign s = (Sign) e.getClickedBlock().getState();
+				String[] lines = s.getLines();
+				if (lines.length > 0 && lines[2].equals("§eSopas")) {
+					Inventory inv = Bukkit.createInventory(null, 5 * 9, "§eMushroom soups");
+					for (int i = 0; i < inv.getSize(); i++)
+						inv.addItem(new ItemStack(Material.MUSHROOM_SOUP));
+					p.openInventory(inv);
+				} else if (lines.length > 0 && lines[2].equals("§eRecrafts")) {
+					Inventory inv = Bukkit.createInventory(null, 5 * 9, "§eRecrafts");
+					for (int i = 0; i < inv.getSize(); i++) {
+						if (i + 1 > inv.getSize() || i + 2 > inv.getSize()) {
+
+							return;
+						}
+						inv.setItem(i, new ItemStack(Material.BOWL, 64));
+						inv.setItem(i += 1, new ItemStack(Material.RED_MUSHROOM, 64));
+						inv.setItem(i += 2, new ItemStack(Material.BROWN_MUSHROOM, 64));
+					}
+					p.openInventory(inv);
+				}
+			}
+		}
 		if (e.getMaterial() != Material.AIR && e.getMaterial() != null) {
+
 			if ((e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK)
 					&& e.getMaterial() == Material.MUSHROOM_SOUP) {
 				HeverKit kit = new HeverKit(Kits.QUICKDROPPER);
@@ -201,18 +230,8 @@ public class GeneralListener implements Listener {
 						}
 					}
 				}
-			} else if (e.getAction() == Action.RIGHT_CLICK_BLOCK
-					&& ((e.getClickedBlock() != null && e.getClickedBlock().getType() == Material.WALL_SIGN)
-							|| e.getClickedBlock().getType() == Material.SIGN_POST)) {
-				Sign s = (Sign) e.getClickedBlock().getState();
-				String[] lines = s.getLines();
-				if (lines.length > 0 && lines[2].equals("§eSopas")) {
-					Inventory inv = Bukkit.createInventory(null, 5 * 9, "§eMushroom soups");
-					for (int i = 0; i < inv.getSize(); i++)
-						inv.addItem(new ItemStack(Material.MUSHROOM_SOUP));
-					p.openInventory(inv);
-				}
 			}
+
 		}
 	}
 
@@ -282,10 +301,12 @@ public class GeneralListener implements Listener {
 		PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
 		if (e.getInventory().getName().equalsIgnoreCase("§eSeletor de Kits")) {
 			for (Kits kits : Kits.values()) {
-				if (kits.getMaterial() == e.getCurrentItem().getType()) {
-					p.closeInventory();
-					e.setCancelled(true);
-					pvp.setKit(p, kits);
+				if (kits.getMaterial() != Material.AIR) {
+					if (kits.getMaterial() == e.getCurrentItem().getType()) {
+						p.closeInventory();
+						e.setCancelled(true);
+						pvp.setKit(p, kits);
+					}
 				}
 			}
 		} else if (e.getInventory().getName().equalsIgnoreCase("§eWarps")) {
