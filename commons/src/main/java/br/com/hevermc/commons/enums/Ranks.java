@@ -23,4 +23,11 @@ public enum Ranks {
 				return ranks;
 		return null;
 	}
+
+	public static Ranks getRank(int ordinal) {
+		for (Ranks ranks : Ranks.values())
+			if (ranks.ordinal() == ordinal)
+				return ranks;
+		return null;
+	}
 }

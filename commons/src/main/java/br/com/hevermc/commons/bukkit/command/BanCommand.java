@@ -24,7 +24,7 @@ public class BanCommand extends HeverCommand {
 					p.sendMessage("§aVocê deve usar §e/ban <nickname> <razão>");
 				} else {
 					String nickname = args[0];
-					HeverPlayer hp_t = new PlayerLoader(nickname.toLowerCase(), "0.0.0.0").load().getHP();
+					HeverPlayer hp_t = PlayerLoader.getHP(nickname);
 					if (!hp.groupIsLarger(hp_t.getGroup())) {
 						p.sendMessage("§cEste jogador possui um cargo maior que o seu!");
 					} else if (nickname.toLowerCase().equals(p.getName().toLowerCase())) {

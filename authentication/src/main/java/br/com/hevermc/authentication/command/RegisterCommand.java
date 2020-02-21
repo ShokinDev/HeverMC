@@ -29,8 +29,8 @@ public class RegisterCommand extends HeverCommand {
 			} else {
 				if (!args[0].equals(args[1])) {
 					p.sendMessage("§cAs senhas não são iguais!");
-				} else if (!isInt(args[2]) && args[2].length() > 4){
-					p.sendMessage("§cO pin deve ter no máximo 4 digitos e apenas numeros!");
+				} else if (!isInt(args[2]) && args[2].length() != 4){
+					p.sendMessage("§cO pin deve ter no 4 digitos e apenas numeros!");
 				} else if (lp.isRegistred()) {
 					p.sendMessage("§cVocê já está registrado, use /login <senha>!");
 				} else {

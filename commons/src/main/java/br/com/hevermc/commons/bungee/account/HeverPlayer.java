@@ -10,6 +10,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 @Getter
 public class HeverPlayer {
+	@Setter
 	String name;
 	@Setter
 	String ip;
@@ -37,6 +38,15 @@ public class HeverPlayer {
 	@Setter
 	@Getter
 	String ban_author;
+	@Setter
+	@Getter
+	boolean muted;
+	@Setter
+	@Getter
+	String mute_reason;
+	@Setter
+	@Getter
+	String mute_author;
 
 	public HeverPlayer(ProxiedPlayer p) {
 		this.name = p.getName().toLowerCase();
@@ -69,22 +79,27 @@ public class HeverPlayer {
 			if (!Commons.getManager().getSQLManager().checkString("hever_players", "name", getName())) {
 				Commons.getManager().getSQLManager().insertPlayer(name, ip);
 			}
-			cash = Commons.getManager().getSQLManager().getInt("hever_players", "name", "cash", getName());
+			setCash(Commons.getManager().getSQLManager().getInt("hever_players", "name", "cash", getName()));
 			xp = Commons.getManager().getSQLManager().getInt("hever_ranking", "name", "xp", getName());
 			groupExpireIn = Commons.getManager().getSQLManager().getLong("hever_groups", "name", "expireIn", getName());
 			lastLogin = Commons.getManager().getSQLManager().getLong("hever_players", "name", "last_login", getName());
 			firstLogin = Commons.getManager().getSQLManager().getLong("hever_players", "name", "first_login",
 					getName());
-			group = Groups.getGroup(
-					Commons.getManager().getSQLManager().getString("hever_groups", "name", "group", getName()));
+		setGroup(Groups.getGroup(
+					Commons.getManager().getSQLManager().getString("hever_groups", "name", "group", getName())));
 			rank = Ranks.getRank(
 					Commons.getManager().getSQLManager().getString("hever_ranking", "name", "ranking", getName()));
 			banned = Commons.getManager().getSQLManager().checkString("hever_bans", "name", getName());
-			Commons.getManager().log("Conta de " + this.name + " foi carregada!");
 			if (banned) {
 				ban_author = Commons.getManager().getSQLManager().getString("hever_bans", "name", "author", getName());
 				ban_reason = Commons.getManager().getSQLManager().getString("hever_bans", "name", "reason", getName());
 			}
+			muted = Commons.getManager().getSQLManager().checkString("hever_mutes", "name", getName());
+			if (muted) {
+				mute_author = Commons.getManager().getSQLManager().getString("hever_mutes", "name", "author", getName());
+				mute_reason = Commons.getManager().getSQLManager().getString("hever_mutes", "name", "reason", getName());
+			}
+			Commons.getManager().log("Conta de " + this.name + " foi carregada!");
 		} catch (Exception e) {
 			Commons.getManager().log("Não foi possivel carregar a conta de " + this.name);
 		}
@@ -114,14 +129,14 @@ public class HeverPlayer {
 		try {
 
 			Commons.getManager().log("Conta de " + this.name + " sendo descarregada!");
-			cash = 0;
-			xp = 0;
-			group = null;
-			rank = null;
-			name = null;
-			ip = null;
-			lastLogin = 0l;
-			firstLogin = 0l;
+			setGroup(null);
+			setCash(0);
+			setXp(0);
+			setRank(null);
+			setName(null);
+			setIp(null);
+			setLastLogin(0l);
+			setFirstLogin(0l);
 			Commons.getManager().log("Conta descarregada!");
 		} catch (Exception e) {
 			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);

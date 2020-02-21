@@ -48,9 +48,10 @@ public abstract class HeverCommand extends Command {
 	}
 
 	public boolean requiredGroup(ProxiedPlayer p, Groups group, boolean b) {
-		HeverPlayer hp = new PlayerLoader(p).getHP();
+		HeverPlayer hp = PlayerLoader.getHP(p);
 		if (p.getServer().getInfo().getName().equals("login"))
 			return false;
+		
 		if (hp.getGroup().ordinal() >= group.ordinal())
 			return true;
 

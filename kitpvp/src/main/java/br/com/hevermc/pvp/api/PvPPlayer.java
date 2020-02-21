@@ -7,8 +7,10 @@ import org.bukkit.inventory.ItemStack;
 
 import br.com.hevermc.commons.bukkit.Commons;
 import br.com.hevermc.commons.bukkit.api.ItemConstructor;
+import br.com.hevermc.commons.bukkit.api.ReflectionAPI;
 import br.com.hevermc.pvp.KitPvP;
 import br.com.hevermc.pvp.enums.Kits;
+import br.com.hevermc.pvp.enums.Warps;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,7 +25,11 @@ public class PvPPlayer {
 	String[] kitList;
 	Kits kit = Kits.NENHUM;
 	boolean protectArea = true;
-
+	boolean combat = false;
+	boolean adminMode = false;
+	Player inCombat;
+	Warps warp = Warps.SPAWN;
+	
 	public PvPPlayer(Player p) {
 		this.name = p.getName();
 	}
@@ -61,24 +67,38 @@ public class PvPPlayer {
 	public void setKit(Player p, Kits kit) {
 		this.kit = kit;
 		if (kit != Kits.NENHUM) {
+			p.getInventory().clear();
+			ReflectionAPI.sendTitle(p, "§6§l" + kit.getName().toUpperCase(),
+					"§fVocê selecionou o kit §e" + kit.getName() + "§f!", 10, 5, 10);
+
 			for (int i = 0; i < p.getInventory().getSize(); i++) {
 				p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP));
 			}
 			if (kit == Kits.PVP) {
-				p.getInventory().setItem(0, new ItemConstructor(new ItemStack(Material.STONE_SWORD), "§fEspada de Pedra", Enchantment.DAMAGE_ALL, 1).create());
+				p.getInventory().setItem(0, new ItemConstructor(new ItemStack(Material.STONE_SWORD),
+						"§fEspada de Pedra", Enchantment.DAMAGE_ALL, 1).create());
 			} else {
-				p.getInventory().setItem(0, new ItemConstructor(new ItemStack(Material.STONE_SWORD), "§fEspada de Pedra").create());
-				p.getInventory().setItem(1, new ItemConstructor(new ItemStack(kit.getMaterial()), "§e" + kit.getName() + " §fitem").create());
+				if (kit.getItem() != Material.AIR) {
+					p.getInventory().setItem(0,
+							new ItemConstructor(new ItemStack(Material.STONE_SWORD), "§fEspada de Pedra").create());
+					p.getInventory().setItem(1,
+							new ItemConstructor(new ItemStack(kit.getItem()), "§e" + kit.getName() + " §fitem")
+									.create());
+				} else {
+					p.getInventory().setItem(0,
+							new ItemConstructor(new ItemStack(Material.STONE_SWORD), "§fEspada de Pedra").create());
+				}
 			}
+			p.getInventory().setItem(8, new ItemConstructor(new ItemStack(Material.COMPASS), "§fBussola").create());
+			p.updateInventory();
 		}
 	}
-	 
+
 	public void update() {
 		try {
-			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "name", "kills", 0, getName());
-			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "name", "deaths", 0, getName());
-			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "name", "ks", 0, getName());
-			Commons.getManager().getSQLManager().updateString("hever_kitpvp", "name", "kitList", "Nenhum", getName());
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "kills", "name", getKills(), getName());
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "deaths", "name", getDeaths(), getName());
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "ks", "name", getKs(), getName());
 			KitPvP.getManager().log("Conta de " + name + " atualizada!");
 		} catch (Exception e) {
 			KitPvP.getManager().log("Conta de " + name + " não foi atualizada!");

@@ -17,9 +17,7 @@ public class Warps {
 		double x = KitPvP.warps.getConfig().getDouble(warp.getName() + ".x");
 		double y = KitPvP.warps.getConfig().getDouble(warp.getName() + ".y");
 		double z = KitPvP.warps.getConfig().getDouble(warp.getName() + ".z");
-		float yaw = Float.valueOf(KitPvP.warps.getConfig().getString(warp.getName() + ".yaw"));
-		float pitch = Float.valueOf(KitPvP.warps.getConfig().getString(warp.getName() + ".pitch"));
-		return new Location(Bukkit.getWorld("wolrd"), x, y, z, yaw, pitch);
+		return new Location(Bukkit.getWorld("world"), x, y, z);
 	}
 
 	public void setLocation(Location l) {

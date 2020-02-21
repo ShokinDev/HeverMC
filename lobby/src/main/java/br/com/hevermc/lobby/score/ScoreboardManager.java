@@ -8,7 +8,6 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
-import br.com.hevermc.commons.bukkit.Commons;
 import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.account.loader.PlayerLoader;
 import br.com.hevermc.commons.enums.Tags;
@@ -88,12 +87,12 @@ public class ScoreboardManager {
 
 		add.addLine("  ", "§f              ", " ", 9);
 		add.addLine(" ", "§fGrupo: ", "", 8);
-		add.addLine(" ", "§fRank: ", "", 7);
+		add.addLine(" §fRank:", " ", "", 7);
 		add.addLine("  ", "§f       §a   ", " ", 6);
 		add.addLine(" ", "§fCash: ", "", 5);
 		add.addLine(" ", "§fExperiência: ", "", 4);
 		add.addLine(" §a ", "§f       §b   ", " ", 3);
-		add.addLine(" ", "§fOnline: ", "", 2);
+		add.addLine(" ", "§fOnline: ", "§a...", 2);
 		add.addLine(" ", "§fLobby: ", "§e#1", 1);
 		add.addLine("  ", " §a  ", "", 0);
 		add.addLine("§awww.", "hevermc", ".com.br ", -1);
@@ -114,9 +113,11 @@ public class ScoreboardManager {
 			}
 		}.runTaskTimer(Lobby.getInstance(), 0, 3);
 	}
+
+	String htext = "§a...";
 	
 	public void updateInfos(Player p) {
-		HeverPlayer hp = new PlayerLoader(p).load().getHP();
+		HeverPlayer hp = PlayerLoader.getHP(p);
 		Scoreboard score = p.getScoreboard();
 		
 		Team group = score.getTeam("line8");
@@ -132,10 +133,15 @@ public class ScoreboardManager {
 		xp.setSuffix("§a" + hp.getXp());
 
 		Team online = score.getTeam("line2");
-		Commons.getManager().getBungeeChannel().getPlayerCount("ALL").whenComplete((result, error) -> {
-			online.setSuffix("§a" + result.intValue());
+		new BungeeChannelApi(Lobby.getInstance()).getPlayerCount("ALL").whenComplete((result, error) -> {
+			if (htext.equals("§a...")) 
+				htext = "§a" + result.intValue();
+			else
+			if (Integer.valueOf(online.getSuffix().replace("§a", "")) != result.intValue()) 
+				htext = "§a" + result.intValue();
+			
 		});
-		
+		online.setSuffix(htext);
 	}
 
 }

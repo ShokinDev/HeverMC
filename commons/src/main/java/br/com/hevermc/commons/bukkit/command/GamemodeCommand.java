@@ -61,7 +61,7 @@ public class GamemodeCommand extends HeverCommand {
 						p.setGameMode(gamemode);
 						p.sendMessage("§aVocê alterou seu gamemode para §b" + gamemode.toString() + "§a!");
 						Bukkit.getOnlinePlayers().forEach(online_players -> {
-							HeverPlayer hp = new PlayerLoader(online_players).load().getHP();
+							HeverPlayer hp = PlayerLoader.getHP(online_players);
 							if (hp.groupIsLarger(Groups.GERENTE))
 								online_players.sendMessage("§c[O staffer " + p.getName() + " alterou seu gamemode para "
 										+ p.getGameMode().toString() + "]");

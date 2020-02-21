@@ -7,7 +7,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import br.com.hevermc.commons.bukkit.Commons;
 import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.account.loader.PlayerLoader;
 import br.com.hevermc.commons.bukkit.command.ChatCommand;
@@ -20,32 +22,41 @@ public class GeneralListeners implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		e.setJoinMessage(null);
 		Player p = e.getPlayer();
-		HeverPlayer hp = new PlayerLoader(p).load().getHP();
+		HeverPlayer hp = PlayerLoader.getHP(p);
 		hp.setTag(Tags.getTags(hp.getGroup()));
 		Bukkit.getOnlinePlayers().forEach(all -> {
-			HeverPlayer hp_all = new PlayerLoader(all).load().getHP();
+			HeverPlayer hp_all = PlayerLoader.getHP(all);
 			hp.setTag_Alternative(all, hp_all.getTag());
 		});
+		Commons.getManager().online.add(p);
+		new BukkitRunnable() {
+			
+			@Override
+			public void run() {
+				PlayerLoader.forceLoadAccount(hp);
+			}
+		}.runTaskLater(Commons.getInstance(), 15);
 	}
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
 		e.setQuitMessage(null);
-		new PlayerLoader(e.getPlayer()).unload();
+		Commons.getManager().online.remove(e.getPlayer());
+		PlayerLoader.unload(e.getPlayer().getName());
 	}
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 		e.setCancelled(true);
 		Player p = e.getPlayer();
-		HeverPlayer hp = new PlayerLoader(p).load().getHP();
+		HeverPlayer hp = PlayerLoader.getHP(p);
 			if (ChatCommand.chat) {
-				Bukkit.broadcastMessage((hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage() : hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage()));
+				Bukkit.broadcastMessage((hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage() : hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage().replace("&", "§")));
 			} else {
 				if (!hp.groupIsLarger(Groups.TRIAL)) {
 					p.sendMessage("§cO chat está §c§ldesabilitado§c!");
 				} else {
-					Bukkit.broadcastMessage((hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage() : hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage()));
+					Bukkit.broadcastMessage((hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage() : hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage().replace("&", "§")));
 				}
 			}
 		}

@@ -24,12 +24,12 @@ public class SendCommand extends HeverCommand implements TabExecutor {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
 			if (requiredGroup(p, Groups.MODGC, true)) {
 				if (args.length < 2) {
-					p.sendMessage(TextComponent.fromLegacyText("§eVocê deve utilizar §e/send <player> <server>"));
+					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/send <player> <server>"));
 				} else {
 					ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 					if (target == null) {
 						p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
-					} else if (Commons.getInstance().getProxy().getServerInfo(args[0]) == null) {
+					} else if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
 						p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
 					} else {
 						target.connect(Commons.getInstance().getProxy().getServerInfo(args[1]));
@@ -53,7 +53,7 @@ public class SendCommand extends HeverCommand implements TabExecutor {
 				}
 			}
 		} else if (args.length == 2) {
-			String search = args[0].toLowerCase();
+			String search = args[1].toLowerCase();
 			for (Servers servers : Servers.values()) {
 				if (servers.toString().toLowerCase().startsWith(search)) {
 					match.add(servers.toString());

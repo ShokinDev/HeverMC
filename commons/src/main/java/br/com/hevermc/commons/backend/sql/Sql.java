@@ -32,7 +32,7 @@ public class Sql {
 		try {
 			String driverName = "com.mysql.jdbc.Driver";
 			Class.forName(driverName);
-			setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database, user,
+			setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true", user,
 					password));
 			// DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database, username,
 			// password);

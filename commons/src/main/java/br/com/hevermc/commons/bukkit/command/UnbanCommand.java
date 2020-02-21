@@ -1,5 +1,8 @@
 package br.com.hevermc.commons.bukkit.command;
 
+import java.util.Random;
+
+import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -42,6 +45,11 @@ public class UnbanCommand extends HeverCommand {
 				} else {
 					Commons.getManager().getSQLManager().delete("hever_bans", "name", nickname.toLowerCase());
 					sender.sendMessage("§aO jogador §e" + nickname + "§a foi desbanido com sucesso!");
+					if (Bukkit.getOnlinePlayers().size() != 0) {
+						int random = new Random().nextInt(Bukkit.getOnlinePlayers().size());
+						Commons.getManager().getBungeeChannel().sendPluginMessage(Commons.getManager().online.get(random),
+								"messageUnban(" + nickname + ")", "BungeeCord");
+					}
 				}
 			}
 		}

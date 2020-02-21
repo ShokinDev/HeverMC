@@ -8,7 +8,7 @@ import java.util.Date;
 public class SQLManager extends Sql {
 //host, port, user, pw, db
 	public SQLManager() {
-		super("18.229.96.83", 3306, "u1777_5sP72amPG7", "BVpWvPLcO=+c6PUlOaSzYrpG", "s1777_hevermc");
+		super("191.232.235.215", 3306, "u37_gl4UEFeVDB", "9twa2TibYW9vGv7TpeoJ5tCC", "s37_gta");
 		tables();
 	}
 
@@ -39,6 +39,11 @@ public class SQLManager extends Sql {
 							+ "`author` VARCHAR(16) NULL, `reason` VARCHAR(999) NULL, `time` LONG NULL, PRIMARY KEY (`id`));");
 			stm3.executeUpdate();
 
+			stm3 = getConnection().prepareStatement(
+					"CREATE TABLE IF NOT EXISTS `hever_mutes` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
+							+ "`author` VARCHAR(16) NULL, `reason` VARCHAR(999) NULL, `time` LONG NULL, PRIMARY KEY (`id`));");
+			stm3.executeUpdate();
+
 			stm4 = getConnection().prepareStatement(
 					"CREATE TABLE IF NOT EXISTS `hever_kitpvp` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
 							+ "`kills` INT NULL, `deaths` INT NULL, `ks` INT NULL, `kitList` VARCHAR(999) NULL, PRIMARY KEY (`id`));");
@@ -61,6 +66,23 @@ public class SQLManager extends Sql {
 		}
 	}
 
+	public void insertMute(String name, String author, String reason, long time) {
+		PreparedStatement stm = null;
+		try {
+
+			stm = getConnection()
+					.prepareStatement("INSERT INTO `hever_mutes`(`name`, `author`, `reason`, `time`) VALUES (?,?,?,?)");
+			stm.setString(1, name);
+			stm.setString(2, author);
+			stm.setString(3, reason);
+			stm.setLong(4, time);
+			stm.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void insertBan(String name, String author, String reason, long time) {
 		PreparedStatement stm = null;
 		try {
@@ -102,6 +124,15 @@ public class SQLManager extends Sql {
 			stm.setString(1, name);
 			stm.setString(2, "UNRANKED");
 			stm.setInt(3, 0);
+			stm.executeUpdate();
+
+			stm = getConnection()
+					.prepareStatement("INSERT INTO `hever_kitpvp`(`name`, `kills`, `deaths`, `ks`, `kitList`) VALUES (?,?,?,?,?)");
+			stm.setString(1, name);
+			stm.setInt(2, 0);
+			stm.setInt(3, 0);
+			stm.setInt(4, 0);
+			stm.setString(5, "nenhum,pvp,kangaroo,viper");
 			stm.executeUpdate();
 
 		} catch (SQLException e) {

@@ -30,7 +30,8 @@ public class FindCommand extends HeverCommand implements TabExecutor {
 						p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
 					} else {
 
-						p.sendMessage(TextComponent.fromLegacyText("§aO jogador §b" + p.getName() + " §afoi localizado em §b" + p.getServer().getInfo().getName() + "§a!"));
+						p.sendMessage(TextComponent.fromLegacyText("§aO jogador §b" + target.getName()
+								+ " §afoi localizado em §b" + target.getServer().getInfo().getName() + "§a!"));
 					}
 
 				}

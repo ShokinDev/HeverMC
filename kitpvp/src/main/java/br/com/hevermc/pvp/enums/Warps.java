@@ -20,6 +20,21 @@ public enum Warps {
 		this.desc = desc;
 		this.material = material;
 	}
-	
+
+	public static Warps getWarps(int ordinal) {
+		for (Warps warps : Warps.values()) {
+			if (warps.ordinal() == ordinal)
+				return warps;
+		}
+		return null;
+	}
+
+	public static Warps getWarps(String warp) {
+		for (Warps warps : Warps.values()) {
+			if (warps.getName().equalsIgnoreCase(warp))
+				return warps;
+		}
+		return null;
+	}
 
 }

@@ -17,6 +17,7 @@ public class Manager {
 	boolean maintenance;
 	public HashMap<String, HeverPlayer> heverplayer = new HashMap<String, HeverPlayer>();
 	public ArrayList<ProxiedPlayer> staffchat = new ArrayList<ProxiedPlayer>();
+	public HashMap<ProxiedPlayer, ProxiedPlayer> reply = new HashMap<ProxiedPlayer, ProxiedPlayer>();
 	
 	public void log(String log) {
 		System.out.println("[COMMONS] " + log);

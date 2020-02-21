@@ -6,39 +6,33 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class PlayerLoader {
 	
-
-	String name;
-	String ip;
-
-	public PlayerLoader(String name, String ip) {
-		this.name = name;
-		this.ip = ip;
+	public static HeverPlayer getHP(ProxiedPlayer p) {
+		if (!Commons.getManager().heverplayer.containsKey(p.getName().toLowerCase()) && p != null) {
+			Commons.getManager().heverplayer.put(p.getName().toLowerCase(),
+					new HeverPlayer(p.getName().toLowerCase(), p.getAddress().getHostName()));
+			Commons.getManager().heverplayer.get(p.getName().toLowerCase()).load();
+		}
+		return Commons.getManager().heverplayer.get(p.getName().toLowerCase());
 	}
 
-	public PlayerLoader(ProxiedPlayer p) {
-		this.name = p.getName();
-		this.ip = p.getAddress().getHostName();
-	}
-
-	public PlayerLoader load() {
-		if (!(Commons.getManager().heverplayer.containsKey(name.toLowerCase()))) {
-			Commons.getManager().heverplayer.put(name.toLowerCase(), new HeverPlayer(name, ip));
+	public static HeverPlayer getHP(String name) {
+		if (!Commons.getManager().heverplayer.containsKey(name.toLowerCase()) && name != null) {
+			Commons.getManager().heverplayer.put(name.toLowerCase(), new HeverPlayer(name.toLowerCase(), "0.0.0.0"));
 			Commons.getManager().heverplayer.get(name.toLowerCase()).load();
-		} 
-		return this;
-	}
-
-	public HeverPlayer getHP() {
+		}
 		return Commons.getManager().heverplayer.get(name.toLowerCase());
 	}
-
-	public void unload() {
-		getHP().update();
-		getHP().unload();
-		Commons.getManager().heverplayer.remove(name.toLowerCase());
+	
+	public static void forceLoadAccount(HeverPlayer hp) {
+		hp.load();
 	}
 
-
-
+	public static void unload(String name) {
+		if (Commons.getManager().heverplayer.containsKey(name.toLowerCase()) && name != null) {
+			Commons.getManager().heverplayer.get(name.toLowerCase()).update();
+			Commons.getManager().heverplayer.get(name.toLowerCase()).unload();
+			Commons.getManager().heverplayer.remove(name.toLowerCase());
+		}
+	}
 
 }

@@ -1,6 +1,7 @@
 package br.com.hevermc.authentication.listeners;
 
 import org.bukkit.entity.Entity;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -39,6 +40,7 @@ public class GeneralEvents implements Listener {
 		new ScoreboardManager().build(p);
 		p.teleport(p.getWorld().getSpawnLocation());
 		p.getInventory().clear();
+		p.setGameMode(GameMode.SURVIVAL);
 		p.setMaxHealth(4);
 		p.setFoodLevel(20);
 		BarUtil.setBar(p, (lp.isRegistred() ? "§a§l§k!!!§f§l USE: §e§l/LOGIN <SENHA> §A§L§K!!!"

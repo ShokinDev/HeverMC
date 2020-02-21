@@ -53,7 +53,7 @@ public class GeneralListener implements Listener {
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		HeverPlayer hp = new PlayerLoader(p).load().getHP();
+		HeverPlayer hp = PlayerLoader.getHP(p);
 		p.getInventory().clear();
 		Bukkit.getOnlinePlayers().forEach(allPlayers -> {
 			if (Lobby.getManager().hide_players.contains(allPlayers))
@@ -101,21 +101,21 @@ public class GeneralListener implements Listener {
 				"\n§fTwitter: §e@HeverNetwork_ §7| §fDiscord: §ediscord.hevermc.com.br §7| §fSite: §ewww.hevermc.com.br\n§fCaso tenha algum problema visite nosso §eDiscord§f!\n");
 
 		p.teleport(p.getWorld().getSpawnLocation());
+		p.setGameMode(GameMode.SURVIVAL);
 		new ScoreboardManager().build(p);
-		BarUtil.setBar(p, "§a§l§k!!!§f§l VOCÊ ESTÁ CONECTADO AO §E§LLOBBY §A§L§K!!!", 100);
 		if (Lobby.getManager().npc_loc.containsKey("kitpvp")) {
 			Location l = Lobby.getManager().npc_loc.get("kitpvp");
 			NPC npc = new NPC("§aClique aqui", l);
 			new Holograms("§a§lKITPVP", new Location(l.getWorld(), l.getX(), l.getY() + 1, l.getZ())).showPlayer(p);
 			npc.spawn(p);
-			npc.headRotation(-138, 6);
+			npc.headRotation(-178.7f, 1.6f);
 			npc.changeSkin(
 					"eyJ0aW1lc3RhbXAiOjE1ODEzODE2NjgxNDQsInByb2ZpbGVJZCI6Ijk0YzI1OThhMzA4MjRiMTU4M2RlNDlhZTMzMGNkNDU2IiwicHJvZmlsZU5hbWUiOiJCbGFhYWNrb3V0WiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0NDg1NDUzNmZlZTcxNGI0MDFlMDU3MGU4ZmEzYTJiYzM5NWMyNjA5MGI1ODU1YzYxZjNkZGJmOGE4OGEyOCJ9fX0=",
 					"DfgUfogh2qx02hoGKCIkF6BxgqLh9KaaM5l92FGx1otlMgYhS0LN4HmwHQkI3+83qZCvPWShGEPx5vO2ylYk8yRmpzrlp/OedDxCqWxejLzTmSfFAg/MsY5nytPXaWLfSFEWBnS6w/DQmWfoRbMCL54AF4tBSqI6cVcMiM7WKMhTlv6yUGhhazs2yuDjgZM1wnla50z4i/HhlXFk5Fj2zAjjRg+zNP35S0l1xfEPag96Gx/NeKkCxD6iGJs6irb3ZoNaYAfnzsg58BUFfZxww9P+T7XjlZ8XlygLiTq4E4Z8AgI3+WT3TjOEK1V78t/TjoNSg7nT3+slN0Wch3bMb9GYYc45x5QPzZp5NEvG53xw9T4K0QhKbyZIXMKDt13pTf0uaxmBQh9qfMLGDcdcFrRoXaF7p358Gefy9s+8VWsUdjWuLVqb8ssrblykiEoJgaBtVxRsdxWqyj9rR9Du2HNFV/OyG6BN1AYVf6guDzrjUALonEkuG4gZHSefSw9eUBEy6YIzmi4vLe5SP5qxPtEy4cFwLpHQTWnD19UDxCTLW9hHslFPbW6zZoJYx9o1FOayo3aYzfjZc2BXRI/VKnoFLA0UkgErTdD7KzZ/9Br/vwuzHGV5/Aa53f57Id+cqq+GFshkntTK/5MPCc1+E/tRMbHSuGxyy8dFf/T8W1M=");
 			new BukkitRunnable() {
-				Holograms h = new Holograms("§fload",
-						new Location(l.getWorld(), l.getX(), l.getY() + 0.5, l.getZ()));
 				String htext = "§fJogando: §a0";
+				Holograms h = new Holograms(htext,
+						new Location(l.getWorld(), l.getX(), l.getY() + 0.5, l.getZ())).showPlayer(p);
 				@Override
 				public void run() {
 					if (!p.isOnline() || p == null) {
@@ -124,7 +124,6 @@ public class GeneralListener implements Listener {
 						Commons.getManager().getBungeeChannel().getPlayerCount("kitpvp")
 								.whenComplete((result, error) -> {
 									if (Integer.parseInt(htext.replace("§fJogando: §a", "")) != result.intValue()) {
-										
 										htext = "§fJogando: §a" + result.intValue();
 										h.hidePlayer(p);
 										h.setName(htext);
@@ -148,6 +147,7 @@ public class GeneralListener implements Listener {
 			Bukkit.broadcastMessage(Tags.getTags(hp.getGroup()).getPrefix() + " "
 					+ Tags.getTags(hp.getGroup()).getColor() + p.getName() + " §fentrou neste §a§nlobby§f!");
 
+		BarUtil.setBar(p, "§a§l§k!!!§f§l VOCÊ ESTÁ CONECTADO AO §E§LLOBBY §A§L§K!!!", 100);
 	}
 
 	@EventHandler
@@ -162,7 +162,8 @@ public class GeneralListener implements Listener {
 		String title = inv.getTitle();
 		ItemStack clicked = e.getCurrentItem();
 		if (clicked != null) {
-			e.setCancelled(true);
+			if (p.getGameMode() != GameMode.CREATIVE)
+				e.setCancelled(true);
 			if (title.startsWith("§eServidores")) {
 				if (clicked.getType() == Material.DIAMOND_SWORD) {
 					p.sendMessage("§aVocê está sendo conectado ao KitPvP!");

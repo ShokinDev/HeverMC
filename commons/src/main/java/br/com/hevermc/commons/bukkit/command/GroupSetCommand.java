@@ -31,7 +31,7 @@ public class GroupSetCommand extends HeverCommand {
 					Groups togroup = Groups.getGroup(args[1]);
 					HeverPlayer htarget;
 					if (!(args[0].length() > 16)) {
-						htarget = new PlayerLoader(args[0], "0.0.0.0").load().getHP();
+						htarget = PlayerLoader.getHP(args[0]);
 					} else {
 						p.sendMessage("§cNickname inválido!");
 						return true;
@@ -46,11 +46,10 @@ public class GroupSetCommand extends HeverCommand {
 						p.sendMessage("§cVocê não pode alterar seu propío grupo!");
 					} else {
 						htarget.setGroup(togroup);
+						htarget.update();
 						if (Bukkit.getPlayer(args[0]) != null) {
 							htarget.setTag(Tags.getTags(togroup));
-						} else {
-
-						}
+						} 
 						p.sendMessage("§aVocê alterou o cargo de §b" + htarget.getName() + " §apara §b"
 								+ htarget.getGroup().getName() + " §acom sucesso!");
 					}
@@ -63,7 +62,7 @@ public class GroupSetCommand extends HeverCommand {
 				Groups togroup = Groups.getGroup(args[1]);
 				HeverPlayer htarget;
 				if (!(args[0].length() > 16)) {
-					htarget = new PlayerLoader(args[0], "0.0.0.0").load().getHP();
+					htarget = PlayerLoader.getHP(args[0]);
 				} else {
 					sender.sendMessage("§cNickname inválido!");
 					return true;
@@ -72,6 +71,7 @@ public class GroupSetCommand extends HeverCommand {
 					sender.sendMessage("§cEste grupo não existe!");
 				} else {
 					htarget.setGroup(togroup);
+					htarget.update();
 					sender.sendMessage("§aVocê alterou o cargo de §b" + htarget.getName() + " §apara §b"
 							+ htarget.getGroup().getName() + " §acom sucesso!");
 				}
