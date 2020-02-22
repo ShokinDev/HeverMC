@@ -29,7 +29,12 @@ public class PvPPlayer {
 	boolean adminMode = false;
 	Player inCombat;
 	Warps warp = Warps.SPAWN;
-	
+	boolean onevsone;
+	Player onevsonep;
+	int ovs_wins;
+	int ovs_loses;
+	int ovs_ws;
+
 	public PvPPlayer(Player p) {
 		this.name = p.getName();
 	}
@@ -45,6 +50,9 @@ public class PvPPlayer {
 			ks = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "ks", getName());
 			kitList = Commons.getManager().getSQLManager().getString("hever_kitpvp", "name", "kitList", getName())
 					.split(",");
+			ovs_wins = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "1v1_wins", getName());
+			ovs_loses = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "1v1_loses", getName());
+			ovs_ws = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "1v1_ws", getName());
 			KitPvP.getManager().log("Conta de " + name + " carregada!");
 		} catch (Exception e) {
 			KitPvP.getManager().log("Conta de " + name + " não foi carregada!");
@@ -68,9 +76,17 @@ public class PvPPlayer {
 		this.kit = kit;
 		if (kit != Kits.NENHUM) {
 			p.getInventory().clear();
-			ReflectionAPI.sendTitle(p, "§6§l" + kit.getName().toUpperCase(),
-					"§fVocê selecionou o kit §e" + kit.getName() + "§f!", 10, 5, 10);
-
+			if (kit != Kits.FPS && kit != Kits.LAVA && kit != Kits.ONEVSONE)
+				ReflectionAPI.sendTitle(p, "§6§l" + kit.getName().toUpperCase(),
+						"§fVocê selecionou o kit §e" + kit.getName() + "§f!", 10, 5, 10);
+			if (kit == Kits.ONEVSONE) {
+				for (int i = 0; i < 8; i++) {
+					p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP));
+				}
+				p.getInventory().setItem(0, new ItemConstructor(new ItemStack(Material.STONE_SWORD),
+						"§fEspada de Pedra", Enchantment.DAMAGE_ALL, 1).create());
+				return;
+			}
 			for (int i = 0; i < p.getInventory().getSize(); i++) {
 				p.getInventory().addItem(new ItemStack(Material.MUSHROOM_SOUP));
 			}
@@ -89,7 +105,8 @@ public class PvPPlayer {
 							new ItemConstructor(new ItemStack(Material.STONE_SWORD), "§fEspada de Pedra").create());
 				}
 			}
-			p.getInventory().setItem(8, new ItemConstructor(new ItemStack(Material.COMPASS), "§fBussola").create());
+			if (getWarp() == Warps.SPAWN)
+				p.getInventory().setItem(8, new ItemConstructor(new ItemStack(Material.COMPASS), "§fBussola").create());
 			p.updateInventory();
 		}
 	}
@@ -99,6 +116,11 @@ public class PvPPlayer {
 			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "kills", "name", getKills(), getName());
 			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "deaths", "name", getDeaths(), getName());
 			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "ks", "name", getKs(), getName());
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "1v1_wins", "name", getOvs_wins(),
+					getName());
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "1v1_loses", "name", getOvs_loses(),
+					getName());
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "1v1_ws", "name", getOvs_ws(), getName());
 			KitPvP.getManager().log("Conta de " + name + " atualizada!");
 		} catch (Exception e) {
 			KitPvP.getManager().log("Conta de " + name + " não foi atualizada!");

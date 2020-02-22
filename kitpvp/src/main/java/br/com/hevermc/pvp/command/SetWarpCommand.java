@@ -5,7 +5,7 @@ import org.bukkit.entity.Player;
 
 import br.com.hevermc.commons.bukkit.command.commons.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
-import br.com.hevermc.pvp.api.Warps;
+import br.com.hevermc.pvp.api.WarpsAPI;
 
 public class SetWarpCommand extends HeverCommand {
 
@@ -19,12 +19,14 @@ public class SetWarpCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			if (hasGroup(p, Groups.BUILDER, true)) {
 				if (args.length == 0) {
-					p.sendMessage("§aVocê deve usar §e/setwarp <fps|lava|onevsone|ovs1|ovs2>");
+					p.sendMessage("§aVocê deve usar §e/setwarp <fps|lava|1v1|1v1pos1|1v1pos2>");
 				} else
-				if (args[0].equalsIgnoreCase("fps") || args[0].equalsIgnoreCase("lava") || args[0].equalsIgnoreCase("onevsone") 
-						|| args[0].equalsIgnoreCase("ovs1") || args[0].equalsIgnoreCase("ovs2")) {
-					new Warps(br.com.hevermc.pvp.enums.Warps.getWarps(args[0])).setLocation(p.getLocation());
+				if (args[0].equalsIgnoreCase("fps") || args[0].equalsIgnoreCase("lava") || args[0].equalsIgnoreCase("1v1") 
+						|| args[0].equalsIgnoreCase("1v1pos1") || args[0].equalsIgnoreCase("1v1pos2")) {
+					new WarpsAPI(br.com.hevermc.pvp.enums.Warps.getWarps(args[0])).setLocation(p.getLocation());
 					p.sendMessage("§aVocê definiu uma warp!");
+				} else {
+					p.sendMessage("§cEsta warp não existe!");
 				}
 			}
 

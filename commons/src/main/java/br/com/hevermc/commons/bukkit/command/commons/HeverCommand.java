@@ -38,7 +38,7 @@ public abstract class HeverCommand extends Command {
 		if (hp.getGroup().ordinal() >= group.ordinal()) {
 			return true;
 		} else if (b) {
-			p.sendMessage("§cVocê precisa do grupo §c§l" + group.getName() + "§c para executar este comando!");
+			p.sendMessage("§cVocê precisa do grupo §c§l" + group.getName() + " ou superior§c para executar este comando!");
 		}
 		return false;
 	}

@@ -22,7 +22,7 @@ public class GamemodeCommand extends HeverCommand {
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (isPlayer(sender)) {
 			Player p = toPlayer(sender);
-			if (hasGroup(p, Groups.MOD, true)) {
+			if (hasGroup(p, Groups.BUILDER, true)) {
 				if (args.length == 0) {
 					p.sendMessage("§aVocê deve usar §e/gamemode <survival|creative>!");
 				} else {

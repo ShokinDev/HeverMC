@@ -40,6 +40,9 @@ public class HeverPlayer {
 	String ban_author;
 	@Setter
 	@Getter
+	long ban_time;
+	@Setter
+	@Getter
 	boolean muted;
 	@Setter
 	@Getter
@@ -47,6 +50,9 @@ public class HeverPlayer {
 	@Setter
 	@Getter
 	String mute_author;
+	@Setter
+	@Getter
+	long mute_time;
 
 	public HeverPlayer(ProxiedPlayer p) {
 		this.name = p.getName().toLowerCase();
@@ -93,11 +99,13 @@ public class HeverPlayer {
 			if (banned) {
 				ban_author = Commons.getManager().getSQLManager().getString("hever_bans", "name", "author", getName());
 				ban_reason = Commons.getManager().getSQLManager().getString("hever_bans", "name", "reason", getName());
+				ban_time = Commons.getManager().getSQLManager().getLong("hever_bans", "name", "time", getName());
 			}
 			muted = Commons.getManager().getSQLManager().checkString("hever_mutes", "name", getName());
 			if (muted) {
 				mute_author = Commons.getManager().getSQLManager().getString("hever_mutes", "name", "author", getName());
 				mute_reason = Commons.getManager().getSQLManager().getString("hever_mutes", "name", "reason", getName());
+				mute_time = Commons.getManager().getSQLManager().getLong("hever_mutes", "name", "time", getName());
 			}
 			Commons.getManager().log("Conta de " + this.name + " foi carregada!");
 		} catch (Exception e) {
@@ -119,6 +127,7 @@ public class HeverPlayer {
 					getName());
 			Commons.getManager().getSQLManager().updateString("hever_ranking", "ranking", "name", getRank().toString(),
 					getName());
+			
 			Commons.getManager().log("Conta de " + this.name + " foi atualizada!");
 		} catch (Exception e) {
 			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);

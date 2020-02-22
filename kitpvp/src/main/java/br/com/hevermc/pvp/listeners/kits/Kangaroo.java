@@ -31,31 +31,35 @@ public class Kangaroo implements Listener {
 		Player p = event.getPlayer();
 		PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
 		kit.setPlayer(p);
-		if (pvp.isCombat()) {
-			p.sendMessage("§cVocê não pode usar o kangaroo em combate!");
-			return;
-		}
-		
-		if (kit.isItem()) {
-			if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK
-					|| event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
+
+		if (kit.usingKit()) {
+			if (kit.isItem()) {
 				event.setCancelled(true);
-			if (!kangaroo.contains(p) && kit.usingKit()) {
-				if (!p.isSneaking()) {
-					p.setFallDistance(-5.0F);
-					Vector vector = p.getEyeLocation().getDirection();
-					vector.multiply(0.6F);
-					vector.setY(1.2F);
-					p.setVelocity(vector);
-				} else {
-					p.setFallDistance(-5.0F);
-					Vector vector = p.getEyeLocation().getDirection();
-					vector.multiply(1.8F);
-					vector.setY(0.5D);
-					p.setVelocity(vector);
+				if (pvp.isCombat()) {
+					p.sendMessage("§cVocê não pode usar o kangaroo em combate!");
+					return;
 				}
-				this.kangaroo.add(p);
+				if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK
+						|| event.getAction() == Action.RIGHT_CLICK_BLOCK || event.getAction() == Action.RIGHT_CLICK_AIR)
+					event.setCancelled(true);
+				if (!kangaroo.contains(p) && kit.usingKit()) {
+					if (!p.isSneaking()) {
+						p.setFallDistance(-5.0F);
+						Vector vector = p.getEyeLocation().getDirection();
+						vector.multiply(0.6F);
+						vector.setY(1.2F);
+						p.setVelocity(vector);
+					} else {
+						p.setFallDistance(-5.0F);
+						Vector vector = p.getEyeLocation().getDirection();
+						vector.multiply(1.8F);
+						vector.setY(0.5D);
+						p.setVelocity(vector);
+					}
+					this.kangaroo.add(p);
+				}
 			}
+
 		}
 	}
 

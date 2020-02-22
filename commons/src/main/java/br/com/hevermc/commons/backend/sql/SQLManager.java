@@ -3,7 +3,9 @@ package br.com.hevermc.commons.backend.sql;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 public class SQLManager extends Sql {
 //host, port, user, pw, db
@@ -46,11 +48,34 @@ public class SQLManager extends Sql {
 
 			stm4 = getConnection().prepareStatement(
 					"CREATE TABLE IF NOT EXISTS `hever_kitpvp` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
-							+ "`kills` INT NULL, `deaths` INT NULL, `ks` INT NULL, `kitList` VARCHAR(999) NULL, PRIMARY KEY (`id`));");
+							+ "`kills` INT NULL, `deaths` INT NULL, `ks` INT NULL, `1v1_loses` INT NULL, `1v1_wins` INT NULL, `1v1_ws` INT NULL, `kitList` VARCHAR(999) NULL, PRIMARY KEY (`id`));");
 			stm4.executeUpdate();
+			stm3 = getConnection().prepareStatement(
+					"CREATE TABLE IF NOT EXISTS `hever_discord` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
+							+ "`dc_id` VARCHAR(999) NULL, `pin` VARCHAR(999) NULL, `status`  VARCHAR(999) NULL, PRIMARY KEY (`id`));");
+			stm3.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public  List<String> getTopKitPvP(String top) {
+		PreparedStatement stm = null;
+		List<String> tops = new ArrayList<String>();
+		try {
+			stm = getConnection().prepareStatement("SELECT * FROM `hever_kitpvp` ORDER BY `" + top + "` DESC");
+			ResultSet rs = stm.executeQuery();
+			int i = 0;
+			while (rs.next()) {
+				if (i <= 10){
+					i++;
+					tops.add("§f" + i + "º §a" + rs.getString("name") + " §e" + rs.getDouble(top));
+				}
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return tops;
 	}
 
 	public void delete(String table, String where, String where_args) {

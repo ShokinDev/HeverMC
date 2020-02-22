@@ -1,5 +1,7 @@
 package br.com.hevermc.commons.bukkit.command;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -10,7 +12,7 @@ import br.com.hevermc.commons.bukkit.command.commons.HeverCommand;
 public class PingCommand extends HeverCommand {
 
 	public PingCommand() {
-		super("ping");
+		super("ping", Arrays.asList("ms"));
 	}
 
 	@Override

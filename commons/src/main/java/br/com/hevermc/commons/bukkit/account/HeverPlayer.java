@@ -1,5 +1,6 @@
 package br.com.hevermc.commons.bukkit.account;
 
+import java.util.Date;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -61,12 +62,20 @@ public class HeverPlayer {
 					"updateGroup(" + this.name + ",groupTo:" + group.toString() + ")", "BungeeCord");
 		}
 
+		Commons.getManager().getSQLManager().updateString("hever_groups", "group", "name", getGroup().toString(),
+				getName());
+
 	}
 
 	public void load() {
 		try {
 			if (!Commons.getManager().getSQLManager().checkString("hever_players", "name", getName()) && name != null) {
 				Commons.getManager().getSQLManager().insertPlayer(name, ip);
+			}
+			if (groupExpireIn > 0) {
+				if (new Date().after(new Date(groupExpireIn))) {
+					setGroup(Groups.MEMBRO);
+				}
 			}
 			String name2 = getName();
 			unload();
@@ -96,9 +105,7 @@ public class HeverPlayer {
 
 	public void update() {
 		try {
-
-			Commons.getManager().getSQLManager().updateString("hever_groups", "group", "name", getGroup().toString(),
-					getName());
+			
 			Commons.getManager().getSQLManager().updateInt("hever_players", "cash", "name", getCash(), getName());
 			Commons.getManager().getSQLManager().updateInt("hever_ranking", "xp", "name", getXp(), getName());
 			Commons.getManager().getSQLManager().updateLong("hever_players", "first_login", "name", getFirstLogin(),

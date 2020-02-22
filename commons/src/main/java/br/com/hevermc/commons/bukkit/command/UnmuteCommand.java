@@ -13,7 +13,7 @@ import br.com.hevermc.commons.enums.Groups;
 public class UnmuteCommand extends HeverCommand {
 
 	public UnmuteCommand() {
-		super("umute");
+		super("unmute");
 	}
 
 	@Override
@@ -22,7 +22,7 @@ public class UnmuteCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			if (hasGroup(p, Groups.GERENTE, true)) {
 				if (args.length == 0) {
-					p.sendMessage("§aVocê deve usar §e/umute <nickname>");
+					p.sendMessage("§aVocê deve usar §e/unmute <nickname>");
 				} else {
 					String nickname = args[0];
 					if (!Commons.getManager().getSQLManager().checkString("hever_mutes", "name",
@@ -42,7 +42,7 @@ public class UnmuteCommand extends HeverCommand {
 			}
 		} else {
 			if (args.length == 0) {
-				sender.sendMessage("§aVocê deve usar §e/umute <nickname>");
+				sender.sendMessage("§aVocê deve usar §e/unmute <nickname>");
 			} else {
 				String nickname = args[0];
 				if (!Commons.getManager().getSQLManager().checkString("hever_mutes", "name", nickname.toLowerCase())) {

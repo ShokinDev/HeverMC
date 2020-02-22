@@ -17,7 +17,12 @@ public enum Kits {
 	QUICKDROPPER("Quickdropper", "Não tenha potes em seu inventário.", Material.BOWL, Material.AIR, Groups.MEMBRO),
 	NOFALL("NoFall", "Não tome dano de queda.", Material.IRON_BOOTS, Material.AIR, Groups.MEMBRO),
 	KANGAROO("Kangaroo", "Vire um canguru.", Material.FIREWORK, Material.FIREWORK, Groups.MEMBRO),
-	FPS("Fps", "Fps", Material.AIR, Material.AIR, Groups.MEMBRO);
+	MONK("Monk", "Desarme seus inimigos.", Material.BLAZE_ROD, Material.BLAZE_ROD, Groups.MEMBRO),
+	FISHERMAN("Fisherman", "Fisgue seus inimigos.", Material.FISHING_ROD, Material.FISHING_ROD, Groups.MEMBRO),
+	ANCHOR("Anchor", "Não se mova ao ser hitado.", Material.ANVIL, Material.AIR, Groups.MEMBRO),
+	FPS("Fps", "Fps", Material.AIR, Material.AIR, Groups.MEMBRO),
+	ONEVSONE("1v1", "1v1", Material.AIR, Material.AIR, Groups.MEMBRO),
+	LAVA("Lava", "Lava", Material.AIR, Material.AIR, Groups.MEMBRO);
 
 	String name;
 	String desc;

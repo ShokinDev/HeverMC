@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
@@ -103,37 +104,114 @@ public class GeneralListener implements Listener {
 		p.teleport(p.getWorld().getSpawnLocation());
 		p.setGameMode(GameMode.SURVIVAL);
 		new ScoreboardManager().build(p);
-		if (Lobby.getManager().npc_loc.containsKey("kitpvp")) {
+		if (Lobby.getManager().npc_loc.containsKey("kitpvp") && Lobby.getManager().h_loc.containsKey("tkpvp")
+				&& Lobby.getManager().h_loc.containsKey("tdpvp")) {
 			Location l = Lobby.getManager().npc_loc.get("kitpvp");
-			NPC npc = new NPC("§aClique aqui", l);
-			new Holograms("§a§lKITPVP", new Location(l.getWorld(), l.getX(), l.getY() + 1, l.getZ())).showPlayer(p);
-			npc.spawn(p);
-			npc.headRotation(-178.7f, 1.6f);
-			npc.changeSkin(
-					"eyJ0aW1lc3RhbXAiOjE1ODEzODE2NjgxNDQsInByb2ZpbGVJZCI6Ijk0YzI1OThhMzA4MjRiMTU4M2RlNDlhZTMzMGNkNDU2IiwicHJvZmlsZU5hbWUiOiJCbGFhYWNrb3V0WiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0NDg1NDUzNmZlZTcxNGI0MDFlMDU3MGU4ZmEzYTJiYzM5NWMyNjA5MGI1ODU1YzYxZjNkZGJmOGE4OGEyOCJ9fX0=",
-					"DfgUfogh2qx02hoGKCIkF6BxgqLh9KaaM5l92FGx1otlMgYhS0LN4HmwHQkI3+83qZCvPWShGEPx5vO2ylYk8yRmpzrlp/OedDxCqWxejLzTmSfFAg/MsY5nytPXaWLfSFEWBnS6w/DQmWfoRbMCL54AF4tBSqI6cVcMiM7WKMhTlv6yUGhhazs2yuDjgZM1wnla50z4i/HhlXFk5Fj2zAjjRg+zNP35S0l1xfEPag96Gx/NeKkCxD6iGJs6irb3ZoNaYAfnzsg58BUFfZxww9P+T7XjlZ8XlygLiTq4E4Z8AgI3+WT3TjOEK1V78t/TjoNSg7nT3+slN0Wch3bMb9GYYc45x5QPzZp5NEvG53xw9T4K0QhKbyZIXMKDt13pTf0uaxmBQh9qfMLGDcdcFrRoXaF7p358Gefy9s+8VWsUdjWuLVqb8ssrblykiEoJgaBtVxRsdxWqyj9rR9Du2HNFV/OyG6BN1AYVf6guDzrjUALonEkuG4gZHSefSw9eUBEy6YIzmi4vLe5SP5qxPtEy4cFwLpHQTWnD19UDxCTLW9hHslFPbW6zZoJYx9o1FOayo3aYzfjZc2BXRI/VKnoFLA0UkgErTdD7KzZ/9Br/vwuzHGV5/Aa53f57Id+cqq+GFshkntTK/5MPCc1+E/tRMbHSuGxyy8dFf/T8W1M=");
-			new BukkitRunnable() {
-				String htext = "§fJogando: §a0";
-				Holograms h = new Holograms(htext,
-						new Location(l.getWorld(), l.getX(), l.getY() + 0.5, l.getZ())).showPlayer(p);
-				@Override
-				public void run() {
-					if (!p.isOnline() || p == null) {
-						cancel();
-					} else {
-						Commons.getManager().getBungeeChannel().getPlayerCount("kitpvp")
-								.whenComplete((result, error) -> {
-									if (Integer.parseInt(htext.replace("§fJogando: §a", "")) != result.intValue()) {
-										htext = "§fJogando: §a" + result.intValue();
-										h.hidePlayer(p);
-										h.setName(htext);
-										h.showPlayer(p);
-									}
-				
-								});
+			Location l2 = Lobby.getManager().h_loc.get("tkpvp");
+			Location l3 = Lobby.getManager().h_loc.get("tdpvp");
+			NPC npc;
+			if (api.getPlayerVersion(p) < 47) {
+				npc = new NPC("§aKitPvP", l);
+			} else {
+
+				npc = new NPC("§aClique aqui", l);
+				new Holograms("§a§lKITPVP", new Location(l.getWorld(), l.getX(), l.getY() + 1, l.getZ())).showPlayer(p);
+				npc.spawn(p);
+				npc.headRotation(-178.7f, 1.6f);
+				npc.changeSkin(
+						"eyJ0aW1lc3RhbXAiOjE1ODEzODE2NjgxNDQsInByb2ZpbGVJZCI6Ijk0YzI1OThhMzA4MjRiMTU4M2RlNDlhZTMzMGNkNDU2IiwicHJvZmlsZU5hbWUiOiJCbGFhYWNrb3V0WiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0NDg1NDUzNmZlZTcxNGI0MDFlMDU3MGU4ZmEzYTJiYzM5NWMyNjA5MGI1ODU1YzYxZjNkZGJmOGE4OGEyOCJ9fX0=",
+						"DfgUfogh2qx02hoGKCIkF6BxgqLh9KaaM5l92FGx1otlMgYhS0LN4HmwHQkI3+83qZCvPWShGEPx5vO2ylYk8yRmpzrlp/OedDxCqWxejLzTmSfFAg/MsY5nytPXaWLfSFEWBnS6w/DQmWfoRbMCL54AF4tBSqI6cVcMiM7WKMhTlv6yUGhhazs2yuDjgZM1wnla50z4i/HhlXFk5Fj2zAjjRg+zNP35S0l1xfEPag96Gx/NeKkCxD6iGJs6irb3ZoNaYAfnzsg58BUFfZxww9P+T7XjlZ8XlygLiTq4E4Z8AgI3+WT3TjOEK1V78t/TjoNSg7nT3+slN0Wch3bMb9GYYc45x5QPzZp5NEvG53xw9T4K0QhKbyZIXMKDt13pTf0uaxmBQh9qfMLGDcdcFrRoXaF7p358Gefy9s+8VWsUdjWuLVqb8ssrblykiEoJgaBtVxRsdxWqyj9rR9Du2HNFV/OyG6BN1AYVf6guDzrjUALonEkuG4gZHSefSw9eUBEy6YIzmi4vLe5SP5qxPtEy4cFwLpHQTWnD19UDxCTLW9hHslFPbW6zZoJYx9o1FOayo3aYzfjZc2BXRI/VKnoFLA0UkgErTdD7KzZ/9Br/vwuzHGV5/Aa53f57Id+cqq+GFshkntTK/5MPCc1+E/tRMbHSuGxyy8dFf/T8W1M=");
+				new BukkitRunnable() {
+					String htopk = "§a§lTOP 10 KILLS" + "\n\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(1) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(2) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(2) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(3) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(4) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(5) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(6) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(7) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(8) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(9) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(10);
+					Holograms h = new Holograms(htopk, new Location(l2.getWorld(), l2.getX(), l2.getY(), l2.getZ()))
+							.showPlayer(p);
+					String htopd = "§a§lTOP 10 DEATHS" + "\n\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(1) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(2) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(2) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(3) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(4) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(5) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(6) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(7) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(8) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(9) + "\n"
+							+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(10);
+					Holograms h2 = new Holograms(htopd, new Location(l3.getWorld(), l3.getX(), l3.getY(), l3.getZ()))
+							.showPlayer(p);
+
+					@Override
+					public void run() {
+						htopk = "§a§lTOP 10 KILLS" + "\n\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(1) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(2) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(2) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(3) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(4) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(5) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(6) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(7) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(8) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(9) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("kills").get(10);
+						htopd = "§a§lTOP 10 DEATHS" + "\n\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(1) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(2) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(2) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(3) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(4) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(5) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(6) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(7) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(8) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(9) + "\n"
+								+ Commons.getManager().getSQLManager().getTopKitPvP("deaths").get(10);
+						h.hidePlayer(p);
+						h.setName(htopk);
+						h.showPlayer(p);
+						h2.hidePlayer(p);
+						h2.setName(htopd);
+						h2.showPlayer(p);
+						Lobby.getManager().log("Hologramas atualizados!");
+
 					}
-				}
-			}.runTaskTimer(Lobby.getInstance(), 0, 10);
+				}.runTaskTimerAsynchronously(Lobby.getInstance(), 0, 300 * 30L);
+				new BukkitRunnable() {
+					String htext = "§fJogando: §a0";
+					Holograms h = new Holograms(htext, new Location(l.getWorld(), l.getX(), l.getY() + 0.5, l.getZ()))
+							.showPlayer(p);
+
+					@Override
+					public void run() {
+						if (!p.isOnline() || p == null || api.getPlayerVersion(p) < 47) {
+							cancel();
+						} else {
+							Commons.getManager().getBungeeChannel().getPlayerCount("kitpvp")
+									.whenComplete((result, error) -> {
+										if (Integer.parseInt(htext.replace("§fJogando: §a", "")) != result.intValue()) {
+											htext = "§fJogando: §a" + result.intValue();
+											h.hidePlayer(p);
+											h.setName(htext);
+											h.showPlayer(p);
+										}
+
+									});
+						}
+					}
+				}.runTaskTimer(Lobby.getInstance(), 0, 10);
+
+			}
 			new BukkitRunnable() {
 				@Override
 				public void run() {
@@ -279,6 +357,11 @@ public class GeneralListener implements Listener {
 	@EventHandler
 	public void onWeather(WeatherChangeEvent e) {
 		e.getWorld().setWeatherDuration(0);
+		e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onDrop(PlayerDropItemEvent e) {
 		e.setCancelled(true);
 	}
 

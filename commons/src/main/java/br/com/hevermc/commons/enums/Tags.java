@@ -22,6 +22,7 @@ public enum Tags {
 	GERENTE("§c§lGERENTE", "§c", "d", Groups.GERENTE, false),
 	ADMIN("§c§lADMIN", "§c", "c", Groups.ADMIN, false),
 	DIRETOR("§4§LDIRETOR", "§4", "b", Groups.DIRETOR, false),
+	DEV("§3§lDEV", "§3", "b", Groups.DEV, false),
 	DONO("§4§LDONO", "§4", "a", Groups.DONO, false);
 
 	String prefix;

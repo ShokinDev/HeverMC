@@ -1,6 +1,7 @@
 package br.com.hevermc.pvp.listeners;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -8,7 +9,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -35,13 +35,16 @@ import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.bukkit.util.Vector;
 
 import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.api.ItemConstructor;
 import br.com.hevermc.pvp.KitPvP;
+import br.com.hevermc.pvp.api.OneVsOneLoader;
 import br.com.hevermc.pvp.api.PlayerLoader;
 import br.com.hevermc.pvp.api.PvPPlayer;
+import br.com.hevermc.pvp.api.WarpsAPI;
 import br.com.hevermc.pvp.command.BuildCommand;
 import br.com.hevermc.pvp.enums.Kits;
 import br.com.hevermc.pvp.gui.Selector;
@@ -104,11 +107,16 @@ public class GeneralListener implements Listener {
 		PvPPlayer hp = new PlayerLoader(p).load().getPvPP();
 		KitPvP.getManager().online.remove(p);
 		if (hp.isCombat()) {
+			if (hp.getInCombat() == null)
+				return;
 			hp.getInCombat().sendMessage("§cSeu adversario deslogou em combate.");
 			PvPPlayer pvp = new PlayerLoader(hp.getInCombat()).load().getPvPP();
-			pvp.setKills(pvp.getKills() + 1);
-			pvp.setKs(pvp.getKs() + 1);
-			hp.setDeaths(hp.getDeaths() + 1);
+			if (pvp.isOnevsone()) {
+				pvp.setOvs_wins(pvp.getOvs_wins() + 1);
+				pvp.setOvs_ws(pvp.getOvs_ws() + 1);
+				hp.setOvs_loses(hp.getOvs_loses() + 1);
+				new OneVsOneLoader(p, hp.getInCombat()).finish();
+			}
 			hp.setCombat(false);
 			hp.setInCombat(null);
 			pvp.setCombat(false);
@@ -118,7 +126,7 @@ public class GeneralListener implements Listener {
 
 	}
 
-	ArrayList<Player> a = new ArrayList<Player>();
+	public static ArrayList<Player> a = new ArrayList<Player>();
 
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
@@ -146,7 +154,6 @@ public class GeneralListener implements Listener {
 					pvpp.setProtectArea(false);
 					p.sendMessage("§cVocê perdeu sua proteção.");
 					if (pvpp.getKit() != Kits.FPS)
-
 						pvpp.setKit(p, Kits.FPS);
 				}
 			}
@@ -174,17 +181,13 @@ public class GeneralListener implements Listener {
 					for (int i = 0; i < inv.getSize(); i++)
 						inv.addItem(new ItemStack(Material.MUSHROOM_SOUP));
 					p.openInventory(inv);
-				} else if (lines.length > 0 && lines[2].equals("§eRecrafts")) {
-					Inventory inv = Bukkit.createInventory(null, 5 * 9, "§eRecrafts");
-					for (int i = 0; i < inv.getSize(); i++) {
-						if (i + 1 > inv.getSize() || i + 2 > inv.getSize()) {
+				} else if (lines.length > 0 && lines[2].equals("§eRecraft")) {
+					Inventory inv = Bukkit.createInventory(null, 9, "§eRecrafts");
 
-							return;
-						}
-						inv.setItem(i, new ItemStack(Material.BOWL, 64));
-						inv.setItem(i += 1, new ItemStack(Material.RED_MUSHROOM, 64));
-						inv.setItem(i += 2, new ItemStack(Material.BROWN_MUSHROOM, 64));
-					}
+					inv.setItem(0, new ItemStack(Material.BOWL, 64));
+					inv.setItem(1, new ItemStack(Material.RED_MUSHROOM, 64));
+					inv.setItem(2, new ItemStack(Material.BROWN_MUSHROOM, 64));
+
 					p.openInventory(inv);
 				}
 			}
@@ -210,24 +213,29 @@ public class GeneralListener implements Listener {
 				}
 			} else if (e.getMaterial() == Material.CHEST) {
 				new Selector(p);
-			} else if (e.getMaterial() == Material.COMPASS) {
-				if (pvp.isProtectArea()) {
+			} else if (e.getMaterial() == Material.COMPASS && pvp.getWarp() == br.com.hevermc.pvp.enums.Warps.SPAWN) {
+				if (pvp.isProtectArea() && pvp.getKit() == Kits.NENHUM) {
 					new Warps(p);
 				} else {
-					for (Entity ets : p.getWorld().getEntities()) {
-						if (ets instanceof Player) {
-							if (p.getLocation().distance(ets.getLocation()) <= 200.0D) {
-								for (int i = 0; i < 200; i++) {
-									if (ets.getLocation().distance(p.getLocation()) == i) {
-										if (ets != p) {
-											p.sendMessage("§aBussola apontando para " + ets.getName());
-											p.setCompassTarget(ets.getLocation());
-											break;
-										}
-									}
-								}
+					double distance = 500.0D;
+					Player target = null;
+					for (Player all : Bukkit.getOnlinePlayers()) {
+						double distancePlayerToVictm = p.getLocation().distance(all.getLocation());
+						PvPPlayer pvp2 = new PlayerLoader(all).load().getPvPP();
+						if (!pvp2.isProtectArea()) {
+							if (distancePlayerToVictm < distance && distancePlayerToVictm > 10.0D) {
+								distance = distancePlayerToVictm;
+								target = all;
 							}
 						}
+					}
+					if (target == null) {
+						p.sendMessage("§cNenhum jogador encontrado!");
+						p.setCompassTarget(p.getWorld().getSpawnLocation());
+					} else {
+						p.sendMessage("§eBussola apontando para §a" + target.getName());
+						p.setCompassTarget(target.getLocation());
+
 					}
 				}
 			}
@@ -248,16 +256,22 @@ public class GeneralListener implements Listener {
 			PvPPlayer pvpkiller = new PlayerLoader(killer).load().getPvPP();
 			PvPPlayer pvpp = new PlayerLoader(p).load().getPvPP();
 			HeverPlayer hpkiller = br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(killer);
-			pvpp.setDeaths(pvpp.getDeaths() + 1);
-			pvpkiller.setKills(pvpkiller.getKills() + 1);
-			pvpkiller.setKs(pvpkiller.getKs() + 1);
-			int xp = (pvpp.getKills() - pvpp.getDeaths()) < 0 ? 1
-					: (pvpp.getKills() - pvpp.getDeaths() > 10 ? 10 : pvpp.getKills() - pvpp.getDeaths());
+			if (pvpp.getWarp() != br.com.hevermc.pvp.enums.Warps.ONEVSONE) {
+				pvpp.setDeaths(pvpp.getDeaths() + 1);
+				pvpp.setKs(0);
+				pvpkiller.setKills(pvpkiller.getKills() + 1);
+				pvpkiller.setKs(pvpkiller.getKs() + 1);
+			} else {
+				pvpp.setOvs_loses(pvpp.getOvs_loses() + 1);
+				pvpkiller.setOvs_wins(pvpkiller.getOvs_wins() + 1);
+				pvpkiller.setOvs_ws(pvpkiller.getOvs_ws() + 1);
+			}
+			int xp = 2 + new Random().nextInt(10);
 
 			hpkiller.setXp(hpkiller.getXp() + xp);
 			p.sendMessage("§cVocê morreu para " + killer.getName());
-			killer.sendMessage("§aVocê matuou " + p.getName());
-			killer.sendMessage("§aForam adicionados §e" + xp + " xp's na sua conta!");
+			killer.sendMessage("§aVocê matou " + p.getName());
+			killer.sendMessage("§aForam adicionados §e" + xp + " §aXPS na sua conta!");
 			hpkiller.update();
 			pvpkiller.update();
 			pvpp.setCombat(false);
@@ -268,7 +282,7 @@ public class GeneralListener implements Listener {
 		}
 		if (e.getEntity() instanceof Player) {
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), new Runnable() {
+			new BukkitRunnable() {
 
 				@Override
 				public void run() {
@@ -278,20 +292,20 @@ public class GeneralListener implements Listener {
 					PacketPlayInClientCommand pk = new PacketPlayInClientCommand(EnumClientCommand.PERFORM_RESPAWN);
 
 					c.a(pk);
+
 				}
-			}, 5L);
+			}.runTaskLater(KitPvP.getInstance(), 5);
 		}
 	}
 
 	@EventHandler
-	public void onAdmin(PlayerInteractEntityEvent e) {
+	public void onInteractPlayer(PlayerInteractEntityEvent e) {
 		Player p = e.getPlayer();
 		if (e.getRightClicked() instanceof Player) {
 			Player a = (Player) e.getRightClicked();
 			PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
 			if (pvp.isAdminMode())
 				p.openInventory(a.getInventory());
-
 		}
 	}
 
@@ -300,6 +314,7 @@ public class GeneralListener implements Listener {
 		Player p = (Player) e.getWhoClicked();
 		PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
 		if (e.getInventory().getName().equalsIgnoreCase("§eSeletor de Kits")) {
+			e.setCancelled(true);
 			for (Kits kits : Kits.values()) {
 				if (kits.getMaterial() != Material.AIR) {
 					if (kits.getMaterial() == e.getCurrentItem().getType()) {
@@ -310,20 +325,35 @@ public class GeneralListener implements Listener {
 				}
 			}
 		} else if (e.getInventory().getName().equalsIgnoreCase("§eWarps")) {
+			e.setCancelled(true);
 			for (br.com.hevermc.pvp.enums.Warps warps : br.com.hevermc.pvp.enums.Warps.values()) {
-				if (warps.getMaterial() == e.getCurrentItem().getType()
-						&& warps != br.com.hevermc.pvp.enums.Warps.SPAWN) {
-
+				if (warps.getMaterial() == e.getCurrentItem().getType() && warps.getMaterial() != Material.AIR) {
+					if (warps == br.com.hevermc.pvp.enums.Warps.ONEVSONE || new WarpsAPI(warps).getLocation() == null) {
+						p.sendMessage("§cEsta warp está em desenvolvimento!");
+						return;
+					}
 					e.setCancelled(true);
 					p.getInventory().clear();
 					p.closeInventory();
-					p.teleport(new br.com.hevermc.pvp.api.Warps(warps).getLocation());
+					p.teleport(new WarpsAPI(warps).getLocation());
 					pvp.setWarp(warps);
 					pvp.setProtectArea(true);
 					p.sendMessage("§eVocê está sendo teleportado até a warp §a" + warps.getName());
 
-					if (warps == br.com.hevermc.pvp.enums.Warps.FPS)
+					if (warps == br.com.hevermc.pvp.enums.Warps.FPS) {
 						pvp.setKit(p, Kits.FPS);
+					} else if (warps == br.com.hevermc.pvp.enums.Warps.ONEVSONE) {
+						p.getScoreboard().clearSlot(DisplaySlot.SIDEBAR);
+						new ScoreboardManager().build(p);
+						p.getInventory().setItem(0,
+								new ItemConstructor(new ItemStack(Material.BLAZE_ROD), "§6Desafie").create());
+						p.getInventory().setItem(1,
+								new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 8), "§7Fila rápida")
+										.create());
+					} else if (warps == br.com.hevermc.pvp.enums.Warps.LAVA) {
+						pvp.setKit(p, Kits.LAVA);
+					}
+
 				}
 			}
 		}
@@ -338,13 +368,41 @@ public class GeneralListener implements Listener {
 			p.chat("/spawn");
 		} else if (pvp.getWarp() == br.com.hevermc.pvp.enums.Warps.FPS) {
 			p.getInventory().clear();
-			p.closeInventory();
-			p.teleport(new br.com.hevermc.pvp.api.Warps(br.com.hevermc.pvp.enums.Warps.FPS).getLocation());
+			p.teleport(new WarpsAPI(br.com.hevermc.pvp.enums.Warps.FPS).getLocation());
 			pvp.setWarp(br.com.hevermc.pvp.enums.Warps.FPS);
+			pvp.setProtectArea(true);
 			pvp.setKit(p, Kits.FPS);
+			new BukkitRunnable() {
 
+				@Override
+				public void run() {
+					p.teleport(new WarpsAPI(br.com.hevermc.pvp.enums.Warps.FPS).getLocation());
+
+				}
+			}.runTaskLater(KitPvP.getInstance(), 7L);
+		} else if (pvp.getWarp() == br.com.hevermc.pvp.enums.Warps.ONEVSONE) {
+			p.getInventory().clear();
+			p.teleport(new WarpsAPI(br.com.hevermc.pvp.enums.Warps.ONEVSONE).getLocation());
+			pvp.setWarp(br.com.hevermc.pvp.enums.Warps.ONEVSONE);
+			pvp.setProtectArea(true);
+			p.getInventory().setItem(0, new ItemConstructor(new ItemStack(Material.BLAZE_ROD), "§6Desafie").create());
+			p.getInventory().setItem(1,
+					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 8), "§7Fila rápida").create());
+		} else if (pvp.getWarp() == br.com.hevermc.pvp.enums.Warps.LAVA) {
+			p.getInventory().clear();
+			pvp.setWarp(br.com.hevermc.pvp.enums.Warps.LAVA);
+			p.teleport(new WarpsAPI(br.com.hevermc.pvp.enums.Warps.LAVA).getLocation());
+			pvp.setProtectArea(true);
+			pvp.setKit(p, Kits.LAVA);
+			new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					p.teleport(new WarpsAPI(br.com.hevermc.pvp.enums.Warps.LAVA).getLocation());
+
+				}
+			}.runTaskLater(KitPvP.getInstance(), 7L);
 		}
-
 	}
 
 	@EventHandler
@@ -366,13 +424,10 @@ public class GeneralListener implements Listener {
 		if (e.getItemDrop().getItemStack().getType() == pvp.getKit().getMaterial()
 				|| e.getItemDrop().getItemStack().getType() == Material.STONE_SWORD
 				|| e.getItemDrop().getItemStack().getType() == Material.COMPASS || pvp.isProtectArea()) {
-			e.setCancelled(true);
+			if (e.getItemDrop().getItemStack().getType() != Material.BOWL)
+				e.setCancelled(true);
 		} else {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), new Runnable() {
-				public void run() {
-					e.getItemDrop().remove();
-				}
-			}, 3);
+			e.getItemDrop().remove();
 
 		}
 	}
@@ -393,6 +448,11 @@ public class GeneralListener implements Listener {
 		if (e.getEntity() instanceof Player) {
 			Player p = (Player) e.getEntity();
 			PvPPlayer pvpp = new PlayerLoader(p).load().getPvPP();
+			if (e.getCause() == DamageCause.LAVA || e.getCause() == DamageCause.FIRE
+					|| e.getCause() == DamageCause.FIRE_TICK) {
+				if (pvpp.getWarp() == br.com.hevermc.pvp.enums.Warps.LAVA)
+					return;
+			}
 			if (e.getCause() == DamageCause.FALL) {
 
 				if (a.contains(p)) {
@@ -414,6 +474,10 @@ public class GeneralListener implements Listener {
 			Player d = (Player) e.getDamager();
 			PvPPlayer pvpp = new PlayerLoader(p).load().getPvPP();
 			PvPPlayer pvpd = new PlayerLoader(d).load().getPvPP();
+			if (KitPvP.getManager().ovs.containsKey(p.getName().toLowerCase())) {
+				if (!KitPvP.getManager().ovs.containsKey(d.getName().toLowerCase()))
+					e.setCancelled(true);
+			}
 			if (pvpp.isProtectArea() || pvpd.isProtectArea()) {
 				e.setCancelled(true);
 			} else {

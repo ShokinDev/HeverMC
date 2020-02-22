@@ -9,8 +9,9 @@ public enum Warps {
 
 	SPAWN("Spawn", "Local de spawn", Material.AIR), LAVA("Lava", "Local para treinamento!", Material.LAVA_BUCKET),
 	FPS("Fps", "Arena otimizada para melhor desempenho do computador", Material.GLASS),
-	ONEVSONE("1V1", "Arena para duelo entre jogadores", Material.BLAZE_ROD);
-
+	ONEVSONE("1V1", "Arena para duelo entre jogadores", Material.BLAZE_ROD),
+	OVPOS1("1v1POS1", "1v1", Material.AIR),
+	OVPOS2("1v1POS2", "1v1", Material.AIR);
 	String name;
 	String desc;
 	Material material;

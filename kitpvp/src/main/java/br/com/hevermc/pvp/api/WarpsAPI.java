@@ -5,11 +5,11 @@ import org.bukkit.Location;
 
 import br.com.hevermc.pvp.KitPvP;
 
-public class Warps {
+public class WarpsAPI {
 
 	br.com.hevermc.pvp.enums.Warps warp;
 
-	public Warps(br.com.hevermc.pvp.enums.Warps warp) {
+	public WarpsAPI(br.com.hevermc.pvp.enums.Warps warp) {
 		this.warp = warp;
 	}
 

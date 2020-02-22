@@ -23,21 +23,27 @@ public class SendCommand extends HeverCommand implements TabExecutor {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
 			if (requiredGroup(p, Groups.MODGC, true)) {
-				if (args.length < 2) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/send <player> <server>"));
-				} else {
-					ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
-					if (target == null) {
-						p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
-					} else if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+				if (!p.getServer().getInfo().getName().equals("login")) {
+					if (args.length < 2) {
+						p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/send <player> <server>"));
 					} else {
-						target.connect(Commons.getInstance().getProxy().getServerInfo(args[1]));
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê enviou " + target.getName() + " §apara §b"
-								+ Commons.getInstance().getProxy().getServerInfo(args[1]).getName().toUpperCase()
-								+ " §acom sucesso!"));
-					}
+						ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
+						if (target == null) {
+							p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+						} else if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
+							p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+						} else {
+							target.connect(Commons.getInstance().getProxy().getServerInfo(args[1]));
+							p.sendMessage(
+									TextComponent.fromLegacyText("§aVocê enviou "
+											+ target.getName() + " §apara §b" + Commons.getInstance().getProxy()
+													.getServerInfo(args[1]).getName().toUpperCase()
+											+ " §acom sucesso!"));
+						}
 
+					}
+				} else {
+					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
 				}
 			}
 		}

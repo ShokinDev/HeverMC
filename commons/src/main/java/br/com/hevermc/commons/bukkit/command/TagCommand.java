@@ -25,7 +25,7 @@ public class TagCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			HeverPlayer hp = toHeverPlayer(p);
 			if (args.length == 0) {
-				TextComponent a = new TextComponent("§6§lTAGS §fSuas tags disponíveis são as seguintes: ");
+				TextComponent a = new TextComponent("§fSuas tags disponíveis são as seguintes: ");
 				a.setUnderlined(false);
 				for (Tags tags : Tags.values()) {
 					if (hp.groupIsLarger(tags.getGroup())) {
@@ -70,7 +70,7 @@ public class TagCommand extends HeverCommand {
 				if (tag == null) {
 					p.sendMessage("§cEsta tag não existe!");
 				} else
-				if (tag.isExclusive() && !hp.groupIsLarger(Groups.GERENTE)) {
+				if (tag.isExclusive() && !(hp.groupIsLarger(Groups.GERENTE) || hp.groupIsLarger(tag.getGroup()))) {
 					p.sendMessage("§cEsta tag é exclusiva!");
 				} else if (hp.getTag() == tag) {
 					p.sendMessage("§cVocê já está utilizando esta tag!");

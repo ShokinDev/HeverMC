@@ -90,7 +90,7 @@ public class ScoreboardManager {
 		add.addLine(" §fRank:", " ", "", 7);
 		add.addLine("  ", "§f       §a   ", " ", 6);
 		add.addLine(" ", "§fCash: ", "", 5);
-		add.addLine(" ", "§fExperiência: ", "", 4);
+		add.addLine(" ", "§fXP: ", "", 4);
 		add.addLine(" §a ", "§f       §b   ", " ", 3);
 		add.addLine(" ", "§fOnline: ", "§a...", 2);
 		add.addLine(" ", "§fLobby: ", "§e#1", 1);
@@ -121,10 +121,10 @@ public class ScoreboardManager {
 		Scoreboard score = p.getScoreboard();
 		
 		Team group = score.getTeam("line8");
-		group.setSuffix(Tags.getTags(hp.getGroup()).getColor() + hp.getGroup().getName());
+		group.setSuffix(Tags.getTags(hp.getGroup()).getColor() + "§l" + hp.getGroup().getName().toUpperCase());
 		
 		Team rank = score.getTeam("line7");
-		rank.setSuffix(hp.getRank().getColor() + hp.getRank().toString());
+		rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()).substring(1));
 
 		Team cash = score.getTeam("line5");
 		cash.setSuffix("§3" + hp.getCash());

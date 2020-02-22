@@ -8,9 +8,11 @@ import org.bukkit.entity.Player;
 
 import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.account.loader.PlayerLoader;
+import br.com.hevermc.commons.bukkit.api.ReflectionAPI;
 import br.com.hevermc.commons.bukkit.command.commons.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Tags;
+
 
 public class GroupSetCommand extends HeverCommand {
 
@@ -48,8 +50,11 @@ public class GroupSetCommand extends HeverCommand {
 						htarget.setGroup(togroup);
 						htarget.update();
 						if (Bukkit.getPlayer(args[0]) != null) {
+							ReflectionAPI.sendTitle(Bukkit.getPlayer(args[0]), Tags.getTags(togroup).getColor() + Bukkit.getPlayer(args[0]).getName(), "§fSeu grupo foi alterado para "
+									+ Tags.getTags(togroup).getColor() + "§l" + togroup.getName().toLowerCase(), 5, 5,
+									5);
 							htarget.setTag(Tags.getTags(togroup));
-						} 
+						}
 						p.sendMessage("§aVocê alterou o cargo de §b" + htarget.getName() + " §apara §b"
 								+ htarget.getGroup().getName() + " §acom sucesso!");
 					}

@@ -32,13 +32,15 @@ public class TempBanCommand extends HeverCommand {
 						p.sendMessage("§cEste jogador possui um cargo maior que o seu!");
 					} else if (nickname.toLowerCase().equals(p.getName().toLowerCase())) {
 						p.sendMessage("§cVocê não pode se banir!");
-					} else if (!isInt(time.replace("d", "").replace("m", "").replace("y", ""))) {
+					} else if (!isInt(time.replace("s", "").replace("d", "").replace("m", "").replace("y", ""))) {
 						p.sendMessage("§aVocê deve usar §e/tempban <nickname> <time> <razão>");
 					} else {
-						int timeint = Integer.valueOf(time.replace("d", "").replace("m", "").replace("y", ""));
+						int timeint = Integer.valueOf(time.replace("d", "").replace("d", "").replace("s", "").replace("y", ""));
 						String format = time.replace(timeint + "", "");
 						Calendar c = Calendar.getInstance();
-						if (format.equalsIgnoreCase("d")) {
+						if (format.equalsIgnoreCase("s")) {
+							c.add(Calendar.SECOND, timeint);
+						} else if (format.equalsIgnoreCase("d")) {
 							c.add(Calendar.DAY_OF_YEAR, timeint);
 						} else if (format.equalsIgnoreCase("m")) {
 							c.add(Calendar.MONTH, timeint);
@@ -48,7 +50,7 @@ public class TempBanCommand extends HeverCommand {
 
 						String reason = "Sem razão";
 						StringBuilder sb = new StringBuilder();
-						for (int i = 1; i < args.length; i++)
+						for (int i = 2; i < args.length; i++)
 							sb.append(args[i]).append(" ");
 						reason = sb.toString();
 

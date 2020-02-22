@@ -5,6 +5,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -45,6 +46,13 @@ public class GeneralListeners implements Listener {
 		PlayerLoader.unload(e.getPlayer().getName());
 	}
 
+	@EventHandler
+	public void onCommand(PlayerCommandPreprocessEvent e) {
+		if (e.getMessage().startsWith("/me")) {
+			
+		}
+	}
+	
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 		e.setCancelled(true);

@@ -32,13 +32,15 @@ public class TempMuteCommand extends HeverCommand {
 						p.sendMessage("§cEste jogador possui um cargo maior que o seu!");
 					} else if (nickname.toLowerCase().equals(p.getName().toLowerCase())) {
 						p.sendMessage("§cVocê não pode se mute!");
-					} else if (!isInt(time.replace("d", "").replace("m", "").replace("y", ""))) {
+					} else if (!isInt(time.replace("d", "").replace("m", "").replace("y", "").replace("s", ""))) {
 						p.sendMessage("§aVocê deve usar §e/tempmute <nickname> <time> <razão>");
 					} else {
-						int timeint = Integer.valueOf(time.replace("d", "").replace("m", "").replace("y", ""));
+						int timeint = Integer.valueOf(time.replace("d", "").replace("m", "").replace("s", "").replace("y", ""));
 						String format = time.replace(timeint + "", "");
 						Calendar c = Calendar.getInstance();
-						if (format.equalsIgnoreCase("d")) {
+						if (format.equalsIgnoreCase("s")) {
+							c.add(Calendar.SECOND, timeint);
+						} if (format.equalsIgnoreCase("d")) {
 							c.add(Calendar.DAY_OF_YEAR, timeint);
 						} else if (format.equalsIgnoreCase("m")) {
 							c.add(Calendar.MONTH, timeint);

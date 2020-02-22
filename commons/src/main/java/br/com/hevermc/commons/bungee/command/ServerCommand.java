@@ -5,6 +5,7 @@ import java.util.Set;
 
 import br.com.hevermc.commons.bungee.Commons;
 import br.com.hevermc.commons.bungee.command.common.HeverCommand;
+import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Servers;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -21,16 +22,19 @@ public class ServerCommand extends HeverCommand implements TabExecutor {
 	public void execute(CommandSender sender, String[] args) {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
-			if (!p.getServer().getInfo().getName().equals("login")) {
+			if (!p.getServer().getInfo().getName().equals("login") && !p.getServer().getInfo().getName().equals("screenshare")) {
 				if (args.length == 0) {
 					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/server <servidor>"));
 				} else {
 					if (Commons.getInstance().getProxy().getServerInfo(args[0]) == null) {
 						p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+					} else if (args[0].equalsIgnoreCase("screenshare") && !requiredGroup(p, Groups.MODGC, false)) {
 					} else {
 						p.connect(Commons.getInstance().getProxy().getServerInfo(args[0]));
 					}
 				}
+			} else {
+				p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
 			}
 		}
 	}

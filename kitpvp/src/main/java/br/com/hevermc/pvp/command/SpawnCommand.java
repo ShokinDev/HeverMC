@@ -12,6 +12,7 @@ import br.com.hevermc.commons.bukkit.command.commons.HeverCommand;
 import br.com.hevermc.pvp.api.PvPPlayer;
 import br.com.hevermc.pvp.enums.Kits;
 import br.com.hevermc.pvp.enums.Warps;
+import br.com.hevermc.pvp.score.ScoreboardManager;
 
 public class SpawnCommand extends HeverCommand {
 
@@ -43,7 +44,9 @@ public class SpawnCommand extends HeverCommand {
 				pvp.setKit(Kits.NENHUM);
 				pvp.setCombat(false);
 				pvp.setWarp(Warps.SPAWN);
+				new ScoreboardManager().build(p);
 				p.setHealth(20);
+				p.sendMessage("§aVocê voltou para o spawn!");
 			}
 
 		}
