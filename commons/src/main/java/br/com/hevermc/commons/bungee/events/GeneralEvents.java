@@ -9,8 +9,6 @@ import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Tags;
 import net.md_5.bungee.api.ServerPing;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
@@ -29,16 +27,10 @@ public class GeneralEvents implements Listener {
 		// sp.setDescription(" §6§lHEVER§f§lMC§f » §7[1.7.x - 1.8.x] \n §f» Servidor em
 		// fase §1§lBETA §f«");
 		sp.setDescription(
-				"              §6§lHEVER§f§lMC§f » §7(1.7.x - 1.8.x) \n             §b§l§k!!§f Servidor em fase §1§lBETA §b§l§k!!§f");
+				"              §6§lHEVER§f§lMC§f » §7(1.7.x - 1.15.x) \n             §b§l§k!!§f Servidor em fase §1§lBETA §b§l§k!!§f");
 
 		sp.getPlayers().setSample(null);
 		sp.getPlayers().setMax(2020);
-		if (Commons.getManager().isMaintenance()) {
-			sp.getVersion().setProtocol(999);
-			sp.getVersion().setName("Manutenção");
-		} else {
-			sp.getVersion().setName("HeverMC > 1.7 to 1.8");
-		}
 		e.setResponse(sp);
 	}
 
@@ -146,91 +138,7 @@ public class GeneralEvents implements Listener {
 			if (Commons.getInstance().getProxy().getPlayer(received) != null)
 				PlayerLoader.getHP(Commons.getInstance().getProxy().getPlayer(received)).update();
 		}
-		if (message.contains("messageUnban(")) {
-			String received = message.substring(15).replace(")", "");
-			PlayerLoader.getHP(Commons.getInstance().getProxy().getPlayer(received)).load();
-		}
-		if (message.contains("messageBan(")) {
-			// name,author,reason,time
-			System.out.println("[DEBUG] Message received by Bukkit, " + message);
-			String[] received = message.substring(13).replace(")", "").split(",");
-			String name = received[0];
-			System.out.println("[DEBUG] Name read is " + name);
-			String author = received[1];
-			System.out.println("[DEBUG] Author read is " + author);
-			String reason = received[2];
-			System.out.println("[DEBUG] Reason read is " + reason);
-			String time = received[3];
-			System.out.println("[DEBUG] Time read is " + time);
-			Commons.getInstance().getProxy().getPlayer(name).disconnect(TextComponent.fromLegacyText(
-					"§4§lBANIDO\n\n§fVocê foi banido permanentemente!\n\n§fMotivo: §c" + reason + "\n§fPor: " + author
-							+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ediscord.hevermc.com.br"));
-			HeverPlayer hp2 = PlayerLoader.getHP(name);
-			hp2.setBanned(true);
-			hp2.setBan_author(author);
-			hp2.setBan_time(Long.valueOf(time));
-			hp2.setBan_reason(reason);
-			Commons.getInstance().getProxy().getPlayers().forEach(players -> {
-				HeverPlayer hp = PlayerLoader.getHP(players);
-				if (!hp.groupIsLarger(players, Groups.MODPLUS)) {
-					TextComponent msg_a = new TextComponent("§c[O jogador " + name + " foi banido]");
-					msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-							new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: " + reason.substring(1)
-									+ "\n§fDuração: "
-									+ (Long.valueOf(time) == 0l ? "§4permanentemente" : "§ctemporariamente"))
-											.create()));
-					players.sendMessage(msg_a);
-				} else {
-					TextComponent msg_a = new TextComponent("§c[O jogador " + name + " foi banido]");
-					msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-							new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: " + reason.substring(1)
-									+ "\n§fPor: " + author + "\n§fDuração: "
-									+ (Long.valueOf(time) == 0l ? "§4permanentemente" : "§ctemporariamente"))
-											.create()));
-					players.sendMessage(msg_a);
-				}
-			});
-
-		}
-		if (message.contains("messageMute(")) {
-			// name,author,reason,time
-			System.out.println("[DEBUG] Message received by Bukkit, " + message);
-			String[] received = message.substring(14).replace(")", "").split(",");
-			String name = received[0];
-			System.out.println("[DEBUG] Name read is " + name);
-			String author = received[1];
-			System.out.println("[DEBUG] Author read is " + author);
-			String reason = received[2];
-			System.out.println("[DEBUG] Reason read is " + reason);
-			String time = received[3];
-			System.out.println("[DEBUG] Time read is " + time);
-			HeverPlayer hp2 = PlayerLoader.getHP(name);
-			hp2.setMuted(true);
-			hp2.setMute_author(author);
-			hp2.setMute_reason(reason);
-			hp2.setMute_time(Long.valueOf(time));
-			Commons.getInstance().getProxy().getPlayers().forEach(players -> {
-				HeverPlayer hp = PlayerLoader.getHP(players);
-				if (!hp.groupIsLarger(players, Groups.MODPLUS)) {
-					TextComponent msg_a = new TextComponent("§c[O jogador " + name + " foi mutado]");
-					msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-							new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: " + reason.substring(1)
-									+ "\n§fDuração: "
-									+ (Long.valueOf(time) == 0l ? "§4permanentemente" : "§ctemporariamente"))
-											.create()));
-					players.sendMessage(msg_a);
-				} else {
-					TextComponent msg_a = new TextComponent("§c[O jogador " + name + " foi mutado]");
-					msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-							new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: " + reason.substring(1)
-									+ "\n§fPor: " + author + "\n§fDuração: "
-									+ (Long.valueOf(time) == 0l ? "§4permanentemente" : "§ctemporariamente"))
-											.create()));
-					players.sendMessage(msg_a);
-				}
-			});
-
-		}
+	
 	}
 
 }

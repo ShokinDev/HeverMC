@@ -34,5 +34,4 @@ public class PlayerLoader {
 			Commons.getManager().heverplayer.remove(name.toLowerCase());
 		}
 	}
-
 }

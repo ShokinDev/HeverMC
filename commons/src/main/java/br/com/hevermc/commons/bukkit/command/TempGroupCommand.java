@@ -63,7 +63,6 @@ public class TempGroupCommand extends HeverCommand {
 						}
 						htarget.setGroup(togroup);
 						htarget.setGroupExpireIn(c.getTimeInMillis());
-						htarget.update();
 						if (Bukkit.getPlayer(args[0]) != null) {
 							htarget.setTag(Tags.getTags(togroup));
 						}
@@ -76,6 +75,7 @@ public class TempGroupCommand extends HeverCommand {
 			if (args.length < 2) {
 				sender.sendMessage("§cVocê deve usar §c§l/tempgroup <nickname> <grupo>");
 			} else {
+				Calendar c = Calendar.getInstance();
 				Groups togroup = Groups.getGroup(args[1]);
 				HeverPlayer htarget;
 				if (!(args[0].length() > 16)) {
@@ -88,7 +88,7 @@ public class TempGroupCommand extends HeverCommand {
 					sender.sendMessage("§cEste grupo não existe!");
 				} else {
 					htarget.setGroup(togroup);
-					htarget.update();
+					htarget.setGroupExpireIn(c.getTimeInMillis());
 					sender.sendMessage("§aVocê alterou o cargo de §b" + htarget.getName() + " §apara §b"
 							+ htarget.getGroup().getName() + " §acom sucesso!");
 				}

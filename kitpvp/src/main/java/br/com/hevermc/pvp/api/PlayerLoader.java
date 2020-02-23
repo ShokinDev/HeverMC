@@ -19,13 +19,11 @@ public class PlayerLoader {
 	public PlayerLoader load() {
 		if (!KitPvP.getManager().pvpplayer.containsKey(name.toLowerCase())) {
 			KitPvP.getManager().pvpplayer.put(name.toLowerCase(), new PvPPlayer(name.toLowerCase()));
-			getPvPP().load();
 		}
 		return this;
 		
 	}	public PlayerLoader unload() {
 		if (KitPvP.getManager().pvpplayer.containsKey(name.toLowerCase())) {
-			getPvPP().update();
 			getPvPP().unload();
 			KitPvP.getManager().pvpplayer.remove(name.toLowerCase());
 		}

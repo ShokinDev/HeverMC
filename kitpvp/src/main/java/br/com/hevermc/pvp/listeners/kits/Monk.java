@@ -26,7 +26,7 @@ public class Monk implements Listener {
 				Player target = (Player) event.getRightClicked();
 				if (kit_api.verifyCooldown() == false) {
 					Calendar c = Calendar.getInstance();
-					c.add(Calendar.SECOND, 5);
+					c.add(Calendar.SECOND, 15);
 					kit_api.setCooldown(new Date(c.getTimeInMillis()));
 					int a = new Random().nextInt(target.getInventory().getSize());
 					ItemStack b = target.getItemInHand();

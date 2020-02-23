@@ -28,6 +28,26 @@ public class Commons extends Plugin {
 		new CommandLoader();
 		getManager().setup();
 		getProxy().getScheduler().schedule(this, new Runnable() {
+
+
+			@Override
+			public void run() {
+				getManager().getRedis().set("pvp_topkills", "1:" + getManager().getSQLManager().getTopKitPvP("kills").get(0) + 
+						"2:" + getManager().getSQLManager().getTopKitPvP("kills").get(1)+ 
+						"3:" + getManager().getSQLManager().getTopKitPvP("kills").get(2)+ 
+						"4:" + getManager().getSQLManager().getTopKitPvP("kills").get(3)+ 
+						"5:" + getManager().getSQLManager().getTopKitPvP("kills").get(4));
+			}
+		}, 1, 5, TimeUnit.MINUTES);
+		getProxy().getScheduler().schedule(this, new Runnable() {
+			
+			@Override
+			public void run() {
+				getManager().getRedis().set("all", "on:" + getProxy().getOnlineCount());
+				getManager().getRedis().set("kitpvp", "on:" + getProxy().getServerInfo("kitpvp").getPlayers().size());
+			}
+		}, 1, 3, TimeUnit.SECONDS);
+		getProxy().getScheduler().schedule(this, new Runnable() {
 			int i = 1;
 
 			@Override

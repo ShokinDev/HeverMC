@@ -8,6 +8,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 
+import br.com.hevermc.commons.bukkit.Commons;
 import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.account.loader.PlayerLoader;
 import br.com.hevermc.commons.enums.Tags;
@@ -107,40 +108,45 @@ public class ScoreboardManager {
 					cancel();
 					return;
 				}
-				
-				obj.setDisplayName(effect());
+
 				updateInfos(p);
+			}
+		}.runTaskTimer(Lobby.getInstance(), 0, 30);
+
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				if (p == null || !p.isOnline()) {
+					cancel();
+					return;
+				}
+
+				obj.setDisplayName(effect());
 			}
 		}.runTaskTimer(Lobby.getInstance(), 0, 3);
 	}
 
 	String htext = "§a...";
-	
+
 	public void updateInfos(Player p) {
 		HeverPlayer hp = PlayerLoader.getHP(p);
 		Scoreboard score = p.getScoreboard();
-		
+
 		Team group = score.getTeam("line8");
 		group.setSuffix(Tags.getTags(hp.getGroup()).getColor() + "§l" + hp.getGroup().getName().toUpperCase());
-		
+
 		Team rank = score.getTeam("line7");
 		rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()).substring(1));
 
 		Team cash = score.getTeam("line5");
 		cash.setSuffix("§3" + hp.getCash());
-		
+
 		Team xp = score.getTeam("line4");
 		xp.setSuffix("§a" + hp.getXp());
 
 		Team online = score.getTeam("line2");
-		new BungeeChannelApi(Lobby.getInstance()).getPlayerCount("ALL").whenComplete((result, error) -> {
-			if (htext.equals("§a...")) 
-				htext = "§a" + result.intValue();
-			else
-			if (Integer.valueOf(online.getSuffix().replace("§a", "")) != result.intValue()) 
-				htext = "§a" + result.intValue();
-			
-		});
+		htext = "§a" + Commons.getManager().getRedis().get("all").replace("on:", "");
 		online.setSuffix(htext);
 	}
 

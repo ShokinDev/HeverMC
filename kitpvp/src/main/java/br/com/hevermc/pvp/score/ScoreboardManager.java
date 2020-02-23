@@ -185,7 +185,7 @@ public class ScoreboardManager {
 			}
 
 		}
-		i=0;
+		i = 0;
 		return "PVP";
 	}
 
@@ -232,51 +232,47 @@ public class ScoreboardManager {
 					return;
 				}
 				obj.setDisplayName(effect(p));
-				updateInfos(p);
 			}
 		}.runTaskTimer(KitPvP.getInstance(), 0, 3);
+
+		new BukkitRunnable() {
+
+			@Override
+			public void run() {
+				if (p == null || !p.isOnline()) {
+					cancel();
+					return;
+				}
+				updateInfos(p);
+			}
+		}.runTaskTimer(KitPvP.getInstance(), 0, 100);
 	}
 
 	public void updateInfos(Player p) {
 		PvPPlayer pvpp = new br.com.hevermc.pvp.api.PlayerLoader(p).load().getPvPP();
 		HeverPlayer hp = PlayerLoader.getHP(p);
 		Scoreboard score = p.getScoreboard();
-		if (hp == null || pvpp == null ||score == null) {
+		if (hp == null || pvpp == null || score == null) {
 			return;
 		}
 
-		if (pvpp.getWarp() != Warps.ONEVSONE) {
-			Team kills = score.getTeam("line8");
-			kills.setSuffix("§a" + pvpp.getKills());
+		Team kills = score.getTeam("line8");
+		kills.setSuffix("§a" + hp.getPvp_kills());
 
-			Team deaths = score.getTeam("line7");
-			deaths.setSuffix("§c" + pvpp.getDeaths());
+		Team deaths = score.getTeam("line7");
+		deaths.setSuffix("§c" + hp.getPvp_deaths());
 
-			Team ks = score.getTeam("line6");
-			ks.setSuffix("§e" + pvpp.getKs());
+		Team ks = score.getTeam("line6");
+		ks.setSuffix("§e" + hp.getPvp_ks());
 
-			Team rank = score.getTeam("line4");
-			rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()).substring(1));
+		Team rank = score.getTeam("line4");
+		rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()).substring(1));
 
-			Team on = score.getTeam("line3");
-			on.setSuffix("§a" + KitPvP.getManager().online.size() + "/80");
+		Team on = score.getTeam("line3");
+		on.setSuffix("§a" + KitPvP.getManager().online.size() + "/80");
 
-			Team kit = score.getTeam("line1");
-			kit.setSuffix("§a" + pvpp.getKit().getName());
-		} else {
-			Team wins = score.getTeam("line6");
-			wins.setSuffix("§a" + pvpp.getOvs_wins());
-			Team loses = score.getTeam("line5");
-			loses.setSuffix("§c" + pvpp.getOvs_loses());
-			Team ws = score.getTeam("line4");
-			ws.setSuffix("§e" + pvpp.getOvs_ws());
-
-			Team rank = score.getTeam("line2");
-			rank.setSuffix(hp.getRank().getColor() + hp.getRank().toString());
-
-			Team on = score.getTeam("line1");
-			on.setSuffix("§a" + KitPvP.getManager().online.size() + "/80");
-		}
+		Team kit = score.getTeam("line1");
+		kit.setSuffix("§a" + pvpp.getKit().getName());
 
 	}
 

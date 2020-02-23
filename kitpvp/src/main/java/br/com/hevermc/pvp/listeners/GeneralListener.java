@@ -41,7 +41,6 @@ import org.bukkit.util.Vector;
 import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.api.ItemConstructor;
 import br.com.hevermc.pvp.KitPvP;
-import br.com.hevermc.pvp.api.OneVsOneLoader;
 import br.com.hevermc.pvp.api.PlayerLoader;
 import br.com.hevermc.pvp.api.PvPPlayer;
 import br.com.hevermc.pvp.api.WarpsAPI;
@@ -111,16 +110,13 @@ public class GeneralListener implements Listener {
 				return;
 			hp.getInCombat().sendMessage("§cSeu adversario deslogou em combate.");
 			PvPPlayer pvp = new PlayerLoader(hp.getInCombat()).load().getPvPP();
-			if (pvp.isOnevsone()) {
-				pvp.setOvs_wins(pvp.getOvs_wins() + 1);
-				pvp.setOvs_ws(pvp.getOvs_ws() + 1);
-				hp.setOvs_loses(hp.getOvs_loses() + 1);
-				new OneVsOneLoader(p, hp.getInCombat()).finish();
-			}
+
 			hp.setCombat(false);
 			hp.setInCombat(null);
+			
 			pvp.setCombat(false);
 			pvp.setInCombat(null);
+			
 		}
 		new PlayerLoader(p).unload();
 
@@ -239,7 +235,6 @@ public class GeneralListener implements Listener {
 					}
 				}
 			}
-
 		}
 	}
 
@@ -256,29 +251,27 @@ public class GeneralListener implements Listener {
 			PvPPlayer pvpkiller = new PlayerLoader(killer).load().getPvPP();
 			PvPPlayer pvpp = new PlayerLoader(p).load().getPvPP();
 			HeverPlayer hpkiller = br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(killer);
-			if (pvpp.getWarp() != br.com.hevermc.pvp.enums.Warps.ONEVSONE) {
-				pvpp.setDeaths(pvpp.getDeaths() + 1);
-				pvpp.setKs(0);
-				pvpkiller.setKills(pvpkiller.getKills() + 1);
-				pvpkiller.setKs(pvpkiller.getKs() + 1);
-			} else {
-				pvpp.setOvs_loses(pvpp.getOvs_loses() + 1);
-				pvpkiller.setOvs_wins(pvpkiller.getOvs_wins() + 1);
-				pvpkiller.setOvs_ws(pvpkiller.getOvs_ws() + 1);
-			}
+			HeverPlayer hp = br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(p);
+			
+			hpkiller.setPvp_kills(hp.getPvp_kills() + 1);
+			hpkiller.setPvp_ks(hp.getPvp_ks() + 1);
+			hp.setPvp_deaths(hp.getPvp_deaths() + 1);
+			hp.setPvp_ks(0);
+			
 			int xp = 2 + new Random().nextInt(10);
-
+			
 			hpkiller.setXp(hpkiller.getXp() + xp);
+			
 			p.sendMessage("§cVocê morreu para " + killer.getName());
 			killer.sendMessage("§aVocê matou " + p.getName());
 			killer.sendMessage("§aForam adicionados §e" + xp + " §aXPS na sua conta!");
+			
 			hpkiller.update();
-			pvpkiller.update();
 			pvpp.setCombat(false);
+			
 			pvpkiller.setCombat(false);
 			pvpp.setInCombat(null);
 			pvpkiller.setInCombat(null);
-			pvpp.update();
 		}
 		if (e.getEntity() instanceof Player) {
 
@@ -474,10 +467,7 @@ public class GeneralListener implements Listener {
 			Player d = (Player) e.getDamager();
 			PvPPlayer pvpp = new PlayerLoader(p).load().getPvPP();
 			PvPPlayer pvpd = new PlayerLoader(d).load().getPvPP();
-			if (KitPvP.getManager().ovs.containsKey(p.getName().toLowerCase())) {
-				if (!KitPvP.getManager().ovs.containsKey(d.getName().toLowerCase()))
-					e.setCancelled(true);
-			}
+
 			if (pvpp.isProtectArea() || pvpd.isProtectArea()) {
 				e.setCancelled(true);
 			} else {

@@ -35,13 +35,13 @@ public class HeverPlayer {
 	Ranks rank;
 	Tags tag;
 
-	@Getter
+	@Setter
 	int pvp_kills = 0;
 
-	@Getter
+	@Setter
 	int pvp_deaths = 0;
 
-	@Getter
+	@Setter
 	int pvp_ks = 0;
 
 	public HeverPlayer(Player p) {
@@ -62,40 +62,28 @@ public class HeverPlayer {
 					"updateGroup(" + this.name + ",groupTo:" + group.toString() + ")", "BungeeCord");
 		}
 
-		Commons.getManager().getSQLManager().updateString("hever_groups", "group", "name", getGroup().toString(),
-				getName());
-
 	}
 
 	public void load() {
 		try {
-			if (!Commons.getManager().getSQLManager().checkString("hever_players", "name", getName()) && name != null) {
-				Commons.getManager().getSQLManager().insertPlayer(name, ip);
-			}
+			String p_acc = Commons.getManager().getRedis().get(name.toLowerCase());
+			String[] p_accl = p_acc.split(",");
+			cash = Integer.parseInt(p_accl[0].replace("cash:", ""));
+			xp = Integer.parseInt(p_accl[1].replace("xp:", ""));
+			groupExpireIn = Long.parseLong(p_accl[2].replace("groupExpireIn:", ""));
+			lastLogin = Long.parseLong(p_accl[3].replace("lastLogin:", ""));
+			firstLogin = Long.parseLong(p_accl[4].replace("firstLogin:", ""));
+			group = Groups.getGroup(p_accl[5].replace("group:", ""));
+			rank = Ranks.getRank(p_accl[6].replace("rank:", ""));
+			pvp_kills = Integer.parseInt(p_accl[7].replace("pvp_kills:", ""));
+			pvp_deaths = Integer.parseInt(p_accl[8].replace("pvp_deaths:", ""));
+			pvp_ks = Integer.parseInt(p_accl[9].replace("pvp_ks:", ""));
 			if (groupExpireIn > 0) {
 				if (new Date().after(new Date(groupExpireIn))) {
 					setGroup(Groups.MEMBRO);
 				}
 			}
-			String name2 = getName();
-			unload();
-			name = name2;
-			group = Groups.getGroup(
-					Commons.getManager().getSQLManager().getString("hever_groups", "name", "group", getName()));
-			cash = Commons.getManager().getSQLManager().getInt("hever_players", "name", "cash", getName());
-			xp = Commons.getManager().getSQLManager().getInt("hever_ranking", "name", "xp", getName());
-			groupExpireIn = Commons.getManager().getSQLManager().getLong("hever_groups", "name", "expireIn", getName());
-			lastLogin = Commons.getManager().getSQLManager().getLong("hever_players", "name", "last_login", getName());
-			firstLogin = Commons.getManager().getSQLManager().getLong("hever_players", "name", "first_login",
-					getName());
 
-			rank = Ranks.getRank(
-					Commons.getManager().getSQLManager().getString("hever_ranking", "name", "ranking", getName()));
-			
-			pvp_kills = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "kills", getName());
-			pvp_deaths = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "deaths", getName());
-			pvp_ks = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "ks", getName());
-			
 			Commons.getManager().log("Conta de " + this.name + " foi carregada!");
 		} catch (Exception e) {
 			Commons.getManager().log("Não foi possivel carregar a conta de " + this.name + "!");
@@ -105,43 +93,13 @@ public class HeverPlayer {
 
 	public void update() {
 		try {
-			
-			Commons.getManager().getSQLManager().updateInt("hever_players", "cash", "name", getCash(), getName());
-			Commons.getManager().getSQLManager().updateInt("hever_ranking", "xp", "name", getXp(), getName());
-			Commons.getManager().getSQLManager().updateLong("hever_players", "first_login", "name", getFirstLogin(),
-					getName());
-			Commons.getManager().getSQLManager().updateLong("hever_players", "last_login", "name", getLastLogin(),
-					getName());
-			Commons.getManager().getSQLManager().updateLong("hever_groups", "expireIn", "name", getGroupExpireIn(),
-					getName());
-			Commons.getManager().getSQLManager().updateString("hever_ranking", "ranking", "name", getRank().toString(),
-					getName());
-			Commons.getManager().log("Conta de " + this.name + " foi atualizada!");
-
-			Commons.getManager().getBungeeChannel().sendPluginMessage(Bukkit.getPlayer("Shokiin"),
-					"updateAll(" + this.name + ")", "BungeeCord");
+			Commons.getManager().getRedis().set(this.name,
+					"cash:" + cash + ",xp:" + xp + ",groupExpireIn:" + groupExpireIn + ",lastLogin:" + lastLogin
+							+ ",firstLogin:" + firstLogin + ",group:" + group.toString() + ",rank:" + rank.toString()
+							+ ",pvp_kills:" + pvp_kills + ",pvp_deaths:" + pvp_deaths + ",pvp_ks:" + pvp_ks);
 		} catch (Exception e) {
 			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);
-		}
-	}
-
-	public void ban(String author, String reason, long time) {
-		// name,author,reason,time
-		Commons.getManager().getSQLManager().insertBan(getName(), author, reason, time);
-		if (Bukkit.getOnlinePlayers().size() != 0) {
-			int random = new Random().nextInt(Bukkit.getOnlinePlayers().size());
-			Commons.getManager().getBungeeChannel().sendPluginMessage(Commons.getManager().online.get(random),
-					"messageBan(" + this.name + "," + author + "," + reason + "," + time + ")", "BungeeCord");
-		}
-	}
-
-	public void mute(String author, String reason, long time) {
-		// name,author,reason,time
-		Commons.getManager().getSQLManager().insertMute(getName(), author, reason, time);
-		if (Bukkit.getOnlinePlayers().size() != 0) {
-			int random = new Random().nextInt(Bukkit.getOnlinePlayers().size());
-			Commons.getManager().getBungeeChannel().sendPluginMessage(Commons.getManager().online.get(random),
-					"messageMute(" + this.name + "," + author + "," + reason + "," + time + ")", "BungeeCord");
+			e.printStackTrace();
 		}
 	}
 

@@ -13,14 +13,15 @@ public class Commons extends JavaPlugin {
 	public static Manager manager = new Manager();
 	@Getter
 	public static Commons instance;
-	
+
 	@Override
 	public void onEnable() {
 		Bukkit.getPluginManager().registerEvents(new GeneralListeners(), this);
 		new CommandLoader();
 		instance = this;
 		getManager().setup();
+		
 		super.onEnable();
 	}
-	
+
 }

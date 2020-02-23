@@ -48,7 +48,6 @@ public class GroupSetCommand extends HeverCommand {
 						p.sendMessage("§cVocê não pode alterar seu propío grupo!");
 					} else {
 						htarget.setGroup(togroup);
-						htarget.update();
 						if (Bukkit.getPlayer(args[0]) != null) {
 							ReflectionAPI.sendTitle(Bukkit.getPlayer(args[0]), Tags.getTags(togroup).getColor() + Bukkit.getPlayer(args[0]).getName(), "§fSeu grupo foi alterado para "
 									+ Tags.getTags(togroup).getColor() + "§l" + togroup.getName().toLowerCase(), 5, 5,
@@ -76,7 +75,6 @@ public class GroupSetCommand extends HeverCommand {
 					sender.sendMessage("§cEste grupo não existe!");
 				} else {
 					htarget.setGroup(togroup);
-					htarget.update();
 					sender.sendMessage("§aVocê alterou o cargo de §b" + htarget.getName() + " §apara §b"
 							+ htarget.getGroup().getName() + " §acom sucesso!");
 				}

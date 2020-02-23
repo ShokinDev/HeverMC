@@ -30,29 +30,27 @@ public class HeverPlayer {
 	Ranks rank;
 	Tags tag;
 	@Setter
-	@Getter
 	boolean banned;
 	@Setter
-	@Getter
 	String ban_reason;
 	@Setter
-	@Getter
 	String ban_author;
 	@Setter
-	@Getter
 	long ban_time;
 	@Setter
-	@Getter
 	boolean muted;
 	@Setter
-	@Getter
 	String mute_reason;
 	@Setter
-	@Getter
 	String mute_author;
 	@Setter
-	@Getter
 	long mute_time;
+	@Setter
+	int pvp_kills;
+	@Setter
+	int pvp_deaths;
+	@Setter
+	int pvp_ks;
 
 	public HeverPlayer(ProxiedPlayer p) {
 		this.name = p.getName().toLowerCase();
@@ -91,11 +89,14 @@ public class HeverPlayer {
 			lastLogin = Commons.getManager().getSQLManager().getLong("hever_players", "name", "last_login", getName());
 			firstLogin = Commons.getManager().getSQLManager().getLong("hever_players", "name", "first_login",
 					getName());
-		setGroup(Groups.getGroup(
+			setGroup(Groups.getGroup(
 					Commons.getManager().getSQLManager().getString("hever_groups", "name", "group", getName())));
 			rank = Ranks.getRank(
 					Commons.getManager().getSQLManager().getString("hever_ranking", "name", "ranking", getName()));
 			banned = Commons.getManager().getSQLManager().checkString("hever_bans", "name", getName());
+			pvp_kills = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "kills", getName());
+			pvp_deaths = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "deaths", getName());
+			pvp_ks = Commons.getManager().getSQLManager().getInt("hever_kitpvp", "name", "ks", getName());
 			if (banned) {
 				ban_author = Commons.getManager().getSQLManager().getString("hever_bans", "name", "author", getName());
 				ban_reason = Commons.getManager().getSQLManager().getString("hever_bans", "name", "reason", getName());
@@ -103,12 +104,20 @@ public class HeverPlayer {
 			}
 			muted = Commons.getManager().getSQLManager().checkString("hever_mutes", "name", getName());
 			if (muted) {
-				mute_author = Commons.getManager().getSQLManager().getString("hever_mutes", "name", "author", getName());
-				mute_reason = Commons.getManager().getSQLManager().getString("hever_mutes", "name", "reason", getName());
+				mute_author = Commons.getManager().getSQLManager().getString("hever_mutes", "name", "author",
+						getName());
+				mute_reason = Commons.getManager().getSQLManager().getString("hever_mutes", "name", "reason",
+						getName());
 				mute_time = Commons.getManager().getSQLManager().getLong("hever_mutes", "name", "time", getName());
 			}
+
+			Commons.getManager().getRedis().set(this.name,
+					"cash:" + cash + ",xp:" + xp + ",groupExpireIn:" + groupExpireIn + ",lastLogin:" + lastLogin
+							+ ",firstLogin:" + firstLogin + ",group:" + group.toString() + ",rank:" + rank.toString()
+							+ ",pvp_kills:" + pvp_kills + ",pvp_deaths:" + pvp_deaths + ",pvp_ks:" + pvp_ks);
 			Commons.getManager().log("Conta de " + this.name + " foi carregada!");
 		} catch (Exception e) {
+			e.printStackTrace();
 			Commons.getManager().log("Não foi possivel carregar a conta de " + this.name);
 		}
 	}
@@ -127,10 +136,37 @@ public class HeverPlayer {
 					getName());
 			Commons.getManager().getSQLManager().updateString("hever_ranking", "ranking", "name", getRank().toString(),
 					getName());
-			
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "kills", "name", getPvp_kills(), getName());
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "deaths", "name", getPvp_deaths(),
+					getName());
+			Commons.getManager().getSQLManager().updateInt("hever_kitpvp", "ks", "name", getPvp_ks(), getName());
+			Commons.getManager().getRedis().set(this.name,
+					"cash:" + cash + ",xp:" + xp + ",groupExpireIn:" + groupExpireIn + ",lastLogin:" + lastLogin
+							+ ",firstLogin:" + firstLogin + ",group:" + group.toString() + ",rank:" + rank.toString()
+							+ ",pvp_kills:" + pvp_kills + ",pvp_deaths:" + pvp_deaths + ",pvp_ks:" + pvp_ks);
+
 			Commons.getManager().log("Conta de " + this.name + " foi atualizada!");
 		} catch (Exception e) {
+			e.printStackTrace();
 			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);
+		}
+	}
+
+	public void ban(String reason, String author, long time) {
+		try {
+			Commons.getManager().getSQLManager().insertBan(name, author, reason, time);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Commons.getManager().log("Não foi possivel banir a conta de " + this.name);
+		}
+	}
+
+	public void mute(String reason, String author, long time) {
+		try {
+			Commons.getManager().getSQLManager().insertMute(name, author, reason, time);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Commons.getManager().log("Não foi possivel mutar a conta de " + this.name);
 		}
 	}
 
@@ -138,6 +174,7 @@ public class HeverPlayer {
 		try {
 
 			Commons.getManager().log("Conta de " + this.name + " sendo descarregada!");
+			Commons.getManager().getRedis().del(this.name);
 			setGroup(null);
 			setCash(0);
 			setXp(0);

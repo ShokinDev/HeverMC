@@ -6,7 +6,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import br.com.hevermc.pvp.api.File;
 import br.com.hevermc.pvp.command.commons.loader.CommandLoader;
 import br.com.hevermc.pvp.listeners.GeneralListener;
-import br.com.hevermc.pvp.listeners.OneVsOneListener;
 import br.com.hevermc.pvp.listeners.kits.commons.loader.KitLoader;
 import lombok.Getter;
 
@@ -24,7 +23,6 @@ public class KitPvP extends JavaPlugin {
 		instance = this;
 		warps.setup();
 		Bukkit.getPluginManager().registerEvents(new GeneralListener(), this);
-		Bukkit.getPluginManager().registerEvents(new OneVsOneListener(), this);
 		new CommandLoader();
 		new KitLoader();
 		getManager().setup();

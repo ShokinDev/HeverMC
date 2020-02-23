@@ -31,7 +31,7 @@ public class GeneralListeners implements Listener {
 		});
 		Commons.getManager().online.add(p);
 		new BukkitRunnable() {
-			
+
 			@Override
 			public void run() {
 				PlayerLoader.forceLoadAccount(hp);
@@ -48,25 +48,33 @@ public class GeneralListeners implements Listener {
 
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent e) {
-		if (e.getMessage().startsWith("/me")) {
-			
-		}
+		if (e.getMessage().startsWith("/me") || e.getMessage().startsWith("/pl") || e.getMessage().startsWith("/about")
+				|| e.getMessage().startsWith("/help") || e.getMessage().startsWith("//calc")
+				|| e.getMessage().startsWith("/plugins")) 
+			e.setCancelled(true);
+		
 	}
-	
+
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
 		e.setCancelled(true);
 		Player p = e.getPlayer();
 		HeverPlayer hp = PlayerLoader.getHP(p);
-			if (ChatCommand.chat) {
-				Bukkit.broadcastMessage((hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage() : hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage().replace("&", "§")));
+		if (ChatCommand.chat) {
+			Bukkit.broadcastMessage(
+					(hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage()
+							: hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f"
+									+ e.getMessage().replace("&", "§")));
+		} else {
+			if (!hp.groupIsLarger(Groups.TRIAL)) {
+				p.sendMessage("§cO chat está §c§ldesabilitado§c!");
 			} else {
-				if (!hp.groupIsLarger(Groups.TRIAL)) {
-					p.sendMessage("§cO chat está §c§ldesabilitado§c!");
-				} else {
-					Bukkit.broadcastMessage((hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage() : hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage().replace("&", "§")));
-				}
+				Bukkit.broadcastMessage(
+						(hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage()
+								: hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f"
+										+ e.getMessage().replace("&", "§")));
 			}
 		}
+	}
 
 }

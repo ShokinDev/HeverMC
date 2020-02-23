@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import br.com.hevermc.commons.bukkit.Commons;
 import br.com.hevermc.commons.bukkit.api.ItemConstructor;
 import br.com.hevermc.lobby.Lobby;
 import br.com.hevermc.lobby.score.BungeeChannelApi;
@@ -19,15 +20,9 @@ public class Servers {
 		inv.setItem(11,
 				new ItemConstructor(new ItemStack(Material.DIAMOND_SWORD), "§aKitPvP",
 						Arrays.asList("", " §fModo §a§lKITPVP §fcom §6SIMULATOR§f, ",
-								" §ftreine suas habilidade com nossa warp §c§lLAVA§F!"," ",
-								"§e... §fjogando agora!")).create());
-		new BungeeChannelApi(Lobby.getInstance()).getPlayerCount("kitpvp").whenComplete((result, error) -> {
-			inv.setItem(11,
-					new ItemConstructor(new ItemStack(Material.DIAMOND_SWORD), "§aKitPvP",
-							Arrays.asList("", " §fModo §a§lKITPVP §fcom §6SIMULATOR§f, ",
-									" §ftreine suas habilidade com nossa warp §c§lLAVA§F!"," ",
-									"§e" + result.intValue() + " §fjogando agora!")).create());
-		});
+								" §ftreine suas habilidade com nossa warp §c§lLAVA§F!", " ",
+								"§e" + Commons.getManager().getRedis().get("kitpvp").replace("on:", "") + " §fjogando agora!")).create());
+
 		inv.setItem(13,
 				new ItemConstructor(new ItemStack(Material.IRON_FENCE), "§cGladiator",
 						Arrays.asList(" ", " §fModo §a§lGLADIATOR§f, este modo ",

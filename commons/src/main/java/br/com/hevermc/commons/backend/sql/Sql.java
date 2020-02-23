@@ -34,9 +34,7 @@ public class Sql {
 			Class.forName(driverName);
 			setConnection(DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?autoReconnect=true", user,
 					password));
-			// DriverManager.getConnection("jdbc:mysql://" + hostname + ":" + port + "/" + database, username,
-			// password);
-			System.out.print("aaa mysql conectqado");
+			System.out.print("[SQL] Conectado.");
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}

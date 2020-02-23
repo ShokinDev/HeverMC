@@ -58,18 +58,20 @@ public class SQLManager extends Sql {
 			e.printStackTrace();
 		}
 	}
-	
-	public  List<String> getTopKitPvP(String top) {
+
+	public List<String> getTopKitPvP(String top) {
 		PreparedStatement stm = null;
 		List<String> tops = new ArrayList<String>();
 		try {
-			stm = getConnection().prepareStatement("SELECT * FROM `hever_kitpvp` ORDER BY `" + top + "` DESC");
+			stm = getConnection().prepareStatement("SELECT * FROM `hever_kitpvp` ORDER BY `"+top+"` DESC");
 			ResultSet rs = stm.executeQuery();
 			int i = 0;
 			while (rs.next()) {
-				if (i <= 10){
+				if (i <= 10) {
 					i++;
-					tops.add("§f" + i + "º §a" + rs.getString("name") + " §e" + rs.getDouble(top));
+					tops.add("§f" + i + "º §a" + rs.getString("name") + " §e" + rs.getInt(top));
+				} else {
+					break;
 				}
 			}
 		} catch (SQLException e) {
@@ -81,8 +83,7 @@ public class SQLManager extends Sql {
 	public void delete(String table, String where, String where_args) {
 		PreparedStatement stm_1;
 		try {
-			stm_1 = getConnection()
-					.prepareStatement("DELETE FROM `" + table + "` WHERE `" + where + "` = ?");
+			stm_1 = getConnection().prepareStatement("DELETE FROM `" + table + "` WHERE `" + where + "` = ?");
 			stm_1.setString(1, where_args);
 			stm_1.executeUpdate();
 		} catch (SQLException e) {
@@ -107,7 +108,7 @@ public class SQLManager extends Sql {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void insertBan(String name, String author, String reason, long time) {
 		PreparedStatement stm = null;
 		try {
@@ -151,8 +152,8 @@ public class SQLManager extends Sql {
 			stm.setInt(3, 0);
 			stm.executeUpdate();
 
-			stm = getConnection()
-					.prepareStatement("INSERT INTO `hever_kitpvp`(`name`, `kills`, `deaths`, `ks`, `kitList`) VALUES (?,?,?,?,?)");
+			stm = getConnection().prepareStatement(
+					"INSERT INTO `hever_kitpvp`(`name`, `kills`, `deaths`, `ks`, `kitList`) VALUES (?,?,?,?,?)");
 			stm.setString(1, name);
 			stm.setInt(2, 0);
 			stm.setInt(3, 0);
