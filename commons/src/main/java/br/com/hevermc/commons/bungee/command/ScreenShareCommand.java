@@ -24,25 +24,25 @@ public class ScreenShareCommand extends HeverCommand implements TabExecutor {
 			if (requiredGroup(p, Groups.MODGC, true)) {
 				if (!p.getServer().getInfo().getName().equals("login")) {
 					if (args.length == 0) {
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/ss <player>"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve utilizar Â§e/ss <player>"));
 					} else {
 						ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 						if (target == null) {
-							p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cSeu alvo estÃ¡ offline!"));
 						} else if (Commons.getInstance().getProxy().getServerInfo("screenshare") == null) {
-							p.sendMessage(TextComponent.fromLegacyText("§cEste servidor está offline!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cEste servidor estÃ¡ offline!"));
 						} else {
 							target.connect(Commons.getInstance().getProxy().getServerInfo("screenshare"));
 							p.connect(Commons.getInstance().getProxy().getServerInfo("screenshare"));
-							p.sendMessage(TextComponent.fromLegacyText("§aVocê enviou " + target.getName()
-									+ " §apara §b"
+							p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª enviou " + target.getName()
+									+ " Â§apara Â§b"
 									+ Commons.getInstance().getProxy().getServerInfo("screenshare").getName().toUpperCase()
-									+ " §acom sucesso!"));
+									+ " Â§acom sucesso!"));
 						}
 
 					}
 				} else {
-					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode executar esta aÃ§Ã£o neste servidor!"));
 				}
 			}
 		}

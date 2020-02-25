@@ -20,10 +20,21 @@ public class HologramCommand extends HeverCommand {
 				if (args.length == 0) {
 					p.sendMessage("§aVocê deve usar §e/hologram <tkpvp|tdpvp>");
 				} else if (args[0].equalsIgnoreCase("tkpvp")) {
-					Lobby.getManager().h_loc.put("tkpvp", p.getLocation());
+					
+					Lobby.getInstance().getLocations().getConfig().set("holo.tkpvp.x", p.getLocation().getX());
+					Lobby.getInstance().getLocations().getConfig().set("holo.tkpvp.y", p.getLocation().getY());
+					Lobby.getInstance().getLocations().getConfig().set("holo.tkpvp.z", p.getLocation().getZ());
+					Lobby.getInstance().getLocations().save();
+					
 					p.sendMessage("§aVocê definiu a localização de um holograma!");
+					
 				}else if (args[0].equalsIgnoreCase("tdpvp")) {
-					Lobby.getManager().h_loc.put("tdpvp", p.getLocation());
+					
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdpvp.x", p.getLocation().getX());
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdpvp.y", p.getLocation().getY());
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdpvp.z", p.getLocation().getZ());
+					Lobby.getInstance().getLocations().save();
+					
 					p.sendMessage("§aVocê definiu a localização de um holograma!");
 				}
 			}

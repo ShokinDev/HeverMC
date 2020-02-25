@@ -20,10 +20,10 @@ public class StaffChatCommand extends HeverCommand {
 			if (requiredGroup(p, Groups.YOUTUBERPLUS, true)) {
 				if (Commons.getManager().staffchat.contains(p)) {
 					Commons.getManager().staffchat.remove(p);
-					p.sendMessage(new TextComponent("§cVocê saiu do §estaff-chat§c!"));
+					p.sendMessage(new TextComponent("Â§cVocÃª saiu do Â§estaff-chatÂ§c!"));
 				} else {
 					Commons.getManager().staffchat.add(p);
-					p.sendMessage(new TextComponent("§aVocê entrou no §estaff-chat§a!"));
+					p.sendMessage(new TextComponent("Â§aVocÃª entrou no Â§estaff-chatÂ§a!"));
 				}
 			}
 		}

@@ -7,13 +7,14 @@ import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.command.commons.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
 
 public class TeleportCommand extends HeverCommand {
 
 	public TeleportCommand() {
-		super("teleport", Arrays.asList("tp", "go"));
+		super("teleport", Arrays.asList("tp", "go", "tpall"));
 	}
 
 	@Override
@@ -22,50 +23,89 @@ public class TeleportCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			if (hasGroup(p, Groups.BUILDER, true)) {
 				if (args.length == 0) {
-					p.sendMessage("§aVocê deve utilizar §e/tp <target> §aou §e/tp <x> <y> <z>");
-				} else if (args.length == 1) {
+
+					if (commandLabel.equalsIgnoreCase("tpall") && hasGroup(p, Groups.MODPLUS, true)) {
+						Bukkit.getOnlinePlayers().forEach(ps -> ps.teleport(p));
+						p.sendMessage("Â§aVocÃª teleportou todos atÃ© vocÃª");
+						Bukkit.getOnlinePlayers().forEach(ps -> {
+							HeverPlayer hps = toHeverPlayer(ps);
+							if (hps.groupIsLarger(Groups.GERENTE)) {
+								ps.sendMessage("Â§7Â§o[" + p.getName() + " teleportou todos atÃ© " + p.getName() + "]");
+							}
+						});
+					} else {
+
+						p.sendMessage("Â§aVocÃª deve utilizar Â§e/tp <target> Â§aou Â§e/tp <x> <y> <z>");
+					}
+				} else {
 
 					if (hasGroup(p, Groups.TRIAL, true)) {
-						if (args[0].length() > 16 || args[0].length() < 3) {
-							p.sendMessage("§cO alvo informado não é valido!");
-						} else {
-							Player target = Bukkit.getPlayer(args[0]);
-							if (target == null) {
-								p.sendMessage("§cO alvo informado não está on-line!");
+						if (args.length == 1) {
+							if (args[0].length() > 16 || args[0].length() < 3) {
+								p.sendMessage("Â§cO alvo informado nÃ£o Ã© valido!");
 							} else {
-								p.teleport(target);
-								p.sendMessage("§aVocê se teleportou para §e" + target.getName());
+								Player target = Bukkit.getPlayer(args[0]);
+								if (target == null) {
+									p.sendMessage("Â§cO alvo informado nÃ£o estÃ¡ on-line!");
+								} else {
+									p.teleport(target);
+									p.sendMessage("Â§aVocÃª se teleportou para Â§e" + target.getName());
+									Bukkit.getOnlinePlayers().forEach(ps -> {
+										HeverPlayer hps = toHeverPlayer(ps);
+										if (hps.groupIsLarger(Groups.GERENTE)) {
+											ps.sendMessage("Â§7Â§o[" + p.getName() + " se teleportou atÃ© "
+													+ target.getName() + "]");
+										}
+									});
+								}
 							}
 						}
 
-					} else if (args.length == 2) {
-						if (args[0].length() > 16 || args[0].length() < 3 || args[1].length() > 16
-								|| args[1].length() < 3) {
-							p.sendMessage("§cUm dos alvos informado não é valido!");
-						} else {
-							Player target = Bukkit.getPlayer(args[0]);
-							Player target2 = Bukkit.getPlayer(args[1]);
-							if (target == null || target2 == null) {
-								p.sendMessage("§cUm dos alvos informado não está on-line!");
-							} else {
-								target.teleport(target2);
-								p.sendMessage("§aVocê teleportou §e" + target.getName() + " §apara §e"
-										+ target2.getName() + "§a!");
+						if (args.length == 2) {
+							if (hasGroup(p, Groups.TRIAL, true)) {
+								if (args[0].length() > 16 || args[0].length() < 3 || args[1].length() > 16
+										|| args[1].length() < 3) {
+									p.sendMessage("Â§cUm dos alvos informado nÃ£o Ã© valido!");
+								} else {
+									Player target = Bukkit.getPlayer(args[0]);
+									Player target2 = Bukkit.getPlayer(args[1]);
+									if (target == null || target2 == null) {
+										p.sendMessage("Â§cUm dos alvos informado nÃ£o estÃ¡ on-line!");
+									} else {
+										target.teleport(target2);
+										p.sendMessage("Â§aVocÃª teleportou Â§e" + target.getName() + " Â§apara Â§e"
+												+ target2.getName() + "Â§a!");
+										Bukkit.getOnlinePlayers().forEach(ps -> {
+											HeverPlayer hps = toHeverPlayer(ps);
+											if (hps.groupIsLarger(Groups.GERENTE)) {
+												ps.sendMessage("Â§7Â§o[" + p.getName() + " teleportou " + target.getName()
+														+ " atÃ© " + target2.getName() + "]");
+											}
+										});
+									}
+								}
 							}
 						}
-					}
-				}
 
-				if (hasGroup(p, Groups.BUILDER, true)) {
-					if (args.length == 3) {
-						if (!(isInt(args[0]) || isInt(args[1]) || isInt(args[2]))) {
-							p.sendMessage("§cVocê deve utiliza apenas numeros!");
+						if (hasGroup(p, Groups.BUILDER, true)) {
+							if (args.length == 3) {
+								if (!(isInt(args[0]) || isInt(args[1]) || isInt(args[2]))) {
+									p.sendMessage("Â§cVocÃª deve utilizar apenas numeros!");
+								}
+								double x = Double.valueOf(args[0]);
+								double y = Double.valueOf(args[1]);
+								double z = Double.valueOf(args[2]);
+								p.teleport(new Location(p.getWorld(), x, y, z));
+								p.sendMessage("Â§aVocÃª se teleportou para Â§eX: " + x + " Y:" + y + " Z:" + z + "Â§a!");
+								Bukkit.getOnlinePlayers().forEach(ps -> {
+									HeverPlayer hps = toHeverPlayer(ps);
+									if (hps.groupIsLarger(Groups.GERENTE)) {
+										ps.sendMessage("Â§7Â§o[" + p.getName() + " se teleportou atÃ© " + "X: " + x + " Y:"
+												+ y + " Z:" + z + "]");
+									}
+								});
+							}
 						}
-						double x = Double.valueOf(args[0]);
-						double y = Double.valueOf(args[1]);
-						double z = Double.valueOf(args[2]);
-						p.teleport(new Location(p.getWorld(), x, y, z));
-						p.sendMessage("§aVocê se teleportou para §eX: " + x + " Y:" + y + " Z:" + z + "§a!");
 
 					}
 				}

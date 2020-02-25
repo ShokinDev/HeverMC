@@ -10,8 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 import br.com.hevermc.commons.bukkit.Commons;
 import br.com.hevermc.commons.bukkit.api.ItemConstructor;
-import br.com.hevermc.lobby.Lobby;
-import br.com.hevermc.lobby.score.BungeeChannelApi;
 
 public class Servers {
 

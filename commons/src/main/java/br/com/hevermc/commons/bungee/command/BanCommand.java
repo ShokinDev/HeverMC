@@ -1,17 +1,24 @@
 package br.com.hevermc.commons.bungee.command;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import com.google.common.collect.ImmutableSet;
+
 import br.com.hevermc.commons.bungee.Commons;
 import br.com.hevermc.commons.bungee.account.HeverPlayer;
 import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.bungee.command.common.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.plugin.TabExecutor;
 
-public class BanCommand extends HeverCommand {
+public class BanCommand extends HeverCommand implements TabExecutor {
 
 	public BanCommand() {
 		super("ban");
@@ -23,7 +30,7 @@ public class BanCommand extends HeverCommand {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.TRIAL, true)) {
 				if (args.length < 3) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/ban <nickname> <reason>"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve usar Â§e/ban <nickname> <reason>"));
 				} else {
 					String target = args[0];
 					HeverPlayer hp = toHeverPlayer(p);
@@ -36,15 +43,15 @@ public class BanCommand extends HeverCommand {
 					HeverPlayer targethp = PlayerLoader.getHP(target);
 					if (targetp != null) {
 						if (targethp.getGroup().ordinal() > hp.getGroup().ordinal()) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode banir este jogador!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode banir este jogador!"));
 						} else if (target.toLowerCase().equals(p.getName().toLowerCase())) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode se auto-banir!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode se auto-banir!"));
 						} else {
 
 							targetp.disconnect(TextComponent
-									.fromLegacyText("§4§lBANIDO\n\n§fVocê foi banido permanentemente!\n\n§fMotivo: §c"
-											+ reason + "\n§fPor: " + p.getName()
-											+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ediscord.hevermc.com.br"));
+									.fromLegacyText("Â§4Â§lBANIDO\n\nÂ§fVocÃª foi banido permanentemente!\n\nÂ§fMotivo: Â§c"
+											+ reason + "\nÂ§fPor: " + p.getName()
+											+ "\n\nÂ§fAchou sua puniÃ§Ã£o injusta? Contate-nÃ³s via Â§3Â§lDISCORDÂ§f!\nÂ§ediscord.hevermc.com.br"));
 
 							targethp.setBanned(true);
 							targethp.setBan_author(p.getName());
@@ -56,22 +63,22 @@ public class BanCommand extends HeverCommand {
 								HeverPlayer t = PlayerLoader.getHP(players);
 								if (!t.groupIsLarger(players, Groups.MODPLUS)) {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + targetp.getName() + " foi banido]");
+											"Â§c[O jogador " + targetp.getName() + " foi banido]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
-													+ reason + "\n§fDuração: §4permanentemente").create()));
+											new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este banimento:\nÂ§fMotivo: "
+													+ reason + "\nÂ§fDuraÃ§Ã£o: Â§4permanentemente").create()));
 									players.sendMessage(msg_a);
 								} else {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + targetp.getName() + " foi banido]");
+											"Â§c[O jogador " + targetp.getName() + " foi banido]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
-													+ reason + "\n§fPor: " + p.getName()
-													+ "\n§fDuração: §4permanentemente").create()));
+											new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este banimento:\nÂ§fMotivo: "
+													+ reason + "\nÂ§fPor: " + p.getName()
+													+ "\nÂ§fDuraÃ§Ã£o: Â§4permanentemente").create()));
 									players.sendMessage(msg_a);
 								}
 							});
-							p.sendMessage(TextComponent.fromLegacyText("§aVocê baniu §e" + targetp.getName() + "§a com sucesso!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª baniu Â§e" + targetp.getName() + "Â§a com sucesso!"));
 						}
 
 					} else {
@@ -85,22 +92,22 @@ public class BanCommand extends HeverCommand {
 							HeverPlayer t = PlayerLoader.getHP(players);
 							if (!t.groupIsLarger(players, Groups.TRIAL)) {
 								TextComponent msg_a = new TextComponent(
-										"§c[O jogador " + target + " foi banido]");
+										"Â§c[O jogador " + target + " foi banido]");
 								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-										new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
-												+ reason + "\n§fDuração: §4permanentemente").create()));
+										new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este banimento:\nÂ§fMotivo: "
+												+ reason + "\nÂ§fDuraÃ§Ã£o: Â§4permanentemente").create()));
 								players.sendMessage(msg_a);
 							} else {
 								TextComponent msg_a = new TextComponent(
-										"§c[O jogador " + target + " foi banido]");
+										"Â§c[O jogador " + target + " foi banido]");
 								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-										new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
-												+ reason + "\n§fPor: " + p.getName()
-												+ "\n§fDuração: §4permanentemente").create()));
+										new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este banimento:\nÂ§fMotivo: "
+												+ reason + "\nÂ§fPor: " + p.getName()
+												+ "\nÂ§fDuraÃ§Ã£o: Â§4permanentemente").create()));
 								players.sendMessage(msg_a);
 							}
 						});
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê baniu §e" + target + "§a com sucesso!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª baniu Â§e" + target + "Â§a com sucesso!"));
 			
 					}
 				}
@@ -108,5 +115,21 @@ public class BanCommand extends HeverCommand {
 			}
 		}
 
+	}
+	
+	public Iterable<String> onTabComplete(CommandSender cs, String[] args) {
+		if ((args.length > 2) || (args.length == 0)) {
+			return ImmutableSet.of();
+		}
+		Set<String> match = new HashSet<>();
+		if (args.length == 1) {
+			String search = args[0].toLowerCase();
+			for (ProxiedPlayer player : ProxyServer.getInstance().getPlayers()) {
+				if (player.getName().toLowerCase().startsWith(search)) {
+					match.add(player.getName());
+				}
+			}
+		}
+		return match;
 	}
 }

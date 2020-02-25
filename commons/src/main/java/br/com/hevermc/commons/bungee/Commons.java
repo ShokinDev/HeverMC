@@ -1,5 +1,6 @@
 package br.com.hevermc.commons.bungee;
 
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import br.com.hevermc.commons.bungee.command.common.loader.CommandLoader;
@@ -16,9 +17,9 @@ public class Commons extends Plugin {
 	@Getter
 	static Commons instance;
 
-	String[] bcs = { "", "O servidor está em fase §3§lBETA§f, bugs podem ocorrer.",
-			"Entre em nosso discord para ficar atento a todas novidades: §ediscord.hevermc.com.br",
-			"Acompanhe nosso servidor no Twitter: §3@_HeverMC", "Tendo problemas com hackers? Utilize §c/report§f!" };
+	String[] bcs = { "", "O servidor estÃ¡ em fase Â§9Â§lBETAÂ§f, bugs podem ocorrer.",
+			"Entre em nosso discord para ficar atento a todas novidades: Â§ediscord.hevermc.com.br",
+			"Acompanhe nosso servidor no Twitter: Â§3@_HeverMC", "Tendo problemas com hackers? Utilize Â§c/reportÂ§f!" };
 
 	@Override
 	public void onEnable() {
@@ -27,24 +28,30 @@ public class Commons extends Plugin {
 		instance = this;
 		new CommandLoader();
 		getManager().setup();
+		List<String> tk = getManager().getSQLManager().getTopKitPvP("kills");
+		List<String> td = getManager().getSQLManager().getTopKitPvP("deaths");
+		getManager().getRedis().set("tkpvp", tk.get(0) + "," + tk.get(1) + "," + tk.get(2) + "," + tk.get(3) + "," + tk.get(4));
+		getManager().getRedis().set("tdpvp", td.get(0) + "," + td.get(1) + "," + td.get(2) + "," + td.get(3) + "," + td.get(4));
 		getProxy().getScheduler().schedule(this, new Runnable() {
-
 
 			@Override
 			public void run() {
-				getManager().getRedis().set("pvp_topkills", "1:" + getManager().getSQLManager().getTopKitPvP("kills").get(0) + 
-						"2:" + getManager().getSQLManager().getTopKitPvP("kills").get(1)+ 
-						"3:" + getManager().getSQLManager().getTopKitPvP("kills").get(2)+ 
-						"4:" + getManager().getSQLManager().getTopKitPvP("kills").get(3)+ 
-						"5:" + getManager().getSQLManager().getTopKitPvP("kills").get(4));
+				List<String> tk2 = getManager().getSQLManager().getTopKitPvP("kills");
+				List<String> td2 = getManager().getSQLManager().getTopKitPvP("deaths");
+				getManager().getRedis().del("tkpvp");
+				getManager().getRedis().del("tdpvp");
+				getManager().getRedis().set("tkpvp", tk2.get(0) + "," + tk2.get(1) + "," + tk2.get(2) + "," + tk2.get(3) + "," + tk2.get(4));
+				getManager().getRedis().set("tdpvp", td2.get(0) + "," + td2.get(1) + "," + td2.get(2) + "," + td2.get(3) + "," + td2.get(4));
 			}
-		}, 1, 5, TimeUnit.MINUTES);
+		}, 1, 3, TimeUnit.MINUTES);
 		getProxy().getScheduler().schedule(this, new Runnable() {
-			
+
 			@Override
 			public void run() {
+				getManager().getRedis().del("all");
+				getManager().getRedis().del("kitpvp");
 				getManager().getRedis().set("all", "on:" + getProxy().getOnlineCount());
-				getManager().getRedis().set("kitpvp", "on:" + getProxy().getServerInfo("kitpvp").getPlayers().size());
+				getManager().getRedis().set("kitpvp", "on:" + (getProxy().getServerInfo("kitpvp").getPlayers() != null ? getProxy().getServerInfo("kitpvp").getPlayers().size() : 0));
 			}
 		}, 1, 3, TimeUnit.SECONDS);
 		getProxy().getScheduler().schedule(this, new Runnable() {
@@ -52,7 +59,7 @@ public class Commons extends Plugin {
 
 			@Override
 			public void run() {
-				if (i >= bcs.length) {
+				if (i == bcs.length) {
 					i = 1;
 					return;
 				} else {
@@ -63,7 +70,7 @@ public class Commons extends Plugin {
 
 				for (ProxiedPlayer all : Commons.getInstance().getProxy().getPlayers()) {
 					all.sendMessage(TextComponent.fromLegacyText(""));
-					all.sendMessage(TextComponent.fromLegacyText("§6§LHEVER§F§LMC §7»§f " + bcs[i]));
+					all.sendMessage(TextComponent.fromLegacyText("Â§6Â§lHEVERÂ§fÂ§lMC Â§fÂ» Â§f" + bcs[i]));
 					all.sendMessage(TextComponent.fromLegacyText(""));
 				}
 

@@ -54,6 +54,10 @@ public class SQLManager extends Sql {
 					"CREATE TABLE IF NOT EXISTS `hever_discord` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
 							+ "`dc_id` VARCHAR(999) NULL, `pin` VARCHAR(999) NULL, `status`  VARCHAR(999) NULL, PRIMARY KEY (`id`));");
 			stm3.executeUpdate();
+			stm3 = getConnection().prepareStatement(
+					"CREATE TABLE IF NOT EXISTS `hever_accounts` (`id` INT NOT NULL AUTO_INCREMENT,`name` VARCHAR(16) NULL,"
+							+ "`original` INT NULL, PRIMARY KEY (`id`));");
+			stm3.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
@@ -63,13 +67,14 @@ public class SQLManager extends Sql {
 		PreparedStatement stm = null;
 		List<String> tops = new ArrayList<String>();
 		try {
-			stm = getConnection().prepareStatement("SELECT * FROM `hever_kitpvp` ORDER BY `"+top+"` DESC");
+			stm = getConnection().prepareStatement("SELECT * FROM hever_kitpvp ORDER BY " + top + " DESC LIMIT 5");
 			ResultSet rs = stm.executeQuery();
 			int i = 0;
 			while (rs.next()) {
-				if (i <= 10) {
+				if (i <= 5) {
 					i++;
-					tops.add("§f" + i + "º §a" + rs.getString("name") + " §e" + rs.getInt(top));
+					tops.add("Â§f" + i + " Â§a" + rs.getString("name") + " - Â§e" + rs.getInt(top) + " "
+							+ top.toUpperCase());
 				} else {
 					break;
 				}
@@ -89,6 +94,21 @@ public class SQLManager extends Sql {
 		} catch (SQLException e) {
 			System.out.println("MYSQL - " + e.getMessage());
 			System.out.println("Erro ao inserir player");
+		}
+	}
+	
+	public void insertOriginal(String name, int original) {
+		PreparedStatement stm = null;
+		try {
+
+			stm = getConnection()
+					.prepareStatement("INSERT INTO `hever_accounts`(`name`, `original`) VALUES (?,?)");
+			stm.setString(1, name);
+			stm.setInt(2, original);
+			stm.executeUpdate();
+
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 

@@ -31,8 +31,8 @@ public class VersionCommand extends HeverCommand {
 					else
 						a++;
 				}
-				p.sendMessage(
-						"§aEstátisticas de versões dos jogadores no servidor atual: \n§21.8: " + a + "\n§c1.7: " + b);
+				p.sendMessage("Â§aEstÃ¡tisticas de versÃµes dos jogadores no servidor atual: \nÂ§2> 47 (maior que ou 1.8): "
+						+ a + "\nÂ§c< 47 (menor que 1.8): " + b);
 			}
 		}
 		return false;

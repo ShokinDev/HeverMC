@@ -34,6 +34,7 @@ public class GeneralListeners implements Listener {
 
 			@Override
 			public void run() {
+				hp.setTag(Tags.getTags(hp.getGroup()));
 				PlayerLoader.forceLoadAccount(hp);
 			}
 		}.runTaskLater(Commons.getInstance(), 15);
@@ -43,16 +44,15 @@ public class GeneralListeners implements Listener {
 	public void onQuit(PlayerQuitEvent e) {
 		e.setQuitMessage(null);
 		Commons.getManager().online.remove(e.getPlayer());
-		PlayerLoader.unload(e.getPlayer().getName());
 	}
 
 	@EventHandler
 	public void onCommand(PlayerCommandPreprocessEvent e) {
 		if (e.getMessage().startsWith("/me") || e.getMessage().startsWith("/pl") || e.getMessage().startsWith("/about")
 				|| e.getMessage().startsWith("/help") || e.getMessage().startsWith("//calc")
-				|| e.getMessage().startsWith("/plugins")) 
+				|| e.getMessage().startsWith("/plugins"))
 			e.setCancelled(true);
-		
+
 	}
 
 	@EventHandler
@@ -62,17 +62,17 @@ public class GeneralListeners implements Listener {
 		HeverPlayer hp = PlayerLoader.getHP(p);
 		if (ChatCommand.chat) {
 			Bukkit.broadcastMessage(
-					(hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage()
-							: hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f"
-									+ e.getMessage().replace("&", "§")));
+					(hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " Â§7Â»Â§f " + e.getMessage()
+							: hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " Â§7Â»Â§f "
+									+ e.getMessage().replace("&", "Â§")));
 		} else {
 			if (!hp.groupIsLarger(Groups.TRIAL)) {
-				p.sendMessage("§cO chat está §c§ldesabilitado§c!");
+				p.sendMessage("Â§cO chat estÃ¡ desabilitado!");
 			} else {
 				Bukkit.broadcastMessage(
-						(hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " §7» §f" + e.getMessage()
-								: hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " §7» §f"
-										+ e.getMessage().replace("&", "§")));
+						(hp.getTag() == Tags.MEMBRO ? hp.getTag().getColor() + p.getName() + " Â§7Â»Â§f " + e.getMessage()
+								: hp.getTag().getPrefix() + " " + hp.getTag().getColor() + p.getName() + " Â§7Â»Â§f"
+										+ e.getMessage().replace("&", "Â§")));
 			}
 		}
 	}

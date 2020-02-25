@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
@@ -27,14 +28,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import br.com.hevermc.commons.bukkit.Commons;
+import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.account.loader.PlayerLoader;
-import br.com.hevermc.commons.bukkit.api.BarUtil;
 import br.com.hevermc.commons.bukkit.api.ItemConstructor;
 import br.com.hevermc.commons.bukkit.api.ReflectionAPI;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Tags;
 import br.com.hevermc.lobby.Lobby;
-import br.com.hevermc.lobby.api.Holograms;
 import br.com.hevermc.lobby.api.NPC;
 import br.com.hevermc.lobby.api.PacketReader;
 import br.com.hevermc.lobby.command.BuildCommand;
@@ -43,17 +44,21 @@ import br.com.hevermc.lobby.gui.Servers;
 import br.com.hevermc.lobby.score.ScoreboardManager;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
-import br.com.hevermc.commons.bukkit.Commons;
-import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 
 public class GeneralListener implements Listener {
 
 	ArrayList<Player> inCooldown = new ArrayList<Player>();
 
+	@EventHandler
+	public void onQuit(PlayerQuitEvent e) {
+		br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.unload(e.getPlayer().getName());
+	}
+
 	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
+
 		HeverPlayer hp = PlayerLoader.getHP(p);
 		p.getInventory().clear();
 		Bukkit.getOnlinePlayers().forEach(allPlayers -> {
@@ -61,8 +66,6 @@ public class GeneralListener implements Listener {
 				hidePlayers(allPlayers, p);
 		});
 
-		for (int i = 0; i < 100; i++)
-			p.sendMessage("");
 		p.getInventory().setItem(0,
 				new ItemConstructor(new ItemStack(Material.COMPASS), "§eServidores §7(Abra com o botão direito)")
 						.create());
@@ -98,80 +101,39 @@ public class GeneralListener implements Listener {
 		p.setAllowFlight(true);
 
 		ReflectionAPI.sendTitle(p, "§e§lLOBBY", "§fSeja bem-vindo ao §elobby§f da rede §6Hever§fMC§f!", 10, 10, 10);
-		ReflectionAPI.tab(p, "\n§6§lHEVER§f§lMC\n",
-				"\n§fTwitter: §e@HeverNetwork_ §7| §fDiscord: §ediscord.hevermc.com.br §7| §fSite: §ewww.hevermc.com.br\n§fCaso tenha algum problema visite nosso §eDiscord§f!\n");
 
 		p.teleport(p.getWorld().getSpawnLocation());
 		p.setGameMode(GameMode.SURVIVAL);
 		new ScoreboardManager().build(p);
-		if (Lobby.getManager().npc_loc.containsKey("kitpvp")) {
-			Location l = Lobby.getManager().npc_loc.get("kitpvp");
-			NPC npc;
-			if (api.getPlayerVersion(p) < 47) {
-				npc = new NPC("§aKitPvP", l);
-			} else {
 
-				npc = new NPC("§aClique aqui", l);
-				new Holograms("§a§lKITPVP", new Location(l.getWorld(), l.getX(), l.getY() + 1, l.getZ())).showPlayer(p);
-				npc.spawn(p);
-				npc.headRotation(-178.7f, 1.6f);
-				npc.changeSkin(
-						"eyJ0aW1lc3RhbXAiOjE1ODEzODE2NjgxNDQsInByb2ZpbGVJZCI6Ijk0YzI1OThhMzA4MjRiMTU4M2RlNDlhZTMzMGNkNDU2IiwicHJvZmlsZU5hbWUiOiJCbGFhYWNrb3V0WiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0NDg1NDUzNmZlZTcxNGI0MDFlMDU3MGU4ZmEzYTJiYzM5NWMyNjA5MGI1ODU1YzYxZjNkZGJmOGE4OGEyOCJ9fX0=",
-						"DfgUfogh2qx02hoGKCIkF6BxgqLh9KaaM5l92FGx1otlMgYhS0LN4HmwHQkI3+83qZCvPWShGEPx5vO2ylYk8yRmpzrlp/OedDxCqWxejLzTmSfFAg/MsY5nytPXaWLfSFEWBnS6w/DQmWfoRbMCL54AF4tBSqI6cVcMiM7WKMhTlv6yUGhhazs2yuDjgZM1wnla50z4i/HhlXFk5Fj2zAjjRg+zNP35S0l1xfEPag96Gx/NeKkCxD6iGJs6irb3ZoNaYAfnzsg58BUFfZxww9P+T7XjlZ8XlygLiTq4E4Z8AgI3+WT3TjOEK1V78t/TjoNSg7nT3+slN0Wch3bMb9GYYc45x5QPzZp5NEvG53xw9T4K0QhKbyZIXMKDt13pTf0uaxmBQh9qfMLGDcdcFrRoXaF7p358Gefy9s+8VWsUdjWuLVqb8ssrblykiEoJgaBtVxRsdxWqyj9rR9Du2HNFV/OyG6BN1AYVf6guDzrjUALonEkuG4gZHSefSw9eUBEy6YIzmi4vLe5SP5qxPtEy4cFwLpHQTWnD19UDxCTLW9hHslFPbW6zZoJYx9o1FOayo3aYzfjZc2BXRI/VKnoFLA0UkgErTdD7KzZ/9Br/vwuzHGV5/Aa53f57Id+cqq+GFshkntTK/5MPCc1+E/tRMbHSuGxyy8dFf/T8W1M=");
-				/*
-				 * new BukkitRunnable() { String[] a =
-				 * Commons.getManager().getRedis().get("pvp_topkills").split(","); String htopk
-				 * = "§a§lTOP 5 KILLS\n" + "\n" + a[0] + "\n" + a[1] + "\n" + a[2] + "\n" + a[3]
-				 * + "\n" + a[4] + "\n\n"; Holograms h = new Holograms(htopk, new
-				 * Location(l2.getWorld(), l2.getX(), l2.getY(), l2.getZ())) .showPlayer(p);
-				 * 
-				 * @Override public void run() { a =
-				 * Commons.getManager().getRedis().get("pvp_topkills").split(","); htopk =
-				 * "§a§lTOP 5 KILLS\n" + "\n" + a[0] + "\n" + a[1] + "\n" + a[2] + "\n" + a[3] +
-				 * "\n" + a[4] + "\n\n";
-				 * 
-				 * h.hidePlayer(p); h.setName(htopk); h.showPlayer(p);
-				 * Lobby.getManager().log("Hologramas atualizados!");
-				 * 
-				 * } }.runTaskTimerAsynchronously(Lobby.getInstance(), 0, 300L);
-				 */
-				new BukkitRunnable() {
-					String htext = "§fJogando: §a0";
-					Holograms h = new Holograms(htext, new Location(l.getWorld(), l.getX(), l.getY() + 0.5, l.getZ()))
-							.showPlayer(p);
+		//
 
-					@Override
-					public void run() {
-						if (!p.isOnline() || p == null || api.getPlayerVersion(p) < 47) {
-							cancel();
-						} else {
-							String ult = htext;
-							htext = "§fJogando: §a" + Commons.getManager().getRedis().get("kitpvp").replace("on:", "");
-							if (!htext.equalsIgnoreCase(ult)) {
-								h.hidePlayer(p);
-								h.setName(htext);
-								h.showPlayer(p);
-							}
+		Location l = new Location(Bukkit.getWorld("world"), Lobby.getInstance().getLocations().getConfig().getDouble("npc.pvp.x"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.pvp.y"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.pvp.z"));
+		NPC npc;
 
-						}
-					}
-				}.runTaskTimer(Lobby.getInstance(), 0, 10);
+		npc = new NPC("§aClique aqui", l);
 
+		npc.spawn(p);
+		npc.headRotation(-178.7f, 1.6f);
+		npc.changeSkin(
+				"eyJ0aW1lc3RhbXAiOjE1ODEzODE2NjgxNDQsInByb2ZpbGVJZCI6Ijk0YzI1OThhMzA4MjRiMTU4M2RlNDlhZTMzMGNkNDU2IiwicHJvZmlsZU5hbWUiOiJCbGFhYWNrb3V0WiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0NDg1NDUzNmZlZTcxNGI0MDFlMDU3MGU4ZmEzYTJiYzM5NWMyNjA5MGI1ODU1YzYxZjNkZGJmOGE4OGEyOCJ9fX0=",
+				"DfgUfogh2qx02hoGKCIkF6BxgqLh9KaaM5l92FGx1otlMgYhS0LN4HmwHQkI3+83qZCvPWShGEPx5vO2ylYk8yRmpzrlp/OedDxCqWxejLzTmSfFAg/MsY5nytPXaWLfSFEWBnS6w/DQmWfoRbMCL54AF4tBSqI6cVcMiM7WKMhTlv6yUGhhazs2yuDjgZM1wnla50z4i/HhlXFk5Fj2zAjjRg+zNP35S0l1xfEPag96Gx/NeKkCxD6iGJs6irb3ZoNaYAfnzsg58BUFfZxww9P+T7XjlZ8XlygLiTq4E4Z8AgI3+WT3TjOEK1V78t/TjoNSg7nT3+slN0Wch3bMb9GYYc45x5QPzZp5NEvG53xw9T4K0QhKbyZIXMKDt13pTf0uaxmBQh9qfMLGDcdcFrRoXaF7p358Gefy9s+8VWsUdjWuLVqb8ssrblykiEoJgaBtVxRsdxWqyj9rR9Du2HNFV/OyG6BN1AYVf6guDzrjUALonEkuG4gZHSefSw9eUBEy6YIzmi4vLe5SP5qxPtEy4cFwLpHQTWnD19UDxCTLW9hHslFPbW6zZoJYx9o1FOayo3aYzfjZc2BXRI/VKnoFLA0UkgErTdD7KzZ/9Br/vwuzHGV5/Aa53f57Id+cqq+GFshkntTK/5MPCc1+E/tRMbHSuGxyy8dFf/T8W1M=");
+
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				npc.rmvFromTablist();
 			}
-			new BukkitRunnable() {
-				@Override
-				public void run() {
-					npc.rmvFromTablist();
-				}
-			}.runTaskLater(Lobby.getInstance(), 25L);
-			Lobby.getManager().npc.put(p, npc.getEntityID());
-			new PacketReader(p).inject();
-		}
+		}.runTaskLater(Lobby.getInstance(), 45L);
+		Lobby.getManager().npc.put(p, npc.getEntityID());
+		new PacketReader(p).inject();
+
 		if (hp.groupIsLarger(Groups.PRO))
 			Bukkit.broadcastMessage(Tags.getTags(hp.getGroup()).getPrefix() + " "
 					+ Tags.getTags(hp.getGroup()).getColor() + p.getName() + " §fentrou neste §a§nlobby§f!");
 
-		BarUtil.setBar(p, "§a§l§k!!!§f§l VOCÊ ESTÁ CONECTADO AO §E§LLOBBY §A§L§K!!!", 100);
 	}
 
 	@EventHandler
@@ -224,7 +186,7 @@ public class GeneralListener implements Listener {
 			if (p.getItemInHand().getType() == Material.COMPASS) {
 				e.setCancelled(true);
 				new Servers(p);
-			} else if (p.getItemInHand().getItemMeta().getDisplayName()
+			} else if (p.getItemInHand().getItemMeta() != null && p.getItemInHand().getItemMeta().getDisplayName()
 					.equalsIgnoreCase("§ePerfil §7(Abra com o botão direito)")) {
 				e.setCancelled(true);
 				new Profile(p);

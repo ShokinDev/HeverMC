@@ -1,6 +1,7 @@
 package br.com.hevermc.commons.bukkit;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import br.com.hevermc.commons.bukkit.command.commons.loader.CommandLoader;
@@ -20,8 +21,15 @@ public class Commons extends JavaPlugin {
 		new CommandLoader();
 		instance = this;
 		getManager().setup();
-		
 		super.onEnable();
+	}
+	
+	@Override
+	public void onDisable() {
+		for (Player ps : Bukkit.getOnlinePlayers()) {
+			getManager().getBungeeChannel().connect(ps, "lobby");
+		}
+		super.onDisable();
 	}
 
 }

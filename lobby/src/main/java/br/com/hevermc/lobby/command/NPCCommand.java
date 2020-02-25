@@ -20,7 +20,10 @@ public class NPCCommand extends HeverCommand {
 				if (args.length == 0) {
 					p.sendMessage("§aVocê deve usar §e/setnpc <kitpvp>");
 				} else if (args[0].equalsIgnoreCase("kitpvp")) {
-					Lobby.getManager().npc_loc.put("kitpvp", p.getLocation());
+					Lobby.getInstance().getLocations().getConfig().set("npc.pvp.x", p.getLocation().getX());
+					Lobby.getInstance().getLocations().getConfig().set("npc.pvp.y", p.getLocation().getY());
+					Lobby.getInstance().getLocations().getConfig().set("npc.pvp.z", p.getLocation().getZ());
+					Lobby.getInstance().getLocations().save();
 					p.sendMessage("§aVocê definiu a localização de um npc!");
 				}
 			}

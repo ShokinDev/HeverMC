@@ -5,25 +5,25 @@ import lombok.Getter;
 @Getter
 public enum Tags {
 
-	MEMBRO("§7", "§7", "z", Groups.MEMBRO, false), 
-	PRO("§6§lPRO", "§6", "q", Groups.PRO, false),
-	LEGEND("§e§lLEGEND", "§E", "p", Groups.LEGEND, false), 
-	CRYSTAL("§d§LCRYSTAL", "§d", "o", Groups.CRYSTAL, false),
-	BETA("§1§LBETA", "§1", "m", Groups.BETA, true),
-	YEAR("§b§L2020", "§b", "n", Groups.YEAR, false),
-	YOUTUBER("§b§lYT", "§b", "l", Groups.YOUTUBER, true),
-	YOUTUBERPLUS("§3§lYT+", "§3", "k", Groups.YOUTUBERPLUS, true),
-	DESIGNER("§2§lDESIGNER", "§2", "j", Groups.DESIGNER, true),
-	BUILDER("§e§lBUILDER", "§e", "i", Groups.BUILDER, false),
-	TRIAL("§d§lTRIAL", "§d", "h", Groups.TRIAL, false),
-	MOD("§5§lMOD", "§5", "g", Groups.MOD, false),
-	MODGC("§5§lMODGC", "§5", "f", Groups.MODGC, true), 
-	MODPLUS("§5§LMOD+", "§5", "e", Groups.MODPLUS, false),
-	GERENTE("§c§lGERENTE", "§c", "d", Groups.GERENTE, false),
-	ADMIN("§c§lADMIN", "§c", "c", Groups.ADMIN, false),
-	DIRETOR("§4§LDIRETOR", "§4", "b", Groups.DIRETOR, false),
-	DEV("§3§lDEV", "§3", "b", Groups.DEV, false),
-	DONO("§4§LDONO", "§4", "a", Groups.DONO, false);
+	MEMBRO("Â§7", "Â§7", "z", Groups.MEMBRO, false), 
+	PRO("Â§6Â§lPRO", "Â§6", "q", Groups.PRO, false),
+	LEGEND("Â§eÂ§lLEGEND", "Â§E", "p", Groups.LEGEND, false), 
+	CRYSTAL("Â§dÂ§LCRYSTAL", "Â§d", "o", Groups.CRYSTAL, false),
+	BETA("Â§1Â§LBETA", "Â§1", "m", Groups.BETA, true),
+	YEAR("Â§bÂ§L2020", "Â§b", "n", Groups.YEAR, false),
+	YOUTUBER("Â§bÂ§lYT", "Â§b", "l", Groups.YOUTUBER, true),
+	YOUTUBERPLUS("Â§3Â§lYT+", "Â§3", "k", Groups.YOUTUBERPLUS, true),
+	DESIGNER("Â§2Â§lDESIGNER", "Â§2", "j", Groups.DESIGNER, true),
+	BUILDER("Â§eÂ§lBUILDER", "Â§e", "i", Groups.BUILDER, false),
+	TRIAL("Â§dÂ§lTRIAL", "Â§d", "h", Groups.TRIAL, false),
+	MOD("Â§5Â§lMOD", "Â§5", "g", Groups.MOD, false),
+	MODGC("Â§5Â§lMODGC", "Â§5", "f", Groups.MODGC, true), 
+	MODPLUS("Â§5Â§LMOD+", "Â§5", "e", Groups.MODPLUS, false),
+	GERENTE("Â§cÂ§lGERENTE", "Â§c", "d", Groups.GERENTE, false),
+	ADMIN("Â§cÂ§lADMIN", "Â§c", "c", Groups.ADMIN, false),
+	DIRETOR("Â§4Â§LDIRETOR", "Â§4", "b", Groups.DIRETOR, false),
+	DEV("Â§3Â§lDEV", "Â§3", "b", Groups.DEV, false),
+	DONO("Â§4Â§LDONO", "Â§4", "a", Groups.DONO, false);
 
 	String prefix;
 	String color;

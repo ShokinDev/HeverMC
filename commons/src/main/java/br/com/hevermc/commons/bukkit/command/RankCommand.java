@@ -20,15 +20,15 @@ public class RankCommand extends HeverCommand {
 		if (isPlayer(sender)) {
 			Player p = toPlayer(sender);
 			HeverPlayer hp = toHeverPlayer(p);
-			p.sendMessage("§fOs ranks do servidor são os seguintes:");
+			p.sendMessage("Â§fOs ranks do servidor sÃ£o os seguintes:");
 			for (Ranks rank : Ranks.values()) {
 				p.sendMessage(rank.getColor() + rank.getSymbol() + " " + rank.getName() + " - " + rank.getXp() + "XP");
 			}
-			p.sendMessage("§fSeu rank: §e" + hp.getRank().getName());
-			p.sendMessage("§aSeu proximo rank é §e"
+			p.sendMessage("Â§fSeu rank: Â§e" + hp.getRank().getName());
+			p.sendMessage("Â§aSeu proximo rank Ã© "
 					+ (Ranks.getRank(hp.getRank().ordinal() + 1) == null ? "Nenhum"
 							: Ranks.getRank(hp.getRank().ordinal() + 1).getName())
-					+ " §ae faltam §e" + (Ranks.getRank(hp.getRank().ordinal() + 1).getXp() - hp.getXp()) + "XPS!");
+					+ " Â§ae faltam Â§e" + (Ranks.getRank(hp.getRank().ordinal() + 1).getXp() - hp.getXp()) + "XPS!");
 		}
 		return false;
 	}

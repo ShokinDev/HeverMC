@@ -13,6 +13,7 @@ import br.com.hevermc.commons.bukkit.account.loader.PlayerLoader;
 import br.com.hevermc.pvp.KitPvP;
 import br.com.hevermc.pvp.api.PvPPlayer;
 import br.com.hevermc.pvp.enums.Warps;
+import br.com.hevermc.pvp.onevsone.Eventos1v1;
 
 public class ScoreboardManager {
 
@@ -23,7 +24,68 @@ public class ScoreboardManager {
 		String cor1 = "§6§l";
 		String cor2 = "§e§l";
 		String cor3 = "§f§l";
-		if (pvp.getWarp() == Warps.SPAWN) {
+		if (pvp.getWarp() == Warps.EVENTO) {
+			if (i == 0) {
+				i++;
+				return cor1 + "EVENTO";
+			}
+			if (i == 1) {
+				i++;
+				return cor2 + "E" + cor1 + "VENTO";
+			}
+			if (i == 2) {
+				i++;
+				return cor3 + "E" + cor2 + "V" + cor1 + "ENTO";
+			}
+			if (i == 3) {
+				i++;
+				return cor3 + "EV" + cor2 + "E" + cor1 + "NTO";
+			}
+			if (i == 4) {
+				i++;
+				return cor3 + "EVE" + cor2 + "N" + cor1 + "TO";
+			}
+			if (i == 5) {
+				i++;
+				return cor3 + "EVEN" + cor2 + "T" + cor1 + "O";
+			}
+			if (i == 6) {
+				i++;
+				return cor3 + "EVENT" + cor2 + "O";
+			}
+			if (i == 7) {
+				i++;
+				return cor3 + "EVENTO";
+			}
+			if (i == 8) {
+				i++;
+				return cor3 + "EVENT" + cor2 + "O";
+			}
+			if (i == 9) {
+				i++;
+				return cor3 + "EVEN" + cor2 + "T" + cor1 + "O";
+			}
+			if (i == 10) {
+				i++;
+				return cor3 + "EVE" + cor2 + "N" + cor1 + "TO";
+			}
+			if (i == 11) {
+				i++;
+				return cor3 + "EV" + cor2 + "E" + cor1 + "NTO";
+			}
+			if (i == 12) {
+				i++;
+				return cor3 + "E" + cor2 + "V" + cor1 + "ENTO";
+			}
+			if (i == 13) {
+				i++;
+				return cor2 + "E" + cor1 + "VENTO";
+			}
+			if (i == 14) {
+				i=0;
+				return cor1 + "EVENTO";
+			}
+		} else if (pvp.getWarp() == Warps.SPAWN) {
 
 			if (i == 0) {
 				i++;
@@ -211,13 +273,15 @@ public class ScoreboardManager {
 			add.addLine("  ", " §e  ", "", 0);
 			add.addLine("§awww.", "hevermc", ".com.br ", -1);
 		} else {// 6,5,4,2,1
-			add.addLine("  ", "§f              ", " ", 7);
-			add.addLine(" ", "§fWins: ", "§a0", 6);
-			add.addLine(" ", "§fLoses: ", "§c0", 5);
-			add.addLine(" ", "§fWinStreak: ", "§e0", 4);
-			add.addLine("  ", " §a  ", "", 3);
-			add.addLine(" ", "§fRank: ", "§fUNRANKED", 2);
-			add.addLine(" ", "§fOnline: ", "§e0", 1);
+			add.addLine("  ", "§f              ", " ", 9);
+			add.addLine(" ", "§fKills: ", "§a0", 8);
+			add.addLine(" ", "§fDeaths: ", "§c0", 7);
+			add.addLine(" ", "§fKillStreak: ", "§e0", 6);
+			add.addLine("  ", " §c  ", "", 5);
+			add.addLine(" ", "§fOnline: ", "§e0", 4);
+			add.addLine("  ", " §c  ", "", 3);
+			add.addLine(" §fJogando ", "com: ", "", 2);
+			add.addLine(" - ", "", "Ninguém", 1);
 			add.addLine("  ", " §e  ", "", 0);
 			add.addLine("§awww.", "hevermc", ".com.br ", -1);
 		}
@@ -245,35 +309,54 @@ public class ScoreboardManager {
 				}
 				updateInfos(p);
 			}
-		}.runTaskTimer(KitPvP.getInstance(), 0, 100);
+		}.runTaskTimer(KitPvP.getInstance(), 0, 20);
 	}
 
 	public void updateInfos(Player p) {
+		if (p == null) {
+			return;
+		}
 		PvPPlayer pvpp = new br.com.hevermc.pvp.api.PlayerLoader(p).load().getPvPP();
 		HeverPlayer hp = PlayerLoader.getHP(p);
 		Scoreboard score = p.getScoreboard();
-		if (hp == null || pvpp == null || score == null) {
+		if (hp == null) {
 			return;
 		}
+		if (pvpp.getWarp() != Warps.ONEVSONE) {
+			Team kills = score.getTeam("line8");
 
-		Team kills = score.getTeam("line8");
-		kills.setSuffix("§a" + hp.getPvp_kills());
+			kills.setSuffix("§a" + hp.getPvp_kills());
 
-		Team deaths = score.getTeam("line7");
-		deaths.setSuffix("§c" + hp.getPvp_deaths());
+			Team deaths = score.getTeam("line7");
+			deaths.setSuffix("§c" + hp.getPvp_deaths());
 
-		Team ks = score.getTeam("line6");
-		ks.setSuffix("§e" + hp.getPvp_ks());
+			Team ks = score.getTeam("line6");
+			ks.setSuffix("§e" + hp.getPvp_ks());
 
-		Team rank = score.getTeam("line4");
-		rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()).substring(1));
+			Team rank = score.getTeam("line4");
+			rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()));
 
-		Team on = score.getTeam("line3");
-		on.setSuffix("§a" + KitPvP.getManager().online.size() + "/80");
+			Team on = score.getTeam("line3");
+			on.setSuffix("§a" + KitPvP.getManager().online.size() + "/80");
 
-		Team kit = score.getTeam("line1");
-		kit.setSuffix("§a" + pvpp.getKit().getName());
+			Team kit = score.getTeam("line1");
+			kit.setSuffix("§a" + pvpp.getKit().getName());
+		} else {
+			Team kills = score.getTeam("line8");
+			kills.setSuffix("§a" + hp.getPvp_kills());
 
+			Team deaths = score.getTeam("line7");
+			deaths.setSuffix("§c" + hp.getPvp_deaths());
+
+			Team ks = score.getTeam("line6");
+			ks.setSuffix("§e" + hp.getPvp_ks());
+
+			Team ks2 = score.getTeam("line1");
+			ks2.setSuffix("§a" + (Eventos1v1.batalhando.containsKey(p) ? Eventos1v1.batalhando.get(p) : "Ninguém"));
+
+			Team on = score.getTeam("line4");
+			on.setSuffix("§a" + KitPvP.getManager().online.size() + "/80");
+		}
 	}
 
 }

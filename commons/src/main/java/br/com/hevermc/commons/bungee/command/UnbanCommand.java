@@ -21,18 +21,18 @@ public class UnbanCommand extends HeverCommand {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.GERENTE, true)) {
 				if (args.length == 0) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/unban <nickname>"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve usar Â§e/unban <nickname>"));
 				} else {
 					HeverPlayer targethp = PlayerLoader.getHP(args[0]);
 					if (!targethp.isBanned()) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste jogador não está banido!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§cEsse jogador nÃ£o estÃ¡ banido!"));
 					} else {
-						Commons.getManager().getSQLManager().delete("hever_bans", "name", getName());
+						Commons.getManager().getSQLManager().delete("hever_bans", "name", args[0].toLowerCase());
 						targethp.setBan_author(null);
 						targethp.setBan_reason(null);
 						targethp.setBan_time(0);
 						targethp.setBanned(false);
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê desbaniu §e" + targethp.getName() + "!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª desbaniu Â§e" + targethp.getName() + "!"));
 					}
 				}
 

@@ -23,15 +23,15 @@ public class FindCommand extends HeverCommand implements TabExecutor {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
 			if (requiredGroup(p, Groups.TRIAL, true)) {
 				if (args.length == 0) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/find <player>"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve utilizar Â§e/find <player>"));
 				} else {
 					ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 					if (target == null) {
-						p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§cSeu alvo estÃ¡ offline!"));
 					} else {
 
-						p.sendMessage(TextComponent.fromLegacyText("§aO jogador §b" + target.getName()
-								+ " §afoi localizado em §b" + target.getServer().getInfo().getName() + "§a!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§aO jogador Â§b" + target.getName()
+								+ " Â§afoi localizado em Â§b" + target.getServer().getInfo().getName() + "Â§a!"));
 					}
 
 				}

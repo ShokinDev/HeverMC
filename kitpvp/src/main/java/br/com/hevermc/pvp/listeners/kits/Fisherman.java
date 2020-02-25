@@ -23,8 +23,6 @@ public class Fisherman implements Listener {
 				if (!new PlayerLoader(p).load().getPvPP().isProtectArea()) {
 					target.teleport(p);
 				}
-
-				e.setCancelled(true);
 			}
 		}
 	}

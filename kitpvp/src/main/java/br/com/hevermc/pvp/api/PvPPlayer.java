@@ -81,6 +81,12 @@ public class PvPPlayer {
 							new ItemConstructor(new ItemStack(Material.STONE_SWORD), "§fEspada de Pedra").create());
 				}
 			}
+
+			if (kit == Kits.SWITCHER) {
+				p.getInventory().setItem(1,
+						new ItemConstructor(new ItemStack(kit.getItem(), 2), "§e" + kit.getName() + " §fitem")
+								.create());
+			}
 			if (getWarp() == Warps.SPAWN)
 				p.getInventory().setItem(8, new ItemConstructor(new ItemStack(Material.COMPASS), "§fBussola").create());
 			p.updateInventory();

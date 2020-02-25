@@ -1,8 +1,13 @@
 package br.com.hevermc.authentication.listeners;
 
-import org.bukkit.entity.Entity;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.URL;
+
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,6 +29,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.hevermc.authentication.Authentication;
 import br.com.hevermc.authentication.api.BarUtil;
+import br.com.hevermc.authentication.api.BungeeChannelApi;
 import br.com.hevermc.authentication.api.LoginPlayer;
 import br.com.hevermc.authentication.api.ReflectionAPI;
 import br.com.hevermc.authentication.api.loader.PlayerLoader;
@@ -32,11 +38,71 @@ import br.com.hevermc.authentication.score.ScoreboardManager;
 
 public class GeneralEvents implements Listener {
 
+	private String getUrlContent(String url) {
+		try {
+			InputStream connection = new URL(url).openStream();
+			BufferedReader reader = new BufferedReader(new InputStreamReader(connection));
+			String line = null;
+			String content = "";
+			while ((line = reader.readLine()) != null) {
+				content = content + line;
+			}
+			return content;
+		} catch (Exception exception) {
+			exception.printStackTrace();
+		}
+		return null;
+	}
+
+	public boolean isPremium(String player) {
+		return getUrlContent("https://api.mojang.com/users/profiles/minecraft/" + player).length() > 0;
+	}
+
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		e.setJoinMessage(null);
 		final Player p = e.getPlayer();
+		ReflectionAPI.tab(p, "\n§6§lHEVER§f§lMC\n",
+				"\n§fSite: §ehevermc.com.br\n§fTwitter: §e@HeverNetwork_\n§fDiscord: §ediscord.hevermc.com.br\n§fCaso tenha algum problema visite nosso §eDiscord§f!\n");
+
 		final LoginPlayer lp = new PlayerLoader(p).load().lp();
+		for (int i = 0; i < 100; i++)
+			p.sendMessage(" ");
+		if (!Authentication.getManager().getSQLManager().checkString("hever_accounts", "name", p.getName())) {
+			if (isPremium(p.getName())) {
+				Authentication.getManager().getSQLManager().insertOriginal(p.getName(), 1);
+				
+				System.out.print("[DEBUG] entrou primeira vez - original");
+				p.kickPlayer("§6§lHEVER§f§lMC\n§7\n§aSua conta foi registrada.\n§7Entre novamente!");
+				return;
+			} else {
+				System.out.print("[DEBUG] entrou primeira vez - pirata");
+				Authentication.getManager().getSQLManager().insertOriginal(p.getName(), 0);
+			}
+		} else {
+			if (Authentication.getManager().getSQLManager().getInt("hever_accounts", "name", "original", p.getName()) == 1) {
+				lp.setCaptcha(true);
+				lp.setLogged(true);
+				System.out.print("[DEBUG] entrou como original");
+				p.sendMessage("§aVocê foi autenticado como jogador original, portanto não foi necessário fazer login!");
+				new BukkitRunnable() {
+
+					@Override
+					public void run() {
+						if (!p.isOnline() || p == null) {
+							cancel();
+							System.out.println("[DEBUG] redirect to lobby canceled");
+							return;
+						}
+						p.sendMessage("§aVocê está sendo conectado ao §blobby§a!");
+						new BungeeChannelApi(Authentication.getInstance()).connect(p, "lobby");
+					}
+				}.runTaskTimer(Authentication.getInstance(), 0, 35L);
+			} else {
+				System.out.print("[DEBUG] entrou como pirtata");
+			}
+		}
+		
 		new ScoreboardManager().build(p);
 		p.teleport(p.getWorld().getSpawnLocation());
 		p.getInventory().clear();
@@ -45,8 +111,6 @@ public class GeneralEvents implements Listener {
 		p.setFoodLevel(20);
 		BarUtil.setBar(p, (lp.isRegistred() ? "§a§l§k!!!§f§l USE: §e§l/LOGIN <SENHA> §A§L§K!!!"
 				: "§a§l§k!!!§f§l USE: §e§l/REGISTER <SENHA> <SENHA> §A§L§K!!!"), 100);
-		ReflectionAPI.tab(p,
-				"\n§6§lHEVER§f§lMC\n", "\n§fTwitter: §e@HeverNetwork_ §7| §fDiscord: §ediscord.hevermc.com.br §7| §fSite: §ewww.hevermc.com.br\n§fCaso tenha algum problema visite nosso §eDiscord§f!\n");
 		for (Entity entitys : p.getWorld().getEntities()) {
 			if (!(entitys instanceof Player)) {
 				entitys.remove();
@@ -56,7 +120,8 @@ public class GeneralEvents implements Listener {
 
 			@Override
 			public void run() {
-				new Captcha(p);
+				if (!lp.isCaptcha())
+					new Captcha(p);
 			}
 		}.runTaskLater(Authentication.getInstance(), 5l);
 		new BukkitRunnable() {
@@ -73,10 +138,10 @@ public class GeneralEvents implements Listener {
 								p.kickPlayer("§cVocê demorou de mais para logar!");
 
 						}
-					}.runTaskLater(Authentication.getInstance(), 150L);
+					}.runTaskLater(Authentication.getInstance(), 250L);
 				}
 			}
-		}.runTaskLater(Authentication.getInstance(), 150L);
+		}.runTaskLater(Authentication.getInstance(), 250L);
 	}
 
 	@EventHandler

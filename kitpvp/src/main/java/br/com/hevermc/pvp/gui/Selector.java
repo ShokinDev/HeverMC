@@ -15,18 +15,62 @@ import br.com.hevermc.pvp.enums.Kits;
 
 public class Selector {
 
-	int[] slots = { 9, 10, 11, 12, 13, 14, 15, 16, 19, 20, 21, 22, 23, 24, 25, 28, 29, 30, 31, 32, 33, 34, 37, 38, 39,
-			40, 41, 42, 43, 44 };
+	int[] slots = { 19, 20, 21, 22, 23, 24, 29, 30, 31, 32, 33, 38, 39, 40, 41, 42 };
 
-	public Selector(Player p) {
-		Inventory inv = Bukkit.createInventory(null, 5 * 9, "§eSeletor de Kits");
+	public Selector(Player p, int page) {
+		Inventory inv = null;
 		HeverPlayer hp = PlayerLoader.getHP(p);
-		
-		for (Kits kits : Kits.values()) {
-			if (kits.getMaterial() != Material.AIR) {
-				inv.setItem(slots[kits.ordinal()], new ItemConstructor(new ItemStack(kits.getMaterial()),
-						hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName() : "§cKit " + kits.getName(), // PvP
-						Arrays.asList("", "§e" + kits.getDesc(), "")).create());
+
+		if (page == 1) {
+			inv = Bukkit.createInventory(null, 6 * 9, "§eSeletor de Kits §7(1/2)");
+			inv.setItem(3, new ItemConstructor(new ItemStack(Material.CHEST), "§aSeletor de Kits").create());
+			inv.setItem(5, new ItemConstructor(new ItemStack(Material.COMPASS), "§7Warps").create());
+			inv.setItem(27,
+					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 8), "§7Página anterior").create());
+			inv.setItem(35,
+					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 10), "§aPróxima página").create());
+			int i = 0;
+			for (Kits kits : Kits.values()) {
+				if (kits.getMaterial() != Material.AIR) {
+					i++;
+					if (!(i >= slots.length)) {
+						if (hp.groupIsLarger(kits.getGroup())) {
+							inv.setItem(slots[i],
+									new ItemConstructor(new ItemStack(kits.getMaterial()),
+											hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName()
+													: "§cKit " + kits.getName(), // PvP
+											Arrays.asList("", "§e" + kits.getDesc(), "")).create());
+						}
+					}
+				}
+			}
+		} else if (page == 2) {
+			inv = Bukkit.createInventory(null, 6 * 9, "§eSeletor de Kits §7(2/2)");
+			inv.setItem(3, new ItemConstructor(new ItemStack(Material.CHEST), "§aSelector de Kits").create());
+			inv.setItem(5, new ItemConstructor(new ItemStack(Material.COMPASS), "§7Warps").create());
+			inv.setItem(27,
+					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 10), "§7Página anterior").create());
+			inv.setItem(35,
+					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 8), "§aPróxima página").create());
+			int i = 0;
+			for (int a = slots.length; a < Kits.values().length; a++) {
+				Kits kits = Kits.getKits(a);
+				if (kits == null) {
+					return;
+				}
+				if (kits.getMaterial() != Material.AIR) {
+					i++;
+					if (!(i >= slots.length)) {
+						if (hp.groupIsLarger(kits.getGroup())) {
+							inv.setItem(slots[i],
+									new ItemConstructor(new ItemStack(kits.getMaterial()),
+											hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName()
+													: "§cKit " + kits.getName(), // PvP
+											Arrays.asList("", "§e" + kits.getDesc(), "")).create());
+						}
+					}
+
+				}
 			}
 		}
 		p.openInventory(inv);

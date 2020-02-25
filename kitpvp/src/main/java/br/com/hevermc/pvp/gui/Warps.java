@@ -12,15 +12,20 @@ import br.com.hevermc.commons.bukkit.api.ItemConstructor;
 
 public class Warps {
 
-	int[] slots = { 0,1,2, 3, 4, 5};
+	int[] slots = { 20, 21, 23, 24 };
 
 	public Warps(Player p) {
-		Inventory inv = Bukkit.createInventory(null, 9, "§eWarps");
+		Inventory inv = Bukkit.createInventory(null, 4 * 9, "§eWarps");
+		inv.setItem(3, new ItemConstructor(new ItemStack(Material.CHEST), "§7Seletor de Kits").create());
+		inv.setItem(5,
+				new ItemConstructor(new ItemStack(Material.COMPASS), "§aWarps").create());
 
 		for (br.com.hevermc.pvp.enums.Warps warps : br.com.hevermc.pvp.enums.Warps.values()) {
-			if (warps.getMaterial() != Material.AIR) {
+			if (warps.getMaterial() != Material.AIR && warps != br.com.hevermc.pvp.enums.Warps.SPAWN
+					&& warps != br.com.hevermc.pvp.enums.Warps.OVPOS1
+					&& warps != br.com.hevermc.pvp.enums.Warps.OVPOS1) {
 				inv.setItem(slots[warps.ordinal()], new ItemConstructor(new ItemStack(warps.getMaterial()),
-					"§aWarp " + warps.getName(), Arrays.asList("", "§e" + warps.getDesc(), "")).create());
+						"§aWarp " + warps.getName(), Arrays.asList("", "§e" + warps.getDesc(), "")).create());
 			}
 		}
 		p.openInventory(inv);

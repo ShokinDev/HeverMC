@@ -22,19 +22,27 @@ public class ServerCommand extends HeverCommand implements TabExecutor {
 	public void execute(CommandSender sender, String[] args) {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
-			if (!p.getServer().getInfo().getName().equals("login") && !p.getServer().getInfo().getName().equals("screenshare")) {
+			if (!p.getServer().getInfo().getName().equals("login")
+					&& !p.getServer().getInfo().getName().equals("screenshare")) {
 				if (args.length == 0) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/server <servidor>"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve utilizar Â§e/server <servidor>"));
 				} else {
 					if (Commons.getInstance().getProxy().getServerInfo(args[0]) == null) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§cEste servidor nÃ£o existe!"));
 					} else if (args[0].equalsIgnoreCase("screenshare") && !requiredGroup(p, Groups.MODGC, false)) {
 					} else {
-						p.connect(Commons.getInstance().getProxy().getServerInfo(args[0]));
+						if (Commons.getInstance().getProxy().getServerInfo(args[0]) == p.getServer().getInfo()) {
+							p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª jÃ¡ estÃ¡ conectado neste servidor!"));
+						} else {
+							p.sendMessage(TextComponent
+									.fromLegacyText("Â§aTe conectando atÃ© Â§e" + args[0].toUpperCase() + " Â§a!"));
+							p.connect(Commons.getInstance().getProxy().getServerInfo(args[0]));
+
+						}
 					}
 				}
 			} else {
-				p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
+				p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode executar esta aÃ§Ã£o neste servidor!"));
 			}
 		}
 	}

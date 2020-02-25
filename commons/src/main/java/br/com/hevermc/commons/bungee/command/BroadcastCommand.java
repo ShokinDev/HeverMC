@@ -21,7 +21,7 @@ public class BroadcastCommand extends HeverCommand {
 
 				if (requiredGroup(p, Groups.DIRETOR, true)) {
 					if (args.length == 0) {
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/broadcast <mensagem>"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve utilizar Â§e/broadcast <mensagem>"));
 					} else {
 						String message;
 						StringBuilder sb = new StringBuilder();
@@ -30,7 +30,7 @@ public class BroadcastCommand extends HeverCommand {
 						message = sb.toString();
 						Commons.getInstance().getProxy().getPlayers().forEach(all -> {
 							all.sendMessage(TextComponent.fromLegacyText(""));
-							all.sendMessage(TextComponent.fromLegacyText("§6§LHEVER§F§LMC §7»§f " + message.replace("&", "§")));
+							all.sendMessage(TextComponent.fromLegacyText("Â§6Â§lHEVERÂ§fÂ§lMC Â§fÂ» Â§7" + message.replace("&", "Â§")));
 							all.sendMessage(TextComponent.fromLegacyText(""));
 						});
 						

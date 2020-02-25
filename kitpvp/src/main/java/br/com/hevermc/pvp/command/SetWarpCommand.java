@@ -20,9 +20,10 @@ public class SetWarpCommand extends HeverCommand {
 			if (hasGroup(p, Groups.BUILDER, true)) {
 				if (args.length == 0) {
 					p.sendMessage("§aVocê deve usar §e/setwarp <fps|lava|1v1|1v1pos1|1v1pos2>");
-				} else
-				if (args[0].equalsIgnoreCase("fps") || args[0].equalsIgnoreCase("lava") || args[0].equalsIgnoreCase("1v1") 
-						|| args[0].equalsIgnoreCase("1v1pos1") || args[0].equalsIgnoreCase("1v1pos2")) {
+				} else if (args[0].equalsIgnoreCase("fps") || args[0].equalsIgnoreCase("lava")
+						|| args[0].equalsIgnoreCase("1v1") || args[0].equalsIgnoreCase("1v1pos1")
+						|| args[0].equalsIgnoreCase("1v1pos2") || args[0].equalsIgnoreCase("specevento")
+						|| args[0].equalsIgnoreCase("evento")) {
 					new WarpsAPI(br.com.hevermc.pvp.enums.Warps.getWarps(args[0])).setLocation(p.getLocation());
 					p.sendMessage("§aVocê definiu uma warp!");
 				} else {

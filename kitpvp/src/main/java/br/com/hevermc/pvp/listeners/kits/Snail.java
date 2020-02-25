@@ -25,7 +25,7 @@ public class Snail implements Listener {
 			kit_api.setPlayer(d);
 			if (kit_api.usingKit()) {
 				if (new Random().nextInt(100) < 60) {
-					p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 5, 1));
+					p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 8, 1));
 				}
 			}
 		}

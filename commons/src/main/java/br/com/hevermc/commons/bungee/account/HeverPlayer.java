@@ -1,5 +1,7 @@
 package br.com.hevermc.commons.bungee.account;
 
+import java.util.Date;
+
 import br.com.hevermc.commons.bungee.Commons;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Ranks;
@@ -63,6 +65,9 @@ public class HeverPlayer {
 	}
 
 	public boolean groupIsLarger(Groups group) {
+		if (Commons.getManager().getRedis().contains("update:" + this.name.toLowerCase())) {
+			load();
+		}
 		if (getGroup().ordinal() >= group.ordinal())
 			return true;
 
@@ -70,6 +75,9 @@ public class HeverPlayer {
 	}
 
 	public boolean groupIsLarger(ProxiedPlayer p, Groups group) {
+		if (Commons.getManager().getRedis().contains("update:" + this.name.toLowerCase())) {
+			load();
+		}
 		if (p.getServer().getInfo().getName().equals("login"))
 			return false;
 		if (getGroup().ordinal() >= group.ordinal())
@@ -110,7 +118,11 @@ public class HeverPlayer {
 						getName());
 				mute_time = Commons.getManager().getSQLManager().getLong("hever_mutes", "name", "time", getName());
 			}
-
+			if (groupExpireIn > 0) {
+				if (new Date().after(new Date(groupExpireIn))) {
+					setGroup(Groups.MEMBRO);
+				}
+			}
 			Commons.getManager().getRedis().set(this.name,
 					"cash:" + cash + ",xp:" + xp + ",groupExpireIn:" + groupExpireIn + ",lastLogin:" + lastLogin
 							+ ",firstLogin:" + firstLogin + ",group:" + group.toString() + ",rank:" + rank.toString()
@@ -118,7 +130,7 @@ public class HeverPlayer {
 			Commons.getManager().log("Conta de " + this.name + " foi carregada!");
 		} catch (Exception e) {
 			e.printStackTrace();
-			Commons.getManager().log("Não foi possivel carregar a conta de " + this.name);
+			Commons.getManager().log("Nï¿½o foi possivel carregar a conta de " + this.name);
 		}
 	}
 
@@ -148,7 +160,7 @@ public class HeverPlayer {
 			Commons.getManager().log("Conta de " + this.name + " foi atualizada!");
 		} catch (Exception e) {
 			e.printStackTrace();
-			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);
+			Commons.getManager().log("Nï¿½o foi possivel atualizar a conta de " + this.name);
 		}
 	}
 
@@ -157,7 +169,7 @@ public class HeverPlayer {
 			Commons.getManager().getSQLManager().insertBan(name, author, reason, time);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Commons.getManager().log("Não foi possivel banir a conta de " + this.name);
+			Commons.getManager().log("Nï¿½o foi possivel banir a conta de " + this.name);
 		}
 	}
 
@@ -166,7 +178,7 @@ public class HeverPlayer {
 			Commons.getManager().getSQLManager().insertMute(name, author, reason, time);
 		} catch (Exception e) {
 			e.printStackTrace();
-			Commons.getManager().log("Não foi possivel mutar a conta de " + this.name);
+			Commons.getManager().log("Nï¿½o foi possivel mutar a conta de " + this.name);
 		}
 	}
 
@@ -185,7 +197,7 @@ public class HeverPlayer {
 			setFirstLogin(0l);
 			Commons.getManager().log("Conta descarregada!");
 		} catch (Exception e) {
-			Commons.getManager().log("Não foi possivel atualizar a conta de " + this.name);
+			Commons.getManager().log("Nï¿½o foi possivel atualizar a conta de " + this.name);
 		}
 	}
 

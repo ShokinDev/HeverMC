@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
 public class Manager {
 	
 	public ArrayList<Player> dj = new ArrayList<Player>();

@@ -4,7 +4,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 import br.com.hevermc.commons.bungee.Commons;
+import br.com.hevermc.commons.bungee.account.HeverPlayer;
 import br.com.hevermc.commons.bungee.command.common.HeverCommand;
+import br.com.hevermc.commons.enums.Groups;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -22,23 +24,33 @@ public class TellCommand extends HeverCommand implements TabExecutor {
 		if (isPlayer(sender)) {
 			ProxiedPlayer p = toPlayer(sender);
 			if (args.length < 2) {
-				p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/tell <alvo> <mensagem>"));
+				p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve usar Â§e/tell <alvo> <mensagem>"));
 			} else {
 				ProxiedPlayer t = Commons.getInstance().getProxy().getPlayer(args[0]);
 				if (t == null) {
-					p.sendMessage(TextComponent.fromLegacyText("§cEste jogador está offline."));
+					p.sendMessage(TextComponent.fromLegacyText("Â§cEsse jogador estÃ¡ offline."));
 				} else if (p.getName().equalsIgnoreCase(args[0])) {
-					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode enviar tell para sí mesmo."));
+					p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode enviar tell para sÃ­ mesmo."));
 				} else {
 					String message;
 					StringBuilder sb = new StringBuilder();
 					for (int i = 1; i < args.length; i++)
 						sb.append(args[i]).append(" ");
 					message = sb.toString();
+					if (message.contains(".com") || message.contains(".cc") || message.contains(".tk")) {
+						Commons.getInstance().getProxy().getPlayers().forEach(ps -> {
+							HeverPlayer hp = toHeverPlayer(ps);
+							if (hp.groupIsLarger(Groups.MOD)) {
+								ps.sendMessage(TextComponent.fromLegacyText("Â§7[O jogador " + p.getName()
+										+ " tentou enviar \"" + message + "\" para " + t.getName() + "]"));
+							}
+						});
+						return;
+					}
 					p.sendMessage(TextComponent
-							.fromLegacyText("§7[§e" + p.getName() + " §f» §e" + t.getName() + "§7] " + message));
+							.fromLegacyText("Â§7[Â§e" + p.getName() + " Â§fÂ» Â§e" + t.getName() + "Â§7] " + message));
 					t.sendMessage(TextComponent
-							.fromLegacyText("§7[§e" + p.getName() + " §f» §e" + t.getName() + "§7] " + message));
+							.fromLegacyText("Â§7[Â§e" + p.getName() + " Â§fÂ» Â§e" + t.getName() + "Â§7] " + message));
 					Commons.getManager().reply.put(t, p);
 				}
 			}

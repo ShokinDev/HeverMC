@@ -21,7 +21,7 @@ public class MaintenanceCommand extends HeverCommand {
 				if (args.length == 0) {
 					if (requiredGroup(p, Groups.DIRETOR, true)) {
 						Commons.getManager().setMaintenance(!Commons.getManager().isMaintenance() ? true : false);
-						p.sendMessage(TextComponent.fromLegacyText("§eVocê " + (Commons.getManager().isMaintenance() ? "§aativou" : "§cdesativou") + " §ea manutenção!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§eVocÃª " + (Commons.getManager().isMaintenance() ? "Â§aativou" : "Â§cdesativou") + " Â§ea manutenÃ§Ã£o!"));
 					}
 				} 
 			}

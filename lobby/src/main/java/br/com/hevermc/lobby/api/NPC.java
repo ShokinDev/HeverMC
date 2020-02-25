@@ -1,5 +1,6 @@
 package br.com.hevermc.lobby.api;
 
+import java.lang.reflect.Field;
 import java.util.List;
 import java.util.UUID;
 
@@ -115,7 +116,14 @@ public class NPC extends Reflections {
 		sendPacket(packet, player);
 		headRotation(100, 0);
 	}
-
+	public static void setValue(Object obj,String name,  Object value) {
+		try {
+			Field field = obj.getClass().getDeclaredField(name);
+			field.setAccessible(true);
+			field.set(obj, value);
+		} catch (Exception exception) {
+		}
+	}
 	public void teleport(Location location) {
 		PacketPlayOutEntityTeleport packet = new PacketPlayOutEntityTeleport();
 		setValue(packet, "a", entityID);
@@ -153,11 +161,11 @@ public class NPC extends Reflections {
 				CraftChatMessage.fromString(gameprofile.getName())[0]);
 		@SuppressWarnings("unchecked")
 		List<PacketPlayOutPlayerInfo.PlayerInfoData> players = (List<PacketPlayOutPlayerInfo.PlayerInfoData>) getValue(
-				packet, "b");
+				"b", packet);
 		players.add(data);
 
-		setValue(packet, "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER);
-		setValue(packet, "b", players);
+		setValue("a",packet, PacketPlayOutPlayerInfo.EnumPlayerInfoAction.ADD_PLAYER);
+		setValue("b",packet, players);
 
 		sendPacket(packet);
 	}
@@ -168,11 +176,11 @@ public class NPC extends Reflections {
 				CraftChatMessage.fromString(gameprofile.getName())[0]);
 		@SuppressWarnings("unchecked")
 		List<PacketPlayOutPlayerInfo.PlayerInfoData> players = (List<PacketPlayOutPlayerInfo.PlayerInfoData>) getValue(
-				packet, "b");
+				"b", packet);
 		players.add(data);
 
-		setValue(packet, "a", PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER);
-		setValue(packet, "b", players);
+		setValue("a", packet,PacketPlayOutPlayerInfo.EnumPlayerInfoAction.REMOVE_PLAYER);
+		setValue("b",packet, players);
 
 		sendPacket(packet);
 	}

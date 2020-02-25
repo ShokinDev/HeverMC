@@ -1,39 +1,49 @@
 package br.com.hevermc.pvp.listeners.kits;
 
-import java.util.ArrayList;
-
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerVelocityEvent;
+import org.bukkit.util.Vector;
 
+import br.com.hevermc.pvp.KitPvP;
 import br.com.hevermc.pvp.enums.Kits;
 import br.com.hevermc.pvp.listeners.kits.commons.HeverKit;
 
 public class Anchor implements Listener {
 
 	HeverKit kit_api = new HeverKit(Kits.ANCHOR);
-	ArrayList<Player> anchordamaged = new ArrayList<Player>();
 
 	@EventHandler
-	public void onPlayerVelocity(PlayerVelocityEvent e) {
-		Player p = e.getPlayer();
-		if (anchordamaged.contains(p))
-			e.setCancelled(false);
-	}
-
-	@EventHandler
-	public void onPlayerDamaged(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
-			kit_api.setPlayer((Player) e.getDamager());
+	public void Kits(EntityDamageByEntityEvent e) {
+		if (((e.getEntity() instanceof Player)) && ((e.getDamager() instanceof Player))) {
+			final Player p = (Player) e.getEntity();
+			Player k = (Player) e.getDamager();
+			kit_api.setPlayer(p);
 			if (kit_api.usingKit()) {
-				anchordamaged.add((Player) e.getEntity());
+				p.setVelocity(new Vector());
+				k.setVelocity(new Vector());
+				k.playSound(k.getLocation(), Sound.ANVIL_BREAK, 0.5F, 0.5F);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), (Runnable) new Runnable() {
+					public void run() {
+						p.setVelocity(new Vector());
+					}
+				}, 1L);
+				return;
 			}
-
-			kit_api.setPlayer((Player) e.getEntity());
+			kit_api.setPlayer(k);
 			if (kit_api.usingKit()) {
-				anchordamaged.add((Player) e.getEntity());
+				k.setVelocity(new Vector());
+				k.playSound(k.getLocation(), Sound.ANVIL_BREAK, 0.5F, 0.5F);
+				Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), (Runnable) new Runnable() {
+					public void run() {
+						p.setVelocity(new Vector());
+						k.setVelocity(new Vector());
+					}
+				}, 1L);
+				return;
 			}
 		}
 	}

@@ -22,7 +22,7 @@ public class ClearChatCommand extends HeverCommand {
 			if (hasGroup(p, Groups.TRIAL, true)) {
 				for (int i = 0; i < 100; i++) 
 					Bukkit.getOnlinePlayers().forEach(all -> all.sendMessage(""));
-				p.sendMessage("§aVocê limpou o chat!");
+				p.sendMessage("Â§aVocÃª limpou o chat!");
 			}
 		}
 		return false;

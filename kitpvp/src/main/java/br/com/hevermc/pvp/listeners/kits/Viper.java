@@ -25,7 +25,7 @@ public class Viper implements Listener {
 			kit_api.setPlayer(d);
 			if (kit_api.usingKit()) {
 				if (new Random().nextInt(100) < 60) {
-					p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 5, 1));
+					p.addPotionEffect(new PotionEffect(PotionEffectType.POISON, 8, 1));
 				}
 			}
 		}

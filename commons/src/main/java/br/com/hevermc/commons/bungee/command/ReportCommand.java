@@ -36,42 +36,42 @@ public class ReportCommand extends HeverCommand implements TabExecutor {
 						if (receive_report.contains(p)) {
 							receive_report.remove(p);
 							p.sendMessage(TextComponent.fromLegacyText(
-									"§aAgora você recebe todos reports!"));
+									"Â§aAgora vocÃª recebe todos reports!"));
 						} else {
 							receive_report.add(p);
 							p.sendMessage(TextComponent.fromLegacyText(
-									"§cAgora você não recebe todos reports!"));
+									"Â§cAgora vocÃª nÃ£o recebe reports!"));
 
 						}
 					}
 				} else {
 
 					p.sendMessage(TextComponent
-							.fromLegacyText("§aVocê deve utilizar §e/report <acusado> <motivo>"));
+							.fromLegacyText("Â§aVocÃª deve utilizar Â§e/report <acusado> <motivo>"));
 				}
 					
 			} else
 			if (args.length < 2) {
 					p.sendMessage(TextComponent
-							.fromLegacyText("§aVocê deve utilizar §e/report <acusado> <motivo>"));
+							.fromLegacyText("Â§aVocÃª deve utilizar Â§e/report <acusado> <motivo>"));
 			} else {
 				ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 				if (target == null) {
-					p.sendMessage(TextComponent.fromLegacyText("§cEste jogador está offline!"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§cEste jogador estÃ¡ offline!"));
 				} else if (target == p) {
-					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode reportar este jogador!"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode reportar este jogador!"));
 				} else {
 					StringBuilder sb = new StringBuilder();
 					for (int i = 1; i < args.length; ++i) {
 						sb.append(args[i]).append(" ");
 					}
 					String reason = sb.toString();
-					TextComponent msg_a = new TextComponent("§c[O jogador " + target.getName() + " foi reportado]");
+					TextComponent msg_a = new TextComponent("Â§c[O jogador " + target.getName() + " foi reportado]");
 					msg_a.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/connect " + p.getServer().getInfo().getName().toLowerCase()));
 					msg_a.setHoverEvent(
 							new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-									new ComponentBuilder("§cInformações sobre este report:\n" + "§fMotivo: §c" + reason
-											+ "\n§fAutor: §c" + p.getName() + "\nServidor: §b§l"
+									new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este report:\n" + "Â§fMotivo: Â§c" + reason
+											+ "\nÂ§fAutor: Â§c" + p.getName() + "\nServidor: Â§bÂ§l"
 											+ p.getServer().getInfo().getName().toUpperCase()).create()));
 					Commons.getInstance().getProxy().getPlayers().forEach(all -> {
 						HeverPlayer allhp = PlayerLoader.getHP(all);
@@ -81,7 +81,7 @@ public class ReportCommand extends HeverCommand implements TabExecutor {
 					});
 
 					p.sendMessage(TextComponent.fromLegacyText(
-							"§aVocê reportou o jogador §e" + target.getName() + " §fcom sucesso!"));
+							"Â§aVocÃª reportou o jogador Â§e" + target.getName() + " Â§fcom sucesso!"));
 
 				}
 

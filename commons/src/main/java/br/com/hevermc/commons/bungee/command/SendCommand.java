@@ -25,25 +25,25 @@ public class SendCommand extends HeverCommand implements TabExecutor {
 			if (requiredGroup(p, Groups.MODGC, true)) {
 				if (!p.getServer().getInfo().getName().equals("login")) {
 					if (args.length < 2) {
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/send <player> <server>"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve utilizar Â§e/send <player> <server>"));
 					} else {
 						ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 						if (target == null) {
-							p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cSeu alvo estÃ¡ offline!"));
 						} else if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
-							p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cEste servidor nÃ£o existe!"));
 						} else {
 							target.connect(Commons.getInstance().getProxy().getServerInfo(args[1]));
 							p.sendMessage(
-									TextComponent.fromLegacyText("§aVocê enviou "
-											+ target.getName() + " §apara §b" + Commons.getInstance().getProxy()
+									TextComponent.fromLegacyText("Â§aVocÃª enviou "
+											+ target.getName() + " Â§apara Â§b" + Commons.getInstance().getProxy()
 													.getServerInfo(args[1]).getName().toUpperCase()
-											+ " §acom sucesso!"));
+											+ " Â§acom sucesso!"));
 						}
 
 					}
 				} else {
-					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode executar esta aÃ§Ã£o neste servidor!"));
 				}
 			}
 		}

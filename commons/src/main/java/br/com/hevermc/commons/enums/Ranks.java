@@ -5,19 +5,26 @@ import lombok.Getter;
 @Getter
 public enum Ranks {
 
-    UNRANKED("งf", "-", "Unranked", 0),
-    PRIMARY("งa", "•", "Primary", 2000),
-    ADVANCED("งe", "••", "Advanced", 4200),
-    EXPERT("ง1", "•••", "Expert", 6500),
-    SILVER("ง7", "", "Silver", 8000),
-    LEGENDARY("ง4", "", "Legendary", 15000);
+    Unranked("ยงf", "-", "Unranked", 0),
+    Primary("ยงa", "โฐ", "Primary", 500),
+    Advanced("ยงe", "โฒ", "Advanced", 2000),
+    Expert("ยง1", "โท", "Expert", 2200),
+    Silver("ยง7", "โถ", "Silver", 2500),
+    Gold("ยง6", "โณ", "Gold", 3000),
+    Diamond("ยงb", "โฆ", "Diamond", 3300),
+    Emerald("ยง2", "โฅ", "Emerald", 4000),
+    Crystal("ยง9", "โ", "Crystal", 4200),
+    Legend("ยง3", "โ", "Legend", 4500),
+    Monster("ยง5", "โน", "Monster", 5000),
+    Master("ยงc", "โซ", "Master", 6000),
+    Legendary("ยง4", "โช", "Legendary", 15000);
 
 	String symbol;
 	String color;
 	String name;
 	int xp;
 
-	private Ranks(String symbol, String color, String name, int xp) {
+	private Ranks(String color, String symbol, String name, int xp) {
 		this.symbol = symbol;
 		this.color = color;
 		this.name = name;

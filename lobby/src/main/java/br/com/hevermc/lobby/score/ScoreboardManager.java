@@ -137,7 +137,7 @@ public class ScoreboardManager {
 		group.setSuffix(Tags.getTags(hp.getGroup()).getColor() + "§l" + hp.getGroup().getName().toUpperCase());
 
 		Team rank = score.getTeam("line7");
-		rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()).substring(1));
+		rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()));
 
 		Team cash = score.getTeam("line5");
 		cash.setSuffix("§3" + hp.getCash());

@@ -21,18 +21,18 @@ public class UnmuteCommand extends HeverCommand {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.GERENTE, true)) {
 				if (args.length == 0) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/unmute <nickname>"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve usar Â§e/unmute <nickname>"));
 				} else {
 					HeverPlayer targethp = PlayerLoader.getHP(args[0]);
 					if (!targethp.isBanned()) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste jogador não está banido!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§cEste jogador nÃ£o estÃ¡ banido!"));
 					} else {
-						Commons.getManager().getSQLManager().delete("hever_mutes", "name", getName());
-						targethp.setBan_author(null);
-						targethp.setBan_reason(null);
-						targethp.setBan_time(0);
-						targethp.setBanned(false);
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê desmutou §e" + targethp.getName() + "!"));
+						Commons.getManager().getSQLManager().delete("hever_mutes", "name", args[0]);
+						targethp.setMute_author(null);
+						targethp.setMute_reason(null);
+						targethp.setMute_time(0);
+						targethp.setMuted(false);
+						p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª desmutou Â§e" + targethp.getName() + "!"));
 					}
 				}
 

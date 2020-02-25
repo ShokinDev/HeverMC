@@ -31,8 +31,9 @@ public class Profile {
 		inv.setItem(13, skull);
 		inv.setItem(19,
 				new ItemConstructor(new ItemStack(Material.DIAMOND_SWORD), "§a§lKitPvP",
-						Arrays.asList(" ", "§fSuas estatísticas nesse modo de jogo são: ", " ", " §aKills: §2" + hp.getPvp_kills() + " " ,
-								" §cDeaths: §c" + hp.getPvp_deaths() + " ", " §eKillStreak: §6" + hp.getPvp_deaths() + " ", " ", "§apvp.hevermc.com.br")).create());
+						Arrays.asList(" ", "§fSuas estatísticas nesse modo de jogo são: ", " ",
+								" §aKills: §2" + hp.getPvp_kills() + " ", " §cDeaths: §c" + hp.getPvp_deaths() + " ",
+								" §eKillStreak: §6" + hp.getPvp_ks() + " ", " ", "§apvp.hevermc.com.br")).create());
 		inv.setItem(20, new ItemConstructor(new ItemStack(Material.PAPER), "§c§k§lHunger-Games").create());
 		inv.setItem(21, new ItemConstructor(new ItemStack(Material.PAPER), "§c§k§lGladiator").create());
 		inv.setItem(25,
@@ -40,7 +41,7 @@ public class Profile {
 						Arrays.asList(" ", "§fTodas informações sobre sua conta: ", " ",
 								" §fGrupo: " + Tags.getTags(hp.getGroup()).getColor() + hp.getGroup().getName(),
 								" §fRank: " + hp.getRank().getColor() + hp.getRank().toString(), " ",
-								" §fExperiência: §e" + hp.getXp(), " §fCash: §3" + hp.getCash(), " ")).create());
+								" §fCash: §3" + hp.getCash(), " §fXp: §e" + hp.getXp(), " ")).create());
 
 		p.openInventory(inv);
 	}

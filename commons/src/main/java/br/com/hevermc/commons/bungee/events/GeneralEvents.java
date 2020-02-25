@@ -1,5 +1,6 @@
 package br.com.hevermc.commons.bungee.events;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import br.com.hevermc.commons.bukkit.api.DateUtil;
@@ -9,12 +10,15 @@ import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Tags;
 import net.md_5.bungee.api.ServerPing;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ClickEvent.Action;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
+import net.md_5.bungee.api.event.PreLoginEvent;
 import net.md_5.bungee.api.event.ProxyPingEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
@@ -24,10 +28,15 @@ public class GeneralEvents implements Listener {
 	@EventHandler
 	public void onProxyPing(ProxyPingEvent e) {
 		ServerPing sp = e.getResponse();
-		// sp.setDescription(" §6§lHEVER§f§lMC§f » §7[1.7.x - 1.8.x] \n §f» Servidor em
-		// fase §1§lBETA §f«");
-		sp.setDescription(
-				"              §6§lHEVER§f§lMC§f » §7(1.7.x - 1.15.x) \n             §b§l§k!!§f Servidor em fase §1§lBETA §b§l§k!!§f");
+		if (Commons.getManager().isMaintenance()) {
+
+			sp.setDescription(
+					"          Â§4â—„   Â§6Â§lHeverÂ§fÂ§lMC Â§4â™¦ Â§7(Â§f1.7.X Â§7| Â§f1.15.XÂ§7)   Â§4â–º\n   Â§4ï¹ƒ Â§4ï¹„ Â§7Os Â§6servidores Â§7estÃ£o em Â§CmanutenÃ§Ã£o Â§4ï¹ƒ Â§4ï¹„");
+		} else {
+
+			sp.setDescription(
+					"           Â§aâ–º  Â§6Â§lHeverÂ§fÂ§lMC Â§aâ™¦ Â§7(Â§f1.7.X Â§7| Â§f1.15.XÂ§7)  Â§aâ—„\n         Â§aï¹ƒ Â§aï¹„ Â§7Servidor em fase Â§9Â§lBETA Â§aï¹ƒ Â§aï¹„");
+		}
 
 		sp.getPlayers().setSample(null);
 		sp.getPlayers().setMax(2020);
@@ -42,8 +51,8 @@ public class GeneralEvents implements Listener {
 			if (!hp.groupIsLarger(Groups.TRIAL)) {
 				System.out.print("[DEBUG] Member not in WhiteList!");
 				e.setCancelled(true);
-				e.setCancelReason("§4§lWHITELIST\n\n§fEstamos em manutenção, tente novamente mais tarde!"
-						+ "\n\n§fEntre em nosso §3§lDISCORD§f!\n§ediscord.hevermc.com.br");
+				e.setCancelReason("Â§4Â§lWHITELIST\n\nÂ§fEstamos em manutenÃ§Ã£o, tente novamente mais tarde!"
+						+ "\n\nÂ§fEntre em nosso Â§3Â§lDISCORDÂ§f!\nÂ§ediscord.hevermc.com.br");
 			}
 		}
 		if (hp.isBanned()) {
@@ -56,12 +65,37 @@ public class GeneralEvents implements Listener {
 			}
 			System.out.print("[DEBUG] Banned is true for " + e.getConnection().getName() + "!");
 			e.setCancelled(true);
-			e.setCancelReason("§4§lBANIDO\n\n§fVocê foi banido "
-					+ (hp.getBan_time() > 0 ? "temporariamente" : "permanentemente") + "!\n\n§fMotivo: §c"
-					+ hp.getBan_reason() + "\n§fPor: " + hp.getBan_author()
-					+ (hp.getBan_time() > 0 ? "\n§fAté: " + DateUtil.formatDifference(hp.getBan_time()) : "")
-					+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ediscord.hevermc.com.br");
+			e.setCancelReason("Â§4Â§lBANIDO\n\nÂ§fVocÃª foi banido "
+					+ (hp.getBan_time() > 0 ? "temporariamente" : "permanentemente") + "!\n\nÂ§fMotivo: Â§c"
+					+ hp.getBan_reason() + "\nÂ§fPor: " + hp.getBan_author()
+					+ (hp.getBan_time() > 0 ? "\nÂ§fAtÃ©: " + DateUtil.formatDifference(hp.getBan_time()) : "")
+					+ "\n\nÂ§fAchou sua puniÃ§Ã£o injusta? Contate-nÃ³s via Â§3Â§lDISCORDÂ§f!\nÂ§ediscord.hevermc.com.br");
 		}
+	}
+
+	public static ArrayList<String> isLogin = new ArrayList<>();
+	@EventHandler
+	public void onPreLogin(PreLoginEvent e) {
+		if (!isLogin.contains(e.getConnection().getName())) {
+			isLogin.add(e.getConnection().getName());
+			e.setCancelReason("Â§aEntre novamente, vocÃª foi verificado!");
+			e.setCancelled(true);
+			return;
+		}
+		if (Commons.getManager().getSQLManager().checkString("hever_accounts", "name", e.getConnection().getName())) {
+			System.out.print("[DEBUG] " + e.getConnection().getName() + " - existe");
+			if (Commons.getManager().getSQLManager().getInt("hever_accounts", "name", "original",
+					e.getConnection().getName()) == 1) {
+				System.out.print("[DEBUG] " + e.getConnection().getName() + " - original");
+				e.getConnection().setOnlineMode(true);
+			} else {
+				System.out.print("[DEBUG] " + e.getConnection().getName() + " - pirata");
+				e.getConnection().setOnlineMode(false);
+			}
+		} else {
+			System.out.print("[DEBUG] " + e.getConnection().getName() + " - n existe");
+		}
+		isLogin.remove(e.getConnection().getName());
 	}
 
 	@EventHandler
@@ -92,8 +126,8 @@ public class GeneralEvents implements Listener {
 					return;
 				}
 			}
-			p.sendMessage(TextComponent.fromLegacyText("§cVocê está mutado "
-					+ (hp.getMute_time() > 0 ? "até " + DateUtil.formatDifference(hp.getMute_time())
+			p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª estÃ¡ mutado "
+					+ (hp.getMute_time() > 0 ? "atÃ© " + DateUtil.formatDifference(hp.getMute_time())
 							: "permanentemente")
 					+ "!"));
 			e.setCancelled(true);
@@ -106,9 +140,9 @@ public class GeneralEvents implements Listener {
 			Commons.getInstance().getProxy().getPlayers().forEach(alls -> {
 				HeverPlayer hp_all = PlayerLoader.getHP(alls);
 				if (hp_all.groupIsLarger(alls, Groups.YOUTUBERPLUS))
-					alls.sendMessage(TextComponent.fromLegacyText("§e§l[STAFF-CHAT] §f"
+					alls.sendMessage(TextComponent.fromLegacyText("Â§eÂ§l[STAFF-CHAT] Â§f"
 							+ Tags.getTags(hp.getGroup()).getPrefix() + " " + Tags.getTags(hp.getGroup()).getColor()
-							+ p.getName() + " §7» §f" + e.getMessage()));
+							+ p.getName() + " Â§7Â» Â§f" + e.getMessage()));
 			});
 		}
 	}
@@ -130,15 +164,23 @@ public class GeneralEvents implements Listener {
 			System.out.println("[DEBUG] Name read is " + name);
 			String toGroup = received[1].replace("groupTo:", "");
 			System.out.println("[DEBUG] Group read is " + toGroup);
-			if (Commons.getInstance().getProxy().getPlayer(name) != null)
-				PlayerLoader.getHP(name).setGroup(Groups.getGroup(toGroup));
+			PlayerLoader.getHP(name).setGroup(Groups.getGroup(toGroup));
 		}
+//		"Â§6Â§lHEVERÂ§fÂ§lMC Â§7Â» Â§fUm evento foi iniciado no KitPvP, entre clicando aqui!"
 		if (message.contains("updateAll(")) {
 			String received = message.substring(12).replace(")", "");
 			if (Commons.getInstance().getProxy().getPlayer(received) != null)
 				PlayerLoader.getHP(Commons.getInstance().getProxy().getPlayer(received)).update();
 		}
-	
+		if (message.contains("kitpvpEvent")) {
+			TextComponent msg_a = new TextComponent(
+					"Â§6Â§lHEVERÂ§fÂ§lMC Â§7Â» Â§fUm evento foi iniciado no KitPvP, entre clicando aqui e use Â§e/evento Â§fdentro do servidor!");
+			msg_a.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/connect kitpvp"));
+			Commons.getInstance().getProxy().getPlayers().forEach(all -> {
+				all.sendMessage(msg_a);
+			});
+		}
+
 	}
 
 }

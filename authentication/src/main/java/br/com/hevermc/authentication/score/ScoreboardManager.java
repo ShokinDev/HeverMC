@@ -87,8 +87,8 @@ public class ScoreboardManager {
 		add.addLine("  ", " §fprosseguir ao §alobby  ", " ", 3);
 		add.addLine("  ", " §fsiga os passos descritos ", " ", 2);
 		add.addLine("  ", " §fem seu chat! ", " ", 1);
-		add.addLine("  ", " §a  ", " ", 0);
-		add.addLine("", " §ahevermc", ".com.br ", -1);
+		add.addLine("  ", "§a  ", " ", 0);
+		add.addLine("§awww.", "hevermc", ".com.br ", -1);
 
 		p.setScoreboard(score);
 

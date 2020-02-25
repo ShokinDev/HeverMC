@@ -33,13 +33,7 @@ public class Manager {
 		try {
 			setSQLManager(new SQLManager());
 			setRedis(new Redis("191.232.247.83", 6379));
-			getRedis().set("pvp_topkills",
-					"1:" + getSQLManager().getTopKitPvP("kills").get(0) + "2:"
-							+ getSQLManager().getTopKitPvP("kills").get(1) + "3:"
-							+ getSQLManager().getTopKitPvP("kills").get(2) + "4:"
-							+ getSQLManager().getTopKitPvP("kills").get(3) + "5:"
-							+ getSQLManager().getTopKitPvP("kills").get(4));
-			getRedis().set("kitpvp", "on:" + Commons.getInstance().getProxy().getServerInfo("kitpvp").getPlayers().size());
+
 			log("Initialization completed successfully!");
 		} catch (Exception e) {
 			log("Initialization completed unsuccessfully!!");

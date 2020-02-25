@@ -26,6 +26,21 @@ public class Redis {
 			jedis.close();
 		}
 	}
+
+	public boolean contains(String key) {
+		Jedis jedis = null;
+		try {
+			jedis = j.getResource();
+			if (jedis.exists(key)) {
+				return true;
+			} else {
+				return false;
+			}
+		} finally {
+			jedis.close();
+		}
+	}
+
 	public void del(String key) {
 		Jedis jedis = null;
 		try {
@@ -35,6 +50,7 @@ public class Redis {
 			jedis.close();
 		}
 	}
+
 	public String get(String key) {
 		Jedis jedis = null;
 		try {

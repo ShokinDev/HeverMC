@@ -19,12 +19,12 @@ public class LobbyCommand extends HeverCommand {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
 			if (!p.getServer().getInfo().getName().equals("login")) {
 				if (!p.getServer().getInfo().getName().equals("screenshare") && !requiredGroup(p, Groups.MODGC, false)) {
-					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode executar esta aÃ§Ã£o neste servidor!"));
 
 				}
 				p.connect(Commons.getInstance().getProxy().getServerInfo("lobby"));
 			} else {
-				p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
+				p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode executar esta aÃ§Ã£o neste servidor!"));
 			}
 		}
 	}

@@ -23,19 +23,19 @@ public class KickCommand extends HeverCommand implements TabExecutor {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
 			if (requiredGroup(p, Groups.TRIAL, true)) {
 				if (args.length < 2) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/kick <player> <motivo>"));
+					p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve utilizar Â§e/kick <player> <motivo>"));
 				} else {
 					ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 					if (target == null) {
-						p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+						p.sendMessage(TextComponent.fromLegacyText("Â§cSeu alvo estÃ¡ offline!"));
 					} else {
-						String reason = "Sem razão";
+						String reason = "Sem razÃ£o";
 						StringBuilder sb = new StringBuilder();
 						for (int i = 1; i < args.length; i++)
 							sb.append(args[i]).append(" ");
 						reason = sb.toString();
-						target.disconnect(TextComponent.fromLegacyText("§4§lKICK\n\n§fPor: " + reason + "\nPelo: " + p.getName()));
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê kickou §e" + target.getName() + " §acom sucesso!"));
+						target.disconnect(TextComponent.fromLegacyText("Â§4Â§lKICK\n\nÂ§fPor: " + reason + "\nPelo: " + p.getName()));
+						p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª kickou Â§e" + target.getName() + " Â§acom sucesso!"));
 					}
 
 				}

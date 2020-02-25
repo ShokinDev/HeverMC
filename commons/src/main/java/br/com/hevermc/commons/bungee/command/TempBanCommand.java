@@ -27,7 +27,7 @@ public class TempBanCommand extends HeverCommand {
 			if (requiredGroup(p, Groups.TRIAL, true)) {
 				if (args.length < 3) {
 					p.sendMessage(
-							TextComponent.fromLegacyText("§aVocê deve usar §e/tempban <nickname> <time> <reason>"));
+							TextComponent.fromLegacyText("Â§aVocÃª deve usar Â§e/tempban <nickname> <time> <reason>"));
 				} else {
 					String target = args[0];
 					HeverPlayer hp = toHeverPlayer(p);
@@ -41,11 +41,11 @@ public class TempBanCommand extends HeverCommand {
 					HeverPlayer targethp = PlayerLoader.getHP(target);
 					if (targetp != null) {
 						if (targethp.getGroup().ordinal() > hp.getGroup().ordinal()) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode banir este jogador!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode banir este jogador!"));
 						} else if (target.toLowerCase().equals(p.getName().toLowerCase())) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode se auto-banir!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode se auto-banir!"));
 						} else if (!isInt(time.replace("d", "").replace("s", "").replace("m", "").replace("y", ""))) {
-							p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/tempban <nickname> <time> <reason>"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve usar Â§e/tempban <nickname> <time> <reason>"));
 						} else {
 							int timeint = Integer.valueOf(time.replace("d", "").replace("m", "").replace("s", "").replace("y", ""));
 							String format = time.replace(timeint + "", "");
@@ -61,10 +61,10 @@ public class TempBanCommand extends HeverCommand {
 							}	
 
 							targetp.disconnect(TextComponent
-									.fromLegacyText("§4§lBANIDO\n\n§fVocê foi banido temporariamente!\n\n§fMotivo: §c"
-											+ reason + "\n§fPor: " + p.getName() + "\n§fPor: " + p.getName()  + 
-											"\nAté: " + DateUtil.formatDifference(c.getTimeInMillis())
-											+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ediscord.hevermc.com.br"));
+									.fromLegacyText("Â§4Â§lBANIDO\n\nÂ§fVocÃª foi banido temporariamente!\n\nÂ§fMotivo: Â§c"
+											+ reason + "\nÂ§fPor: " + p.getName() + "\nÂ§fPor: " + p.getName()  + 
+											"\nAtÃ©: " + DateUtil.formatDifference(c.getTimeInMillis())
+											+ "\n\nÂ§fAchou sua puniÃ§Ã£o injustas Contate-nÃ³s via Â§3Â§lDISCORDÂ§f!\nÂ§ediscord.hevermc.com.br"));
 
 							targethp.setBanned(true);
 							targethp.setBan_author(p.getName());
@@ -76,30 +76,30 @@ public class TempBanCommand extends HeverCommand {
 								HeverPlayer t = PlayerLoader.getHP(players);
 								if (!t.groupIsLarger(players, Groups.MODPLUS)) {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + targetp.getName() + " foi banido]");
+											"Â§c[O jogador " + targetp.getName() + " foi banido]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
-													+ reason + "\n§fDuração: §4temporariamente").create()));
+											new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este banimento:\nÂ§fMotivo: "
+													+ reason + "\nÂ§fDuraÃ§Ã£o: Â§4temporariamente").create()));
 									players.sendMessage(msg_a);
 								} else {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + targetp.getName() + " foi banido]");
+											"Â§c[O jogador " + targetp.getName() + " foi banido]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
-													+ reason + "\n§fPor: " + p.getName()
-													+ "\n§fDuração: §4temporariamente §c(" + DateUtil.formatDifference(c.getTimeInMillis()) + ")").create()));
+											new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este banimento:\nÂ§fMotivo: "
+													+ reason + "\nÂ§fPor: " + p.getName()
+													+ "\nÂ§fDuraÃ§Ã£o: Â§4temporariamente Â§c(" + DateUtil.formatDifference(c.getTimeInMillis()) + ")").create()));
 									players.sendMessage(msg_a);
 								}
 							});
 							p.sendMessage(TextComponent
-									.fromLegacyText("§aVocê baniu §e" + targetp.getName() + "§a temporariamente com sucesso!"));
+									.fromLegacyText("Â§aVocÃª baniu Â§e" + targetp.getName() + "Â§a temporariamente com sucesso!"));
 						}
 
 					} else {
 						if (targethp.getGroup().ordinal() > hp.getGroup().ordinal()) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode banir este jogador!"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§cVocÃª nÃ£o pode banir este jogador!"));
 						} else if (!isInt(time.replace("d", "").replace("s", "").replace("m", "").replace("y", ""))) {
-							p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/tempban <nickname> <time> <reason>"));
+							p.sendMessage(TextComponent.fromLegacyText("Â§aVocÃª deve usar Â§e/tempban <nickname> <time> <reason>"));
 						} else {
 							int timeint = Integer.valueOf(time.replace("d", "").replace("m", "").replace("s", "").replace("y", ""));
 							String format = time.replace(timeint + "", "");
@@ -124,23 +124,23 @@ public class TempBanCommand extends HeverCommand {
 								HeverPlayer t = PlayerLoader.getHP(players);
 								if (!t.groupIsLarger(players, Groups.TRIAL)) {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + target + " foi banido]");
+											"Â§c[O jogador " + target + " foi banido]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
-													+ reason + "\n§fDuração: §4temporariamente").create()));
+											new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este banimento:\nÂ§fMotivo: "
+													+ reason + "\nÂ§fDuraÃ§Ã£o: Â§4temporariamente").create()));
 									players.sendMessage(msg_a);
 								} else {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + target + " foi banido]");
+											"Â§c[O jogador " + target + " foi banido]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
-													+ reason + "\n§fPor: " + p.getName()
-													+ "\n§fDuração: §4temporariamente §c(" + DateUtil.formatDifference(c.getTimeInMillis()) + ")").create()));
+											new ComponentBuilder("Â§cInformaÃ§Ãµes sobre este banimento:\nÂ§fMotivo: "
+													+ reason + "\nÂ§fPor: " + p.getName()
+													+ "\nÂ§fDuraÃ§Ã£o: Â§4temporariamente Â§c(" + DateUtil.formatDifference(c.getTimeInMillis()) + ")").create()));
 									players.sendMessage(msg_a);
 								}
 							});
 							p.sendMessage(TextComponent
-									.fromLegacyText("§aVocê baniu §e" + target + "§a temporariamente com sucesso!"));
+									.fromLegacyText("Â§aVocÃª baniu Â§e" + target + "Â§a temporariamente com sucesso!"));
 						}
 					}
 				}
