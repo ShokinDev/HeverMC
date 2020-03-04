@@ -89,7 +89,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-
 		<dependency>
 			<groupId>us.myles</groupId>
 			<artifactId>viaversion</artifactId>
@@ -97,7 +96,7 @@
 			<scope>provided</scope>
 		</dependency>
 
-			<dependency>
+		<dependency>
 			<groupId>org.spigotmc</groupId>
 			<artifactId>spigot-api</artifactId>
 			<version>1.8.8-R0.1-SNAPSHOT</version>

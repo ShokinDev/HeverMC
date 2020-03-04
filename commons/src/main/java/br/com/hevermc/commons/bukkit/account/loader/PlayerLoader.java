@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 
 import br.com.hevermc.commons.bukkit.Commons;
 import br.com.hevermc.commons.bukkit.account.HeverPlayer;
+import br.com.hevermc.commons.enums.Tags;
 
 public class PlayerLoader {
 	public static HeverPlayer getHP(Player p) {
@@ -20,9 +21,15 @@ public class PlayerLoader {
 			Commons.getManager().heverplayer.put(name.toLowerCase(), new HeverPlayer(name.toLowerCase(), "0.0.0.0"));
 			Commons.getManager().heverplayer.get(name.toLowerCase()).load();
 		}
+		if (Commons.getManager().getBackend().getRedis().contains(name.toLowerCase() + ":update")) {
+			Commons.getManager().getBackend().getRedis().del(name.toLowerCase() + ":update");
+			Commons.getManager().heverplayer.get(name.toLowerCase()).load();
+			Commons.getManager().heverplayer.get(name.toLowerCase())
+					.setTag(Tags.getTags(Commons.getManager().heverplayer.get(name.toLowerCase()).getGroup()));
+		}
 		return Commons.getManager().heverplayer.get(name.toLowerCase());
 	}
-	
+
 	public static void forceLoadAccount(HeverPlayer hp) {
 		hp.load();
 	}

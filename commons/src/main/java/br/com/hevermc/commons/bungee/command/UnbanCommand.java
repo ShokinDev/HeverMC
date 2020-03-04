@@ -27,11 +27,8 @@ public class UnbanCommand extends HeverCommand {
 					if (!targethp.isBanned()) {
 						p.sendMessage(TextComponent.fromLegacyText("§cEsse jogador não está banido!"));
 					} else {
-						Commons.getManager().getSQLManager().delete("hever_bans", "name", args[0].toLowerCase());
-						targethp.setBan_author(null);
-						targethp.setBan_reason(null);
-						targethp.setBan_time(0);
-						targethp.setBanned(false);
+						Commons.getManager().getBackend().getSql().delete("bans", "name", args[0].toLowerCase());
+						targethp.load();
 						p.sendMessage(TextComponent.fromLegacyText("§aVocê desbaniu §e" + targethp.getName() + "!"));
 					}
 				}

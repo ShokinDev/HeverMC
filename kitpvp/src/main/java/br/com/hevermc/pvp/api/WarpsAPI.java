@@ -2,6 +2,7 @@ package br.com.hevermc.pvp.api;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import br.com.hevermc.pvp.KitPvP;
 
@@ -11,6 +12,16 @@ public class WarpsAPI {
 
 	public WarpsAPI(br.com.hevermc.pvp.enums.Warps warp) {
 		this.warp = warp;
+	}
+
+	public int getINWarp() {
+		int i = 0;
+		for (Player ps : Bukkit.getOnlinePlayers()) {
+			PvPPlayer pvp = new PlayerLoader(ps).load().getPvPP();
+			if (pvp.getWarp() == warp)
+				i++;
+		}
+		return i;
 	}
 
 	public Location getLocation() {

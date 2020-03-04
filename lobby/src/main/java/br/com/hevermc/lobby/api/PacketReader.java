@@ -1,20 +1,23 @@
 package br.com.hevermc.lobby.api;
 
-import io.netty.channel.Channel;
-import io.netty.channel.ChannelHandler;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.MessageToMessageDecoder;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
-import net.minecraft.server.v1_8_R3.Packet;
+
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import br.com.hevermc.commons.bukkit.Commons;
-import br.com.hevermc.commons.bukkit.api.ReflectionAPI;
+import br.com.hevermc.commons.bukkit.account.HeverPlayer;
+import br.com.hevermc.commons.bukkit.account.loader.PlayerLoader;
+import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.lobby.Lobby;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelHandler;
+import io.netty.channel.ChannelHandlerContext;
+import io.netty.handler.codec.MessageToMessageDecoder;
+import net.minecraft.server.v1_8_R3.Packet;
 
 public class PacketReader {
 
@@ -49,22 +52,36 @@ public class PacketReader {
 		if (packet.getClass().getSimpleName().equalsIgnoreCase("PacketPlayInUseEntity")) {
 			int id = ((Integer) getValue(packet, "a")).intValue();
 			if (!buff.contains(player)) {
+				HeverPlayer hp = PlayerLoader.getHP(player);
 				if (Lobby.getManager().npc.get(player) == id) {
 					player.sendMessage("§aVocê está sendo conectado ao §eKitPvP§a!");
-					ReflectionAPI.sendTitle(player, "§b§lCONNECT", "§fVocê está se conectando ao §aKitPvP§f!", 10, 10,
-							10);
 					Commons.getManager().getBungeeChannel().connect(player, "kitpvp");
-
+					buff.add(player);
+				}
+				if (Lobby.getManager().npc2.get(player) == id) {
+					if (hp.groupIsLarger(Groups.ADMIN)) {
+						player.sendMessage("§aVocê está sendo conectado ao §eHardCoreGames§a!");
+						Commons.getManager().getBungeeChannel().connect(player, "hg-1");
+					} else {
+						player.sendMessage("§aServidor em desenvolvimento!");
+					}
+					buff.add(player);
+				}
+				if (Lobby.getManager().npc3.get(player) == id) {
+					if (hp.groupIsLarger(Groups.ADMIN)) {
+						player.sendMessage("§aVocê está sendo conectado ao §eGladiator§a!");
+						Commons.getManager().getBungeeChannel().connect(player, "gladiator");
+					} else {
+						player.sendMessage("§aServidor em desenvolvimento!");
+					}
+					buff.add(player);
 				}
 				new BukkitRunnable() {
-
 					@Override
 					public void run() {
 						buff.remove(player);
 					}
-				}.runTaskLater(Lobby.getInstance(), 3 * 60l);
-			} else {
-				player.sendMessage("§cVocê deve esperar um pouco para tentar entrar no §c§lKitPvP§c novamente!");
+				}.runTaskLater(Lobby.getInstance(), 50L);
 			}
 		}
 	}

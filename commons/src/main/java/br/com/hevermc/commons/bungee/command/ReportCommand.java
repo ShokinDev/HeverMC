@@ -3,6 +3,8 @@ package br.com.hevermc.commons.bungee.command;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 import br.com.hevermc.commons.bungee.Commons;
 import br.com.hevermc.commons.bungee.account.HeverPlayer;
@@ -10,6 +12,7 @@ import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.bungee.command.common.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ClickEvent.Action;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -25,6 +28,22 @@ public class ReportCommand extends HeverCommand implements TabExecutor {
 	}
 
 	ArrayList<ProxiedPlayer> receive_report = new ArrayList<>();
+	
+	
+	public ArrayList<UUID> coowdownReport = new ArrayList<>();
+
+	public void addCoowdown(ProxiedPlayer proxiedPlayer) {
+		coowdownReport.add(proxiedPlayer.getUniqueId());
+		ProxyServer.getInstance().getScheduler().schedule(Commons.getInstance(), new Runnable() {
+			public void run() {
+				coowdownReport.remove(proxiedPlayer.getUniqueId());
+			}
+		}, 1, TimeUnit.MINUTES);
+	}
+
+	public boolean inCoowdown(ProxiedPlayer proxiedPlayer) {
+		return coowdownReport.contains(proxiedPlayer.getUniqueId());
+	}
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
@@ -56,6 +75,12 @@ public class ReportCommand extends HeverCommand implements TabExecutor {
 							.fromLegacyText("§aVocê deve utilizar §e/report <acusado> <motivo>"));
 			} else {
 				ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
+				
+				if (inCoowdown(p)) {
+					p.sendMessage(TextComponent.fromLegacyText("§cAguarde para reportar novamente!"));
+					return;
+				}
+				
 				if (target == null) {
 					p.sendMessage(TextComponent.fromLegacyText("§cEste jogador está offline!"));
 				} else if (target == p) {
@@ -74,7 +99,7 @@ public class ReportCommand extends HeverCommand implements TabExecutor {
 											+ "\n§fAutor: §c" + p.getName() + "\nServidor: §b§l"
 											+ p.getServer().getInfo().getName().toUpperCase()).create()));
 					Commons.getInstance().getProxy().getPlayers().forEach(all -> {
-						HeverPlayer allhp = PlayerLoader.getHP(all);
+						HeverPlayer allhp = PlayerLoader.getHP(all.getName());
 						if (allhp.groupIsLarger(Groups.TRIAL) && !(receive_report.contains(all))) {
 							all.sendMessage(msg_a);
 						}
@@ -82,7 +107,7 @@ public class ReportCommand extends HeverCommand implements TabExecutor {
 
 					p.sendMessage(TextComponent.fromLegacyText(
 							"§aVocê reportou o jogador §e" + target.getName() + " §fcom sucesso!"));
-
+					addCoowdown(p);
 				}
 
 			}

@@ -36,6 +36,30 @@ public class HologramCommand extends HeverCommand {
 					Lobby.getInstance().getLocations().save();
 					
 					p.sendMessage("§aVocê definiu a localização de um holograma!");
+				}else if (args[0].equalsIgnoreCase("tdhg")) {
+					
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdhg.x", p.getLocation().getX());
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdhg.y", p.getLocation().getY());
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdhg.z", p.getLocation().getZ());
+					Lobby.getInstance().getLocations().save();
+					
+					p.sendMessage("§aVocê definiu a localização de um holograma!");
+				}else if (args[0].equalsIgnoreCase("tdhg")) {
+					
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdhg.x", p.getLocation().getX());
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdhg.y", p.getLocation().getY());
+					Lobby.getInstance().getLocations().getConfig().set("holo.tdhg.z", p.getLocation().getZ());
+					Lobby.getInstance().getLocations().save();
+					
+					p.sendMessage("§aVocê definiu a localização de um holograma!");
+				}else if (args[0].equalsIgnoreCase("rank")) {
+					
+					Lobby.getInstance().getLocations().getConfig().set("holo.rank.x", p.getLocation().getX());
+					Lobby.getInstance().getLocations().getConfig().set("holo.rank.y", p.getLocation().getY());
+					Lobby.getInstance().getLocations().getConfig().set("holo.rank.z", p.getLocation().getZ());
+					Lobby.getInstance().getLocations().save();
+					
+					p.sendMessage("§aVocê definiu a localização de um holograma!");
 				}
 			}
 		}

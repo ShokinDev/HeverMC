@@ -11,6 +11,7 @@ import br.com.hevermc.commons.bukkit.account.HeverPlayer;
 import br.com.hevermc.commons.bukkit.command.commons.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.pvp.KitPvP;
+import br.com.hevermc.pvp.api.EventoTimer;
 import br.com.hevermc.pvp.api.PlayerLoader;
 import br.com.hevermc.pvp.api.PvPPlayer;
 import br.com.hevermc.pvp.api.WarpsAPI;
@@ -30,10 +31,10 @@ public class EventoCommand extends HeverCommand {
 		if (isPlayer(sender)) {
 			Player p = toPlayer(sender);
 			PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
-			if (hasGroup(p, Groups.MODPLUS, true)) {
+			if (hasGroup(p, Groups.MODPLUS, false)) {
 				if (args.length == 0) {
 					if (KitPvP.getManager().startedEvent == false) {
-						p.sendMessage("§aVocê deve utilizar §e/evento <on|ir>");
+						p.sendMessage("§aVocê deve utilizar §e/evento <on|ir|mod>");
 					} else {
 						p.sendMessage("§aVocê deve utilizar §e/evento <start|finish|build>");
 					}
@@ -46,8 +47,14 @@ public class EventoCommand extends HeverCommand {
 							pvp.setWarp(Warps.EVENTO);
 							KitPvP.getManager().startedEvent = true;
 							KitPvP.getManager().eventOcurring = false;
+							new ScoreboardManager().build(p);
 							KitPvP.getManager().joinInEvent = true;
 							Commons.getManager().getBungeeChannel().sendPluginMessage(p, "kitpvpEvent", "BungeeCord");
+							Bukkit.getOnlinePlayers().forEach(ps -> {
+								if (toHeverPlayer(ps).groupIsLarger(Groups.MODPLUS)) {
+									ps.sendMessage("§7§o[" + p.getName() + " ativou o evento]");
+								}
+							});
 						}
 					} else if (args[0].equalsIgnoreCase("start")) {
 
@@ -55,12 +62,15 @@ public class EventoCommand extends HeverCommand {
 						KitPvP.getManager().joinInEvent = false;
 						p.sendMessage("§aVocê iniciou o evento!");
 						Bukkit.broadcastMessage("§6§lHEVERMC §7» §fO evento iniciou.");
-
+						new EventoTimer();
 						Bukkit.getOnlinePlayers().forEach(ps -> {
 							if (KitPvP.getManager().inEvent.contains(ps)) {
 								PvPPlayer psvp = new PlayerLoader(ps).load().getPvPP();
 								psvp.setProtectArea(false);
 								ps.teleport(new WarpsAPI(Warps.EVENTO).getLocation());
+							}
+							if (toHeverPlayer(ps).groupIsLarger(Groups.MODPLUS)) {
+								ps.sendMessage("§7§o[" + p.getName() + " inicou o evento]");
 							}
 						});
 
@@ -80,19 +90,27 @@ public class EventoCommand extends HeverCommand {
 						new ScoreboardManager().build(p);
 						p.setHealth(20);
 						pvp.setCombat(false);
+						KitPvP.getManager().killsInEvent.put(p, 0);
 						pvp.setInCombat(null);
 						pvp.setKit(Kits.NENHUM);
 						pvp.setProtectArea(true);
 						pvp.setWarp(Warps.EVENTO);
+						new ScoreboardManager().build(p);
 					} else if (args[0].equalsIgnoreCase("mod")) {
 						p.teleport(new WarpsAPI(Warps.EVENTO).getLocation());
 						p.chat("/admin");
 						p.sendMessage("§aVocê entrou na warp §eevento§a!");
 						pvp.setWarp(Warps.EVENTO);
+						new ScoreboardManager().build(p);
 					} else if (args[0].equalsIgnoreCase("finish")) {
 						if (KitPvP.getManager().eventOcurring == false) {
 							p.sendMessage("§cO evento não está ocorrendo");
 						} else {
+							Bukkit.getOnlinePlayers().forEach(ps -> {
+								if (toHeverPlayer(ps).groupIsLarger(Groups.MODPLUS)) {
+									ps.sendMessage("§7§o[" + p.getName() + " finalizou o evento]");
+								}
+							});
 							KitPvP.getManager().buildInEvent = false;
 							KitPvP.getManager().eventOcurring = false;
 							KitPvP.getManager().joinInEvent = false;
@@ -153,6 +171,7 @@ public class EventoCommand extends HeverCommand {
 							pvp.setKit(Kits.NENHUM);
 							pvp.setProtectArea(true);
 							KitPvP.getManager().specEvent.add(p);
+							new ScoreboardManager().build(p);
 						} else {
 							p.teleport(new WarpsAPI(Warps.EVENTO).getLocation());
 							p.sendMessage("§aVocê entrou na warp §eevento§a!");
@@ -164,7 +183,9 @@ public class EventoCommand extends HeverCommand {
 							pvp.setInCombat(null);
 							pvp.setKit(Kits.NENHUM);
 							pvp.setProtectArea(true);
+							KitPvP.getManager().killsInEvent.put(p, 0);
 							pvp.setWarp(Warps.EVENTO);
+							new ScoreboardManager().build(p);
 						}
 					}
 				}

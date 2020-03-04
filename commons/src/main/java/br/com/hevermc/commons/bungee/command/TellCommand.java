@@ -37,7 +37,7 @@ public class TellCommand extends HeverCommand implements TabExecutor {
 					for (int i = 1; i < args.length; i++)
 						sb.append(args[i]).append(" ");
 					message = sb.toString();
-					if (message.contains(".com") || message.contains(".cc") || message.contains(".tk")) {
+					if (message.contains(".com") ||message.contains(". com") || message.contains(".cc") || message.contains(".tk")) {
 						Commons.getInstance().getProxy().getPlayers().forEach(ps -> {
 							HeverPlayer hp = toHeverPlayer(ps);
 							if (hp.groupIsLarger(Groups.MOD)) {

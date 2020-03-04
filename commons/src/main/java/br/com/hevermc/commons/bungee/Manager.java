@@ -3,8 +3,7 @@ package br.com.hevermc.commons.bungee;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import br.com.hevermc.commons.backend.jedis.Redis;
-import br.com.hevermc.commons.backend.sql.SQLManager;
+import br.com.hevermc.commons.backend.Backend;
 import br.com.hevermc.commons.bungee.account.HeverPlayer;
 import lombok.Getter;
 import lombok.Setter;
@@ -12,12 +11,9 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class Manager {
 
-	@Getter
 	@Setter
-	SQLManager SQLManager;
 	@Getter
-	@Setter
-	Redis redis;
+	public Backend backend;
 	@Getter
 	@Setter
 	boolean maintenance;
@@ -31,9 +27,8 @@ public class Manager {
 
 	public void setup() {
 		try {
-			setSQLManager(new SQLManager());
-			setRedis(new Redis("191.232.247.83", 6379));
-
+			Backend.bungee = true;
+			setBackend(new Backend());
 			log("Initialization completed successfully!");
 		} catch (Exception e) {
 			log("Initialization completed unsuccessfully!!");

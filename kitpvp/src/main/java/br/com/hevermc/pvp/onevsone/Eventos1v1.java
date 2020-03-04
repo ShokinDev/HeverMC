@@ -31,7 +31,7 @@ import br.com.hevermc.pvp.api.WarpsAPI;
 import br.com.hevermc.pvp.enums.Warps;
 
 public final class Eventos1v1 implements Listener {
-	
+
 	public static ArrayList<Player> Combate1 = new ArrayList<Player>();
 
 	public static ItemStack searchingItem() {
@@ -62,6 +62,9 @@ public final class Eventos1v1 implements Listener {
 
 	public static boolean wait = false;
 
+	public static UUID firstMatch;
+	public static UUID secondMatch;
+	public static UUID thirdMatch;
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onInteract(final PlayerInteractEvent e) {
@@ -107,8 +110,8 @@ public final class Eventos1v1 implements Listener {
 		final ItemStack i = e.getPlayer().getItemInHand();
 		PvPPlayer eplayer = new br.com.hevermc.pvp.api.PlayerLoader(e.getPlayer()).load().getPvPP();
 		PvPPlayer challengedp = new br.com.hevermc.pvp.api.PlayerLoader(challenged).load().getPvPP();
-		
-		if (eplayer.getWarp() == Warps.ONEVSONE  && challengedp.getWarp() == Warps.ONEVSONE) {
+
+		if (eplayer.getWarp() == Warps.ONEVSONE && challengedp.getWarp() == Warps.ONEVSONE) {
 			if (e.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD) {
 				if (i.getItemMeta().getDisplayName().equals("§e1v1 Normal §7(§fClique§7)")) {
 					if (cooldown.contains(e.getPlayer())) {
@@ -140,8 +143,10 @@ public final class Eventos1v1 implements Listener {
 					if (playerfigh.containsKey(challenged)) {
 						return;
 					}
-					e.getPlayer().sendMessage("§aVocê desafiou o jogador: " + challenged.getName() + " para um " + "1v1 normal!");
-					challenged.sendMessage("§aVocê foi desafiado pelo jogador: " + e.getPlayer().getName() + " para um " + "1v1 normal!");
+					e.getPlayer().sendMessage(
+							"§aVocê desafiou o jogador: " + challenged.getName() + " para um " + "1v1 normal!");
+					challenged.sendMessage("§aVocê foi desafiado pelo jogador: " + e.getPlayer().getName() + " para um "
+							+ "1v1 normal!");
 					cooldown.add(e.getPlayer());
 					challenge.put(e.getPlayer(), challenged);
 					Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), new Runnable() {
@@ -218,7 +223,8 @@ public final class Eventos1v1 implements Listener {
 
 	public static String cora(Player p) {
 		Damageable vida = p;
-		return NumberFormat.getCurrencyInstance().format(vida.getHealth() / 2).replace("$", "").replace("R", "").replace(",", ".");
+		return NumberFormat.getCurrencyInstance().format(vida.getHealth() / 2).replace("$", "").replace("R", "")
+				.replace(",", ".");
 	}
 
 	public static void show(Player p) {
@@ -231,20 +237,17 @@ public final class Eventos1v1 implements Listener {
 	public void onDamage(final EntityDamageEvent e) {
 		if (e.getEntity() instanceof Player) {
 			Player p = (Player) e.getEntity();
-			
+
 			PvPPlayer p2 = new br.com.hevermc.pvp.api.PlayerLoader(p).load().getPvPP();
-			
+
 			if (p2.getWarp() == Warps.ONEVSONE && !playerfigh.containsKey(p)) {
 				e.setCancelled(true);
 			}
 		}
 	}
 
-	public static UUID firstMatch;
-	public static UUID secondMatch;
-	public static UUID thirdMatch;
 
-	public static final ArrayList<Player> cooldown = new ArrayList<>();	
+	public static final ArrayList<Player> cooldown = new ArrayList<>();
 	public static final HashMap<Player, Player> challenge = new HashMap<>();
 
 	public static final HashMap<Player, Player> challengec = new HashMap<>();
@@ -272,15 +275,15 @@ public final class Eventos1v1 implements Listener {
 		i.setItemMeta(ik);
 		return i;
 	}
-	
+
 	@EventHandler
 	public void cmd(PlayerCommandPreprocessEvent event) {
 		Player p = event.getPlayer();
-		
+
 		PvPPlayer p2 = new br.com.hevermc.pvp.api.PlayerLoader(p).load().getPvPP();
-		
+
 		if (p2.getWarp() == Warps.ONEVSONE && Combate1.contains(p) && event.getMessage().startsWith("/")) {
-			
+
 			p.playSound(p.getLocation(), Sound.CLICK, 15.0F, 1.0F);
 			event.getPlayer().sendMessage("§cVocê não pode utilizar comandos na warp 1v1!");
 			event.setCancelled(true);
@@ -321,10 +324,10 @@ public final class Eventos1v1 implements Listener {
 		prepareInventory(p2);
 		Combate1.add(p2);
 		Combate1.add(p1);
-        for (Player todos2: Bukkit.getOnlinePlayers()) {
-            p1.hidePlayer(todos2);
+		for (Player todos2 : Bukkit.getOnlinePlayers()) {
+			p1.hidePlayer(todos2);
 			p2.hidePlayer(todos2);
-        }
+		}
 		p1.showPlayer(p2);
 		p2.showPlayer(p1);
 		pvp.setCombat(true);
@@ -341,10 +344,10 @@ public final class Eventos1v1 implements Listener {
 		pvp.setProtectArea(false);
 		pvp2.setProtectArea(false);
 		Menu1v1Custom.loadItensCustom(p1, p2);
-        for (Player todos2: Bukkit.getOnlinePlayers()) {
-            p1.hidePlayer(todos2);
+		for (Player todos2 : Bukkit.getOnlinePlayers()) {
+			p1.hidePlayer(todos2);
 			p2.hidePlayer(todos2);
-        }
+		}
 		p1.showPlayer(p2);
 		p2.showPlayer(p1);
 		Combate1.add(p2);

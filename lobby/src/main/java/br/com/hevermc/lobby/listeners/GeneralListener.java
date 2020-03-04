@@ -19,7 +19,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.inventory.Inventory;
@@ -39,6 +38,7 @@ import br.com.hevermc.lobby.Lobby;
 import br.com.hevermc.lobby.api.NPC;
 import br.com.hevermc.lobby.api.PacketReader;
 import br.com.hevermc.lobby.command.BuildCommand;
+import br.com.hevermc.lobby.gui.HardcoreGames;
 import br.com.hevermc.lobby.gui.Profile;
 import br.com.hevermc.lobby.gui.Servers;
 import br.com.hevermc.lobby.score.ScoreboardManager;
@@ -49,17 +49,12 @@ public class GeneralListener implements Listener {
 
 	ArrayList<Player> inCooldown = new ArrayList<Player>();
 
-	@EventHandler
-	public void onQuit(PlayerQuitEvent e) {
-		br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.unload(e.getPlayer().getName());
-	}
-
 	@SuppressWarnings("unchecked")
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 
-		HeverPlayer hp = PlayerLoader.getHP(p);
+		HeverPlayer hp = PlayerLoader.getHP(p.getName());
 		p.getInventory().clear();
 		Bukkit.getOnlinePlayers().forEach(allPlayers -> {
 			if (Lobby.getManager().hide_players.contains(allPlayers))
@@ -92,15 +87,9 @@ public class GeneralListener implements Listener {
 				"§7Jogadores: §aON", Enchantment.WATER_WORKER, 5).create());
 
 		p.sendMessage(" ");
-		p.sendMessage("§6§lHEVER§F§LMC");
-		p.sendMessage(" ");
-		p.sendMessage(
-				"§fSeja §ebem-vindo§f ao servidor, qualquer problema consulte a §eequipe§f via Discord: §ediscord.hevermc.com.br§f, caso tenha algum problema");
-		p.sendMessage("§fcom hackers utilize o comando §c/report§f");
-		p.sendMessage(" ");
 		p.setAllowFlight(true);
 
-		ReflectionAPI.sendTitle(p, "§e§lLOBBY", "§fSeja bem-vindo ao §elobby§f da rede §6Hever§fMC§f!", 10, 10, 10);
+		ReflectionAPI.sendTitle(p, "§e§lLOBBY", "§fSeja bem-vindo ao §6§lHever§f§lMC§f!", 10, 10, 10);
 
 		p.teleport(p.getWorld().getSpawnLocation());
 		p.setGameMode(GameMode.SURVIVAL);
@@ -108,7 +97,8 @@ public class GeneralListener implements Listener {
 
 		//
 
-		Location l = new Location(Bukkit.getWorld("world"), Lobby.getInstance().getLocations().getConfig().getDouble("npc.pvp.x"),
+		Location l = new Location(Bukkit.getWorld("world"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.pvp.x"),
 				Lobby.getInstance().getLocations().getConfig().getDouble("npc.pvp.y"),
 				Lobby.getInstance().getLocations().getConfig().getDouble("npc.pvp.z"));
 		NPC npc;
@@ -116,23 +106,55 @@ public class GeneralListener implements Listener {
 		npc = new NPC("§aClique aqui", l);
 
 		npc.spawn(p);
-		npc.headRotation(-178.7f, 1.6f);
+		npc.headRotation(-180.0f, 1.6f);
 		npc.changeSkin(
-				"eyJ0aW1lc3RhbXAiOjE1ODEzODE2NjgxNDQsInByb2ZpbGVJZCI6Ijk0YzI1OThhMzA4MjRiMTU4M2RlNDlhZTMzMGNkNDU2IiwicHJvZmlsZU5hbWUiOiJCbGFhYWNrb3V0WiIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0NDg1NDUzNmZlZTcxNGI0MDFlMDU3MGU4ZmEzYTJiYzM5NWMyNjA5MGI1ODU1YzYxZjNkZGJmOGE4OGEyOCJ9fX0=",
-				"DfgUfogh2qx02hoGKCIkF6BxgqLh9KaaM5l92FGx1otlMgYhS0LN4HmwHQkI3+83qZCvPWShGEPx5vO2ylYk8yRmpzrlp/OedDxCqWxejLzTmSfFAg/MsY5nytPXaWLfSFEWBnS6w/DQmWfoRbMCL54AF4tBSqI6cVcMiM7WKMhTlv6yUGhhazs2yuDjgZM1wnla50z4i/HhlXFk5Fj2zAjjRg+zNP35S0l1xfEPag96Gx/NeKkCxD6iGJs6irb3ZoNaYAfnzsg58BUFfZxww9P+T7XjlZ8XlygLiTq4E4Z8AgI3+WT3TjOEK1V78t/TjoNSg7nT3+slN0Wch3bMb9GYYc45x5QPzZp5NEvG53xw9T4K0QhKbyZIXMKDt13pTf0uaxmBQh9qfMLGDcdcFrRoXaF7p358Gefy9s+8VWsUdjWuLVqb8ssrblykiEoJgaBtVxRsdxWqyj9rR9Du2HNFV/OyG6BN1AYVf6guDzrjUALonEkuG4gZHSefSw9eUBEy6YIzmi4vLe5SP5qxPtEy4cFwLpHQTWnD19UDxCTLW9hHslFPbW6zZoJYx9o1FOayo3aYzfjZc2BXRI/VKnoFLA0UkgErTdD7KzZ/9Br/vwuzHGV5/Aa53f57Id+cqq+GFshkntTK/5MPCc1+E/tRMbHSuGxyy8dFf/T8W1M=");
+				"eyJ0aW1lc3RhbXAiOjE1ODI5OTk1MjM2MjEsInByb2ZpbGVJZCI6ImJhOTcxY2EwZjcyZjRiOWRiMmZlNDM0MGU2NzY3OTZiIiwicHJvZmlsZU5hbWUiOiJpTHVjYXNVUyIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjlhYjgwODcyMDI5N2FhMjI4YmEyYzUzNWFhMzZmYmI2NDI5MTY3YTdkMjM2MmJjM2JlOTIyMTBmNjA0YTc4NCJ9fX0=",
+				"MmuK79hTlRHjxzWODt4cpHgea8KOcB94oZJLUjviyM42PJfix1sKhvPKUDclXP9K99zBQeUQ0qNoZZIOnmheIbTXfvlF4iCIFW5RdRR2gUhqEL4fVB2Ydn8q4994BdNsqttDwiku8SOmIf4mzTjbbEFROudWkA5yGs7E1+2s3N3FqeYQPMYM15/3iUhgXXJodP60tW8dGJ7qzsUSOX5wJPkXk6G+iQXQOIo67cw2iBnJGvk0RzbkM3BKi1dCtEchAx3vdigltZRk60hCo/74pvvzVvzkNNxYjGwQ6g+EskB/GmgvV4E3mmwR9hjb8iv26kSKwBS3zE8VTIhF34PIAQ828WJWjVdi0xk+RFuNCd7l4Pd/NBLTl0lrb+eDiClucU2quPY42+6sF7B9DXFiuw7oOxXhLOj+O0Jw22iSFru9816VXdVVGu70aEZFaCw266rqRjOIycivwU3T7SVYsyxpv1kAVWRx6eqETVETg6onkhRmflHaSxtkWXxuHkFfnNB667mmcVrP43d6OIT6kdB98vbrIEJE74vLEh6HPwZy2c1cyeREpTv0ehqcvSzTfX0WkaRW8BqKpMX/IVjLu3C8c+RfANXvPSQvbEC+iG1uuON2Z6B8Q2ZF91GxEIXkz4tlSNtU3Kr3qHHCuieIEBpPt6mN1Nc0lkrqisXhNTQ=");
+
+		Location l2 = new Location(Bukkit.getWorld("world"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.hg.x"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.hg.y"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.hg.z"));
+		NPC npc2;
+
+		npc2 = new NPC("§aClique aqui", l2);
+
+		npc2.spawn(p);
+		npc2.headRotation(-180.0f, 1.6f);
+		npc2.changeSkin(
+				"eyJ0aW1lc3RhbXAiOjE1ODI5OTk2NzEzMTMsInByb2ZpbGVJZCI6IjU3NDVkYmM2ZWVkMjQ3YzBiNjQ5MmI0YjU0ZDU4ZjlhIiwicHJvZmlsZU5hbWUiOiJTaG9raWluIiwic2lnbmF0dXJlUmVxdWlyZWQiOnRydWUsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9kMjUyNWUwZTZlNGJiMTkzM2JjYTY5OWUzNjQ4ZTQ5M2U3YzBlYTIzMjIyMTI3ODc3YWI4NmUwNDNmYjA5NTEwIn19fQ==",
+				"EqK9MvQ+XBfd0wZS36bItgrl7sXubnUCGNp4eYi3r/NzKQH7He5cxVBSnbtUBlOw1HbUJp79iQ6Kexufm77HBs+dx70cgoS+pRoQfckSNoB3G05ZA4EYLSswWytgiqX67eUbkbQZJaKClcr+hMvKRne5+DZUO6J6zblcwDcT5xUiCQqG/yaBjF/MpzvJVI9iGUEKxh+D2h3gkXujGxlbK54/gZFwS9Eg5le49Jl/aRlzWYfUw6TgMFQf4w4WKSew1+vZu88MIu0rW3xUVXz0uJrY/3mD5FWwuYiF0J3KUyE9l6XuMaGtEH+ZngR/Q+aKAmMZN0nbRLGIC9Vwk/PbThDML8sTO6Bn6+6okjJZFDKlAUTC0rmopMjBglu4XBBOtJZkE1pCS1PIi/pNQCeh5oojvXyUfE3H7rF1btfqduZMubyDPCf9x2doMko/rpY6Cwl5mXjkwnReV0gufp9n5Tgeq3y8Noaw5L0lfT52yZXEwzdnypwVwWxuJS0ilcTicf2ucZTSWIw21Sh9HfNLlIMDNSP3ONUXmFmPE2EVwo+gYP1vHPRq3Jy0E3dOUbETPSuTVwxSz5McR0JUjXt9wodN4SiseGJK7DdQ3xKcAmyyF/wrSRIwDvUbVOXpyo11E+J2uMzosfbWCxibTQjBirXmy/5Isa5cckOUuDyyfPk=");
+
+		Location l3 = new Location(Bukkit.getWorld("world"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.glad.x"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.glad.y"),
+				Lobby.getInstance().getLocations().getConfig().getDouble("npc.glad.z"));
+		NPC npc3;
+
+		npc3 = new NPC("§aClique aqui", l3);
+
+		npc3.spawn(p);
+		npc3.headRotation(-180.0f, 1.6f);
+		npc3.changeSkin(
+				"eyJ0aW1lc3RhbXAiOjE1ODI5OTk3NDgyNTEsInByb2ZpbGVJZCI6IjY1N2YzNDU2MDk5MDQwNDM4NTRhNjU5MGY2YzJlNmZlIiwicHJvZmlsZU5hbWUiOiJTcGFydGV5eHoiLCJzaWduYXR1cmVSZXF1aXJlZCI6dHJ1ZSwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2FjNzYxNDIzMWUxYTkxMjQ3ZjdhNjc4ODBlYThlZTU3ZGE3ZmI3MGJlNGExYzg0ODM5ZTc2ZjQyZjNkOTU0MmMifX19",
+				"tkjBvdJCuaWfD01dcS+o5zItulAHPhlO3GpD6XdNlLKdm1E+pY3cpQXGfpkoRKIkFKbZQMsoIyQ3xmYhDza/7sOmoiSna1n0Zp/mgdAAHZ4xsDhPoBjG/GlQsZT+CatWXREVpsqA9NBmvKnO5holAqOoCceNewy2UFMeJg4ntDcv0tDXAA7uoYTlM7TlRpw9xkWnkXHjDhDY/IMxgz3khGoJL3qHnCWhe8CRGtlJWZ0oe2oyw5S4GtfnronDykD+T/Tqe2muNUFl9aeDRxQl4pL1PehmOLv4LVmtfCiBeKUf+bsp2p2MLcTNMs5UvAqVH63b8uH8OnbSYgAcOpQ/hqmTesQtIjBtDgJYRcgioUFeMZHxt0wlP/CqkBuYHsf0kwNxOSKZmGZz+tSIPCkGiSD+VfTYrue/GJSagnrBG4fyiFd4TSZdT0+zgG5BfSX0hNQCgr5bpvDeTHrQ1ZtQSP9QVRnS52vrMgXx6Skod9KBSdZCHlE65azwI3tR3dAS8l2IqSj7v1d1ZDrPVvppc/zj9wAVpMhKppjahlDFJVSXpCc0lkZejgNGp5g/v/kusIuYSGsLajhtK76D6ZY3x3FKd+kPOHftXwikkrSrfbFx1G7WocGqCkhkzOyUZNTk+XJ4GI27jdIFS3gGzM0ebLV17vmqT1YwrQPCEyf0e5c=");
 
 		new BukkitRunnable() {
 			@Override
 			public void run() {
 				npc.rmvFromTablist();
+				npc2.rmvFromTablist();
+				npc3.rmvFromTablist();
 			}
 		}.runTaskLater(Lobby.getInstance(), 45L);
 		Lobby.getManager().npc.put(p, npc.getEntityID());
+		Lobby.getManager().npc2.put(p, npc2.getEntityID());
+		Lobby.getManager().npc3.put(p, npc3.getEntityID());
 		new PacketReader(p).inject();
 
 		if (hp.groupIsLarger(Groups.PRO))
 			Bukkit.broadcastMessage(Tags.getTags(hp.getGroup()).getPrefix() + " "
-					+ Tags.getTags(hp.getGroup()).getColor() + p.getName() + " §fentrou neste §a§nlobby§f!");
+					+ Tags.getTags(hp.getGroup()).getColor() + p.getName() + " §fentrou neste §a§nLOBBY§f!");
 
 	}
 
@@ -151,12 +173,32 @@ public class GeneralListener implements Listener {
 			if (p.getGameMode() != GameMode.CREATIVE)
 				e.setCancelled(true);
 			if (title.startsWith("§eServidores")) {
+				e.setCancelled(true);
 				if (clicked.getType() == Material.DIAMOND_SWORD) {
-					p.sendMessage("§aVocê está sendo conectado ao KitPvP!");
-					ReflectionAPI.sendTitle(p, "§b§lCONNECT", "§fVocê está se conectando ao §aKitPvP§f!", 10, 10, 10);
+					p.sendMessage("§aVocê está sendo conectado ao §eKitPvP§a!");
 					Commons.getManager().getBungeeChannel().connect(p, "kitpvp");
 					p.closeInventory();
+				} else if (clicked.getType() == Material.MUSHROOM_SOUP) {
+					p.closeInventory();
+					if (!PlayerLoader.getHP(p).groupIsLarger(Groups.MOD)) {
+						p.sendMessage(
+								"§cEste modo está em desenvolvimento, portanto está disponível apenas para a equipe!");
+					} else {
+						//new HardcoreGames(p);
+					}
 				}
+			} else if (title.startsWith("§eSalas de HardcoreGames")) {
+				if (e.getCurrentItem() != null) {
+					if (e.getCurrentItem().getType() == Material.INK_SACK) {
+						p.sendMessage("§aTe conectando até §e"
+								+ e.getCurrentItem().getItemMeta().getDisplayName().replace("§aSala ", "").toLowerCase()
+								+ "§a!");
+						p.closeInventory();
+						Commons.getManager().getBungeeChannel().connect(p,
+								e.getCurrentItem().getItemMeta().getDisplayName().replace("§aSala ", "").toLowerCase());
+					}
+				}
+				e.setCancelled(true);
 			}
 		}
 	}
@@ -183,6 +225,10 @@ public class GeneralListener implements Listener {
 		Player p = e.getPlayer();
 		// HeverPlayer hp = new PlayerLoader(p).load().getHP();
 		if (p.getItemInHand() != null && p.getItemInHand().getType() != Material.AIR) {
+			if (p.getItemInHand().getType() == Material.LAVA_BUCKET) {
+				e.setCancelled(true);
+				return;
+			}
 			if (p.getItemInHand().getType() == Material.COMPASS) {
 				e.setCancelled(true);
 				new Servers(p);

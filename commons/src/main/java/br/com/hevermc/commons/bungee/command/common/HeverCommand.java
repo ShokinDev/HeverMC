@@ -48,7 +48,7 @@ public abstract class HeverCommand extends Command {
 	}
 
 	public HeverPlayer toHeverPlayer(ProxiedPlayer p) {
-		return PlayerLoader.getHP(p);
+		return PlayerLoader.getHP(p.getName());
 	}
 
 	public boolean isInt(String args) {
@@ -61,7 +61,7 @@ public abstract class HeverCommand extends Command {
 	}
 
 	public boolean requiredGroup(ProxiedPlayer p, Groups group, boolean b) {
-		HeverPlayer hp = PlayerLoader.getHP(p);
+		HeverPlayer hp = PlayerLoader.getHP(p.getName());
 		if (p.getServer().getInfo().getName().equals("login"))
 			return false;
 

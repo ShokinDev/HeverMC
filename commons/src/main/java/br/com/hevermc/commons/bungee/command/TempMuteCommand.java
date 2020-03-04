@@ -38,9 +38,9 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 					String target = args[0];
 					HeverPlayer hp = toHeverPlayer(p);
 					String reason;
-					String time = "";
+					String time = args[1].toLowerCase();
 					StringBuilder sb = new StringBuilder();
-					for (int i = 1; i < args.length; i++)
+					for (int i = 2; i < args.length; i++)
 						sb.append(args[i]).append(" ");
 					reason = sb.toString();
 					ProxiedPlayer targetp = Commons.getInstance().getProxy().getPlayer(target);
@@ -50,59 +50,61 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode mutar este jogador!"));
 						} else if (target.toLowerCase().equals(p.getName().toLowerCase())) {
 							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode se auto-mutar!"));
-						} else if (!isInt(time.replace("d", "").replace("s", "").replace("m", "").replace("y", ""))) {
-							p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+						} else if (!isInt(time.replace("d", "").replace("h", "").replace("s", "").replace("m", "")
+								.replace("y", ""))) {
+							p.sendMessage(TextComponent
+									.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
 						} else {
-							int timeint = Integer.valueOf(time.replace("d", "").replace("m", "").replace("s", "").replace("y", ""));
+							int timeint = Integer.valueOf(time.replace("d", "").replace("h", "").replace("m", "")
+									.replace("s", "").replace("y", ""));
 							String format = time.replace(timeint + "", "");
 							Calendar c = Calendar.getInstance();
 							if (format.equalsIgnoreCase("s")) {
 								c.add(Calendar.SECOND, timeint);
+							} else if (format.equalsIgnoreCase("h")) {
+								c.add(Calendar.HOUR, timeint);
 							} else if (format.equalsIgnoreCase("d")) {
 								c.add(Calendar.DAY_OF_YEAR, timeint);
 							} else if (format.equalsIgnoreCase("m")) {
 								c.add(Calendar.MONTH, timeint);
 							} else if (format.equalsIgnoreCase("y")) {
 								c.add(Calendar.YEAR, timeint);
-							}	
+							}
 
-							
-							targethp.setMuted(true);
-							targethp.setMute_author(p.getName());
-							targethp.setMute_time(c.getTimeInMillis());
-							targethp.setMute_reason(reason);
 							targethp.mute(reason, p.getName(), c.getTimeInMillis());
 
 							Commons.getInstance().getProxy().getPlayers().forEach(players -> {
-								HeverPlayer t = PlayerLoader.getHP(players);
-								if (!t.groupIsLarger(players, Groups.MODPLUS)) {
+								HeverPlayer t = PlayerLoader.getHP(players.getName());
+								if (!t.groupIsLarger(Groups.MODPLUS)) {
 									TextComponent msg_a = new TextComponent(
 											"§c[O jogador " + targetp.getName() + " foi mutado]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: "
-													+ reason + "\n§fDuração: §4temporariamente").create()));
+											new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: " + reason
+													+ "\n§fDuração: §4temporariamente").create()));
 									players.sendMessage(msg_a);
 								} else {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + targetp.getName() + " foi mumtado]");
+											"§c[O jogador " + targetp.getName() + " foi mutado]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: "
-													+ reason + "\n§fPor: " + p.getName()
-													+ "\n§fDuração: §4temporariamente").create()));
+											new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: " + reason
+													+ "\n§fPor: " + p.getName() + "\n§fDuração: §4temporariamente")
+															.create()));
 									players.sendMessage(msg_a);
 								}
 							});
-							p.sendMessage(TextComponent
-									.fromLegacyText("§aVocê mutou §e" + targetp.getName() + "§a temporariamente com sucesso!"));
+							p.sendMessage(TextComponent.fromLegacyText(
+									"§aVocê mutou §e" + targetp.getName() + "§a temporariamente com sucesso!"));
 						}
 
 					} else {
 						if (targethp.getGroup().ordinal() > hp.getGroup().ordinal()) {
 							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode mutar este jogador!"));
 						} else if (!isInt(time.replace("d", "").replace("s", "").replace("m", "").replace("y", ""))) {
-							p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+							p.sendMessage(TextComponent
+									.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
 						} else {
-							int timeint = Integer.valueOf(time.replace("d", "").replace("m", "").replace("s", "").replace("y", ""));
+							int timeint = Integer
+									.valueOf(time.replace("d", "").replace("m", "").replace("s", "").replace("y", ""));
 							String format = time.replace(timeint + "", "");
 							Calendar c = Calendar.getInstance();
 							if (format.equalsIgnoreCase("s")) {
@@ -113,30 +115,24 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 								c.add(Calendar.MONTH, timeint);
 							} else if (format.equalsIgnoreCase("y")) {
 								c.add(Calendar.YEAR, timeint);
-							}	
+							}
 
-							targethp.setBanned(true);
-							targethp.setBan_author(p.getName());
-							targethp.setBan_time(c.getTimeInMillis());
-							targethp.setBan_reason(reason);
 							targethp.ban(reason, p.getName(), c.getTimeInMillis());
 
 							Commons.getInstance().getProxy().getPlayers().forEach(players -> {
-								HeverPlayer t = PlayerLoader.getHP(players);
-								if (!t.groupIsLarger(players, Groups.TRIAL)) {
-									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + target + " foi mutar]");
+								HeverPlayer t = PlayerLoader.getHP(players.getName());
+								if (!t.groupIsLarger(Groups.TRIAL)) {
+									TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi mutado]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: "
-													+ reason + "\n§fDuração: §4temporariamente").create()));
+											new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: " + reason
+													+ "\n§fDuração: §4temporariamente").create()));
 									players.sendMessage(msg_a);
 								} else {
-									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + target + " foi mutar]");
+									TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi mutado]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: "
-													+ reason + "\n§fPor: " + p.getName()
-													+ "\n§fDuração: §4temporariamente §c(" + DateUtil.formatDifference(c.getTimeInMillis()) + ")").create()));
+											new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: " + reason
+													+ "\n§fPor: " + p.getName() + "\n§fDuração: §4temporariamente §c("
+													+ DateUtil.formatDifference(c.getTimeInMillis()) + ")").create()));
 									players.sendMessage(msg_a);
 								}
 							});
@@ -147,10 +143,113 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 				}
 
 			}
+		} else {
+			if (args.length < 3) {
+				sender.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+			} else {
+				String target = args[0];
+				String reason;
+				String time = args[1].toLowerCase();
+				StringBuilder sb = new StringBuilder();
+				for (int i = 2; i < args.length; i++)
+					sb.append(args[i]).append(" ");
+				reason = sb.toString();
+				ProxiedPlayer targetp = Commons.getInstance().getProxy().getPlayer(target);
+				HeverPlayer targethp = PlayerLoader.getHP(target);
+				if (targetp != null) {
+				 if (!isInt(time.replace("d", "").replace("h", "").replace("s", "").replace("m", "")
+							.replace("y", ""))) {
+						sender.sendMessage(TextComponent
+								.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+					} else {
+						int timeint = Integer.valueOf(time.replace("d", "").replace("h", "").replace("m", "")
+								.replace("s", "").replace("y", ""));
+						String format = time.replace(timeint + "", "");
+						Calendar c = Calendar.getInstance();
+						if (format.equalsIgnoreCase("s")) {
+							c.add(Calendar.SECOND, timeint);
+						} else if (format.equalsIgnoreCase("h")) {
+							c.add(Calendar.HOUR, timeint);
+						} else if (format.equalsIgnoreCase("d")) {
+							c.add(Calendar.DAY_OF_YEAR, timeint);
+						} else if (format.equalsIgnoreCase("m")) {
+							c.add(Calendar.MONTH, timeint);
+						} else if (format.equalsIgnoreCase("y")) {
+							c.add(Calendar.YEAR, timeint);
+						}
+
+						targethp.mute(reason, sender.getName(), c.getTimeInMillis());
+
+						Commons.getInstance().getProxy().getPlayers().forEach(players -> {
+							HeverPlayer t = PlayerLoader.getHP(players.getName());
+							if (!t.groupIsLarger(Groups.MODPLUS)) {
+								TextComponent msg_a = new TextComponent(
+										"§c[O jogador " + targetp.getName() + " foi mutado]");
+								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+										new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: " + reason
+												+ "\n§fDuração: §4temporariamente").create()));
+								players.sendMessage(msg_a);
+							} else {
+								TextComponent msg_a = new TextComponent(
+										"§c[O jogador " + targetp.getName() + " foi mutado]");
+								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+										new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: " + reason
+												+ "\n§fPor: " + sender.getName() + "\n§fDuração: §4temporariamente")
+														.create()));
+								players.sendMessage(msg_a);
+							}
+						});
+						sender.sendMessage(TextComponent.fromLegacyText(
+								"§aVocê mutou §e" + targetp.getName() + "§a temporariamente com sucesso!"));
+					}
+
+				} else {
+					if (!isInt(time.replace("d", "").replace("s", "").replace("m", "").replace("y", ""))) {
+						sender.sendMessage(TextComponent
+								.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+					} else {
+						int timeint = Integer
+								.valueOf(time.replace("d", "").replace("m", "").replace("s", "").replace("y", ""));
+						String format = time.replace(timeint + "", "");
+						Calendar c = Calendar.getInstance();
+						if (format.equalsIgnoreCase("s")) {
+							c.add(Calendar.SECOND, timeint);
+						} else if (format.equalsIgnoreCase("d")) {
+							c.add(Calendar.DAY_OF_YEAR, timeint);
+						} else if (format.equalsIgnoreCase("m")) {
+							c.add(Calendar.MONTH, timeint);
+						} else if (format.equalsIgnoreCase("y")) {
+							c.add(Calendar.YEAR, timeint);
+						}
+
+						targethp.ban(reason, sender.getName(), c.getTimeInMillis());
+
+						Commons.getInstance().getProxy().getPlayers().forEach(players -> {
+							HeverPlayer t = PlayerLoader.getHP(players.getName());
+							if (!t.groupIsLarger(Groups.TRIAL)) {
+								TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi mutado]");
+								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+										new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: " + reason
+												+ "\n§fDuração: §4temporariamente").create()));
+								players.sendMessage(msg_a);
+							} else {
+								TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi mutado]");
+								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+										new ComponentBuilder("§cInformações sobre esse mute:\n§fMotivo: " + reason
+												+ "\n§fPor: " + sender.getName() + "\n§fDuração: §4temporariamente §c("
+												+ DateUtil.formatDifference(c.getTimeInMillis()) + ")").create()));
+								players.sendMessage(msg_a);
+							}
+						});
+						sender.sendMessage(TextComponent
+								.fromLegacyText("§aVocê mutou §e" + target + "§a temporariamente com sucesso!"));
+					}
+				}
+			}
 		}
 
 	}
-	
+
 	public Iterable<String> onTabComplete(CommandSender cs, String[] args) {
 		if ((args.length > 2) || (args.length == 0)) {
 			return ImmutableSet.of();

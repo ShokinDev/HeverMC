@@ -1,6 +1,5 @@
 package br.com.hevermc.pvp.command;
 
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -13,7 +12,6 @@ public class WarpCommand extends HeverCommand {
 		super("warp");
 	}
 
-
 	@Override
 	public boolean execute(CommandSender sender, String commandLabel, String[] args) {
 		if (isPlayer(sender)) {
@@ -22,6 +20,7 @@ public class WarpCommand extends HeverCommand {
 			if (!pvp.isCombat()) {
 				new br.com.hevermc.pvp.gui.Warps(p);
 			} else {
+				p.setAllowFlight(false);
 				p.sendMessage("§cVocê está em combate!");
 			}
 		}

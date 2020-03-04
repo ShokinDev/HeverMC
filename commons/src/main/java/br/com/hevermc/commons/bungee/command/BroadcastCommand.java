@@ -12,14 +12,14 @@ public class BroadcastCommand extends HeverCommand {
 	public BroadcastCommand() {
 		super("broadcast", "bc");
 	}
-
+	
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
 			if (!p.getServer().getInfo().getName().equals("login")) {
 
-				if (requiredGroup(p, Groups.DIRETOR, true)) {
+				if (requiredGroup(p, Groups.ADMIN, true)) {
 					if (args.length == 0) {
 						p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/broadcast <mensagem>"));
 					} else {
@@ -30,11 +30,9 @@ public class BroadcastCommand extends HeverCommand {
 						message = sb.toString();
 						Commons.getInstance().getProxy().getPlayers().forEach(all -> {
 							all.sendMessage(TextComponent.fromLegacyText(""));
-							all.sendMessage(TextComponent.fromLegacyText("§6§lHEVER§f§lMC §f» §7" + message.replace("&", "§")));
+							all.sendMessage(TextComponent.fromLegacyText("§6§lHEVER§f§lMC §7» §f" + message.replace("&", "§")));
 							all.sendMessage(TextComponent.fromLegacyText(""));
 						});
-						
-	
 					}
 				}
 			}

@@ -1,7 +1,10 @@
 package br.com.hevermc.commons.bungee.events;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.concurrent.TimeUnit;
 
 import br.com.hevermc.commons.bukkit.api.DateUtil;
 import br.com.hevermc.commons.bungee.Commons;
@@ -9,6 +12,7 @@ import br.com.hevermc.commons.bungee.account.HeverPlayer;
 import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.enums.Groups;
 import br.com.hevermc.commons.enums.Tags;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.ServerPing;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ClickEvent.Action;
@@ -25,6 +29,9 @@ import net.md_5.bungee.event.EventHandler;
 
 public class GeneralEvents implements Listener {
 
+	public static HashMap<String, Integer> premium = new HashMap<String, Integer>();
+	public static ArrayList<String> verificando = new ArrayList<String>();
+
 	@EventHandler
 	public void onProxyPing(ProxyPingEvent e) {
 		ServerPing sp = e.getResponse();
@@ -37,78 +44,137 @@ public class GeneralEvents implements Listener {
 			sp.setDescription(
 					"           §a►  §6§lHever§f§lMC §a♦ §7(§f1.7.X §7| §f1.15.X§7)  §a◄\n         §a﹃ §a﹄ §7Servidor em fase §9§lBETA §a﹃ §a﹄");
 		}
-
 		sp.getPlayers().setSample(null);
 		sp.getPlayers().setMax(2020);
 		e.setResponse(sp);
 	}
 
+	public static HashMap<String, Date> segs = new HashMap<String, Date>();
+	public static ArrayList<String> bypass = new ArrayList<String>();
+	public static ArrayList<String> cooldown = new ArrayList<String>();
+	public static ArrayList<String> qs = new ArrayList<String>();
+	public static ArrayList<String> ip = new ArrayList<String>();
+
 	@EventHandler
 	public void onJoin(LoginEvent e) {
 		HeverPlayer hp = PlayerLoader.getHP(e.getConnection().getName());
 		hp.load();
+		hp.setLastLogin(new Date().getTime());
+		if (e.getConnection().getVersion() >= 47) {
+			qs.add(e.getConnection().getName());
+		}
 		if (Commons.getManager().isMaintenance()) {
 			if (!hp.groupIsLarger(Groups.TRIAL)) {
-				System.out.print("[DEBUG] Member not in WhiteList!");
-				e.setCancelled(true);
 				e.setCancelReason("§4§lWHITELIST\n\n§fEstamos em manutenção, tente novamente mais tarde!"
 						+ "\n\n§fEntre em nosso §3§lDISCORD§f!\n§ediscord.hevermc.com.br");
+				e.setCancelled(true);
 			}
 		}
 		if (hp.isBanned()) {
+
 			if (hp.getBan_time() > 0 && new Date().after(new Date(hp.getBan_time()))) {
-				hp.setBan_author(null);
-				hp.setBan_reason(null);
-				hp.setBan_time(0);
-				hp.setBanned(false);
+				Commons.getManager().getBackend().getSql().delete("bans", "name",
+						e.getConnection().getName().toLowerCase());
 				return;
 			}
-			System.out.print("[DEBUG] Banned is true for " + e.getConnection().getName() + "!");
-			e.setCancelled(true);
 			e.setCancelReason("§4§lBANIDO\n\n§fVocê foi banido "
 					+ (hp.getBan_time() > 0 ? "temporariamente" : "permanentemente") + "!\n\n§fMotivo: §c"
 					+ hp.getBan_reason() + "\n§fPor: " + hp.getBan_author()
 					+ (hp.getBan_time() > 0 ? "\n§fAté: " + DateUtil.formatDifference(hp.getBan_time()) : "")
 					+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ediscord.hevermc.com.br");
+			e.setCancelled(true);
 		}
 	}
 
-	public static ArrayList<String> isLogin = new ArrayList<>();
 	@EventHandler
 	public void onPreLogin(PreLoginEvent e) {
-		if (!isLogin.contains(e.getConnection().getName())) {
-			isLogin.add(e.getConnection().getName());
-			e.setCancelReason("§aEntre novamente, você foi verificado!");
+		if (e.getConnection().getName().toLowerCase().startsWith("mcdrop")) {
+			e.setCancelReason("§cNickname bloqueado!");
 			e.setCancelled(true);
 			return;
 		}
-		if (Commons.getManager().getSQLManager().checkString("hever_accounts", "name", e.getConnection().getName())) {
-			System.out.print("[DEBUG] " + e.getConnection().getName() + " - existe");
-			if (Commons.getManager().getSQLManager().getInt("hever_accounts", "name", "original",
-					e.getConnection().getName()) == 1) {
-				System.out.print("[DEBUG] " + e.getConnection().getName() + " - original");
-				e.getConnection().setOnlineMode(true);
+		if (!bypass.contains(e.getConnection().getName())) {
+			if (!segs.containsKey(e.getConnection().getName())) {
+				e.setCancelReason("§cAguarde 10 segundos e tente novamente!");
+				e.setCancelled(true);
+				Calendar c = Calendar.getInstance();
+				c.add(Calendar.SECOND, 10);
+				segs.put(e.getConnection().getName(), c.getTime());
+				return;
 			} else {
-				System.out.print("[DEBUG] " + e.getConnection().getName() + " - pirata");
+				if (!new Date().after(segs.get(e.getConnection().getName()))) {
+
+					e.setCancelReason(
+							"§cAguarde " + DateUtil.formatDifference(segs.get(e.getConnection().getName()).getTime())
+									+ " e tente novamente!");
+					e.setCancelled(true);
+					return;
+				} else {
+					bypass.add(e.getConnection().getName());
+				}
+			}
+		}
+		if (!verificando.contains(e.getConnection().getName())) {
+			verificando.add(e.getConnection().getName());
+			e.setCancelReason("§6§lHEVER§f§lMC\n§f\n§aVocê foi verificado!\n§fEntre novamente!\n§f\n§ahevermc.com.br");
+			e.setCancelled(true);
+			return;
+		}
+		if (cooldown.contains(e.getConnection().getName().toLowerCase())) {
+			e.setCancelled(true);
+			e.setCancelReason(
+					"§6§lHEVER§f§lMC\n§f\n§fSua conta ainda não foi descarregada da ultima vez em que você logou \n§fno servidor, tente novamente!\n§f\n§ahevermc.com.br");
+			return;
+		}
+		if (!premium.containsKey(e.getConnection().getName())) {
+			if (PlayerLoader.getHP(e.getConnection().getName()).getAccountType() != 2) {
+				if (PlayerLoader.getHP(e.getConnection().getName()).getAccountType() == 1) {
+					e.getConnection().setOnlineMode(true);
+					premium.put(e.getConnection().getName(), 1);
+				} else {
+					e.getConnection().setOnlineMode(false);
+					premium.put(e.getConnection().getName(), 0);
+				}
+			} else {
 				e.getConnection().setOnlineMode(false);
 			}
 		} else {
-			System.out.print("[DEBUG] " + e.getConnection().getName() + " - n existe");
+			if (premium.get(e.getConnection().getName()) == 1) {
+				e.getConnection().setOnlineMode(true);
+			} else {
+				e.getConnection().setOnlineMode(false);
+			}
 		}
-		isLogin.remove(e.getConnection().getName());
+		if (verificando.contains(e.getConnection().getName())) {
+			verificando.remove(e.getConnection().getName());
+		}
 	}
 
 	@EventHandler
 	public void onQuit(PlayerDisconnectEvent e) {
 		ProxiedPlayer p = e.getPlayer();
-		PlayerLoader.unload(p.getName());
 
+		String n = p.getName();
+		if (qs.contains(n))
+			qs.remove(n);
+		PlayerLoader.unload(n);
+
+		ProxyServer.getInstance().getScheduler().schedule(Commons.getInstance(), new Runnable() {
+
+			@Override
+			public void run() {
+				if (cooldown.contains(e.getPlayer().getName().toLowerCase())) {
+					cooldown.remove(e.getPlayer().getName().toLowerCase());
+				}
+
+			}
+		}, 5, TimeUnit.SECONDS);
 	}
 
 	@EventHandler
 	public void onChat(ChatEvent e) {
 		ProxiedPlayer p = (ProxiedPlayer) e.getSender();
-		HeverPlayer hp = PlayerLoader.getHP(p);
+		HeverPlayer hp = PlayerLoader.getHP(p.getName());
 		if (p.getServer().getInfo().getName().equals("login")) {
 			if (!(e.getMessage().startsWith("/login") || e.getMessage().startsWith("/register"))) {
 				e.setCancelled(true);
@@ -119,10 +185,8 @@ public class GeneralEvents implements Listener {
 				return;
 			if (hp.getMute_time() > 0) {
 				if (new Date().after(new Date(hp.getMute_time()))) {
-					hp.setMute_author(null);
-					hp.setMuted(false);
-					hp.setMute_reason(null);
-					hp.setMute_time(0);
+					Commons.getManager().getBackend().getSql().delete("mutes", "name", p.getName().toLowerCase());
+
 					return;
 				}
 			}
@@ -138,14 +202,16 @@ public class GeneralEvents implements Listener {
 
 			e.setCancelled(true);
 			Commons.getInstance().getProxy().getPlayers().forEach(alls -> {
-				HeverPlayer hp_all = PlayerLoader.getHP(alls);
-				if (hp_all.groupIsLarger(alls, Groups.YOUTUBERPLUS))
+				HeverPlayer hp_all = PlayerLoader.getHP(alls.getName());
+				if (hp_all.groupIsLarger(Groups.YOUTUBERPLUS))
 					alls.sendMessage(TextComponent.fromLegacyText("§e§l[STAFF-CHAT] §f"
 							+ Tags.getTags(hp.getGroup()).getPrefix() + " " + Tags.getTags(hp.getGroup()).getColor()
 							+ p.getName() + " §7» §f" + e.getMessage()));
 			});
 		}
 	}
+
+	ArrayList<String> loginBypass = new ArrayList<String>();
 
 	@EventHandler
 	public void receiveMessage(PluginMessageEvent event) {
@@ -158,19 +224,21 @@ public class GeneralEvents implements Listener {
 		}
 		if (message.contains("updateGroup(")) {
 
-			System.out.println("[DEBUG] Message received by Bukkit, " + message);
 			String[] received = message.substring(14).replace(")", "").split(",");
 			String name = received[0];
-			System.out.println("[DEBUG] Name read is " + name);
 			String toGroup = received[1].replace("groupTo:", "");
-			System.out.println("[DEBUG] Group read is " + toGroup);
 			PlayerLoader.getHP(name).setGroup(Groups.getGroup(toGroup));
 		}
 //		"§6§lHEVER§f§lMC §7» §fUm evento foi iniciado no KitPvP, entre clicando aqui!"
 		if (message.contains("updateAll(")) {
 			String received = message.substring(12).replace(")", "");
-			if (Commons.getInstance().getProxy().getPlayer(received) != null)
-				PlayerLoader.getHP(Commons.getInstance().getProxy().getPlayer(received)).update();
+			PlayerLoader.getHP(received).update();
+		}
+		if (message.contains("loginBypass(")) {
+			String received = message.substring(14).replace(")", "");
+			if (!loginBypass.contains(received))
+				loginBypass.add(received);
+
 		}
 		if (message.contains("kitpvpEvent")) {
 			TextComponent msg_a = new TextComponent(

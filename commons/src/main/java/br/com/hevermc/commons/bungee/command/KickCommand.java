@@ -4,10 +4,14 @@ import java.util.HashSet;
 import java.util.Set;
 
 import br.com.hevermc.commons.bungee.Commons;
+import br.com.hevermc.commons.bungee.account.HeverPlayer;
+import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.bungee.command.common.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.TabExecutor;
@@ -28,14 +32,28 @@ public class KickCommand extends HeverCommand implements TabExecutor {
 					ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 					if (target == null) {
 						p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+					} else if (toHeverPlayer(target).getGroup().ordinal() > toHeverPlayer(p).getGroup().ordinal()) {
+						p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode kickar este jogador!"));
 					} else {
-						String reason = "Sem razão";
+						String reason;
 						StringBuilder sb = new StringBuilder();
 						for (int i = 1; i < args.length; i++)
 							sb.append(args[i]).append(" ");
 						reason = sb.toString();
 						target.disconnect(TextComponent.fromLegacyText("§4§lKICK\n\n§fPor: " + reason + "\nPelo: " + p.getName()));
 						p.sendMessage(TextComponent.fromLegacyText("§aVocê kickou §e" + target.getName() + " §acom sucesso!"));
+						TextComponent msg_a = new TextComponent(
+								"§7§o[O jogador " + args[0] + " foi kickado]");
+						msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(
+								"§cInformações:\n§fMotivo: " + reason + "\n§fPor: " + sender.getName())
+										.create()));
+						Commons.getInstance().getProxy().getPlayers().forEach(players -> {
+							HeverPlayer t2 = PlayerLoader.getHP(players.getName());
+							if (!t2.groupIsLarger(Groups.MODPLUS)) {
+					
+								players.sendMessage(msg_a);
+							}
+						});
 					}
 
 				}

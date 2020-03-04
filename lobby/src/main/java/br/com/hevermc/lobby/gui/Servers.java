@@ -19,7 +19,7 @@ public class Servers {
 				new ItemConstructor(new ItemStack(Material.DIAMOND_SWORD), "§aKitPvP",
 						Arrays.asList("", " §fModo §a§lKITPVP §fcom §6SIMULATOR§f, ",
 								" §ftreine suas habilidade com nossa warp §c§lLAVA§F!", " ",
-								"§e" + Commons.getManager().getRedis().get("kitpvp").replace("on:", "") + " §fjogando agora!")).create());
+								"§e" + Commons.getManager().getBackend().getRedis().get("kitpvp").replace("on:", "") + " §fjogando agora!")).create());
 
 		inv.setItem(13,
 				new ItemConstructor(new ItemStack(Material.IRON_FENCE), "§cGladiator",

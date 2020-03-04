@@ -7,12 +7,15 @@ import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 
 import br.com.hevermc.commons.bungee.Commons;
+import br.com.hevermc.commons.bungee.DateUtil;
 import br.com.hevermc.commons.bungee.account.HeverPlayer;
 import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.bungee.command.common.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.TabExecutor;
@@ -69,13 +72,40 @@ public class TempGroupCommand extends HeverCommand implements TabExecutor {
 						}
 						ProxiedPlayer t = Commons.getInstance().getProxy().getPlayer(args[0]);
 						if (t != null) {
-							t.disconnect(TextComponent.fromLegacyText("§6§lHEVER§f§lMC\n§f\n§fSeu grupo foi alterado para " + togroup.getName() + "!\n§f\n§fEntre novamente."));
+							htarget.setGroup(togroup);
+							htarget.setGroupExpireIn(c.getTimeInMillis());
+
+							htarget.update();
+							Commons.getManager().getBackend().getRedis()
+									.set(htarget.getName().toLowerCase() + ":update", "all");
+							p.sendMessage(
+									TextComponent.fromLegacyText("§aVocê alterou o cargo de §b" + htarget.getName()
+											+ " §apara §b" + htarget.getGroup().getName() + " §acom sucesso!"));
+						} else {
+
+							htarget.setGroup(togroup);
+							htarget.setGroupExpireIn(c.getTimeInMillis());
+							htarget.update();
+							p.sendMessage(
+									TextComponent.fromLegacyText("§aVocê alterou o cargo de §b" + htarget.getName()
+											+ " §apara §b" + htarget.getGroup().getName() + " §acom sucesso!"));
+
 						}
-						htarget.setGroup(togroup);
-						htarget.setGroupExpireIn(c.getTimeInMillis());
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê alterou o cargo de §b" + htarget.getName()
-								+ " §apara §b" + htarget.getGroup().getName() + " §acom sucesso!"));
+						Commons.getInstance().getProxy().getPlayers().forEach(players -> {
+							HeverPlayer t2 = PlayerLoader.getHP(players.getName());
+							if (t2.groupIsLarger(Groups.MODPLUS)) {
+								TextComponent msg_a = new TextComponent(
+										"§7§o[O jogador " + args[0] + " teve o grupo alterado]");
+								msg_a.setHoverEvent(
+										new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+												new ComponentBuilder("§cInformações:\n§fPor: " + sender.getName() + "\n§fPara: "
+														+ togroup.getName() + "\nAté: "
+														+ DateUtil.formatDifference(c.getTimeInMillis())).create()));
+								players.sendMessage(msg_a);
+							}
+						});
 					}
+					
 				}
 			}
 		} else {
@@ -96,20 +126,40 @@ public class TempGroupCommand extends HeverCommand implements TabExecutor {
 				} else {
 					ProxiedPlayer t = Commons.getInstance().getProxy().getPlayer(args[0]);
 					if (t != null) {
-						t.disconnect(TextComponent.fromLegacyText("§6§lHEVER§f§lMC\n§f\n§fSeu grupo foi alterado para " + togroup.getName() + "!\n§f\n§fEntre novamente."));
+						htarget.setGroup(togroup);
+						htarget.setGroupExpireIn(c.getTimeInMillis());
+
+						htarget.update();
+						Commons.getManager().getBackend().getRedis().set(htarget.getName().toLowerCase() + ":update",
+								"all");
+						sender.sendMessage(TextComponent.fromLegacyText("§aVocê alterou o cargo de §b"
+								+ htarget.getName() + " §apara §b" + htarget.getGroup().getName() + " §acom sucesso!"));
+					} else {
+
+						htarget.setGroup(togroup);
+						htarget.setGroupExpireIn(c.getTimeInMillis());
+						htarget.update();
+						sender.sendMessage(TextComponent.fromLegacyText("§aVocê alterou o cargo de §b"
+								+ htarget.getName() + " §apara §b" + htarget.getGroup().getName() + " §acom sucesso!"));
+
 					}
-					htarget.setGroup(togroup);
-					htarget.setGroupExpireIn(c.getTimeInMillis());
-					if (Commons.getInstance().getProxy().getPlayer(args[0]) != null) {
-						Commons.getManager().getRedis().set("update:" + htarget.getName().toLowerCase(), "all");
-					}
-					sender.sendMessage(TextComponent.fromLegacyText("§aVocê alterou o cargo de §b" + htarget.getName()
-							+ " §apara §b" + htarget.getGroup().getName() + " §acom sucesso!"));
+					Commons.getInstance().getProxy().getPlayers().forEach(players -> {
+						HeverPlayer t2 = PlayerLoader.getHP(players.getName());
+						if (!t2.groupIsLarger(Groups.MODPLUS)) {
+							TextComponent msg_a = new TextComponent(
+									"§7§o[O jogador " + args[0] + " teve o grupo alterado]");
+							msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+									new ComponentBuilder("§cInformações:\n§fPor: " + sender.getName() + "\n§fPara: "
+											+ togroup.getName() + "\nAté: "
+											+ DateUtil.formatDifference(c.getTimeInMillis())).create()));
+							players.sendMessage(msg_a);
+						}
+					});
 				}
 			}
 		}
 	}
-	
+
 	public Iterable<String> onTabComplete(CommandSender cs, String[] args) {
 		if ((args.length > 2) || (args.length == 0)) {
 			return ImmutableSet.of();
@@ -122,15 +172,14 @@ public class TempGroupCommand extends HeverCommand implements TabExecutor {
 					match.add(player.getName());
 				}
 			}
-		} else 
-			if (args.length == 3) {
-				String search = args[2].toLowerCase();
-				for (Groups player : Groups.values()) {
-					if (player.getName().toLowerCase().startsWith(search)) {
-						match.add(player.getName());
-					}
+		} else if (args.length == 3) {
+			String search = args[2].toLowerCase();
+			for (Groups player : Groups.values()) {
+				if (player.getName().toLowerCase().startsWith(search)) {
+					match.add(player.getName());
 				}
 			}
+		}
 		return match;
 	}
 }

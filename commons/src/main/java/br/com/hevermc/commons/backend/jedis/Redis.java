@@ -21,6 +21,8 @@ public class Redis {
 		Jedis jedis = null;
 		try {
 			jedis = j.getResource();
+			if (contains(key))
+				del(key);
 			jedis.set(key, value);
 		} finally {
 			jedis.close();
@@ -31,11 +33,8 @@ public class Redis {
 		Jedis jedis = null;
 		try {
 			jedis = j.getResource();
-			if (jedis.exists(key)) {
-				return true;
-			} else {
-				return false;
-			}
+			return jedis.exists(key);
+
 		} finally {
 			jedis.close();
 		}
@@ -45,7 +44,8 @@ public class Redis {
 		Jedis jedis = null;
 		try {
 			jedis = j.getResource();
-			jedis.del(key);
+			if (contains(key))
+				jedis.del(key);
 		} finally {
 			jedis.close();
 		}

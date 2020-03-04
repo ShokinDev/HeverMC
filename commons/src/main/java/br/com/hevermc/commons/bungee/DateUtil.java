@@ -2,6 +2,7 @@ package br.com.hevermc.commons.bungee;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
 import java.util.concurrent.TimeUnit;
@@ -14,6 +15,10 @@ public class DateUtil {
 		Calendar calendar = GregorianCalendar.getInstance(tz);
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		return sdf.format(calendar.getTime());
+	}
+	public static String getDate(Date d) {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		return sdf.format(d);
 	}
 
 	private static String fromLong(long lenth) {

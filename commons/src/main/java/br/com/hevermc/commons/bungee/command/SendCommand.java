@@ -29,7 +29,21 @@ public class SendCommand extends HeverCommand implements TabExecutor {
 					} else {
 						ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 						if (target == null) {
-							p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+							if (args[0].equalsIgnoreCase("all")) {
+								if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
+									p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+								} else {
+									p.sendMessage(TextComponent.fromLegacyText("§aVocê enviou §btodos §apara §b"
+											+ Commons.getInstance().getProxy().getServerInfo(args[1]).getName()
+													.toUpperCase()
+											+ " §acom sucesso!"));
+									p.getServer().getInfo().getPlayers().forEach(ps -> {
+										ps.connect(Commons.getInstance().getProxy().getServerInfo(args[1]));
+									});
+								}
+							} else {
+								p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+							}
 						} else if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
 							p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
 						} else {

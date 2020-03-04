@@ -38,8 +38,6 @@ public class Gladiator implements Listener {
 	HeverKit kit_api = new HeverKit(Kits.GLADIATOR);
 	Plugin plugin = KitPvP.getInstance();
 
-
-
 	@EventHandler
 	void KitGladiator(final PlayerInteractEntityEvent e) {
 		if (e.getRightClicked() instanceof Player) {
@@ -49,12 +47,12 @@ public class Gladiator implements Listener {
 			PvPPlayer ppvp = new PlayerLoader(p).load().getPvPP();
 			kit_api.setPlayer(p);
 			if (kit_api.isItem() && kit_api.usingKit() && !rpvp.isProtectArea() && !ppvp.isProtectArea()) {
-				final Location loc = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() + 100.0,
+				final Location loc = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getY() + 70.0,
 						p.getLocation().getZ());
 				final Location loc2 = new Location(p.getWorld(), (double) (p.getLocation().getBlockX() + 8),
-						(double) (p.getLocation().getBlockY() + 103), (double) (p.getLocation().getBlockZ() + 8));
+						(double) (p.getLocation().getBlockY() + 73), (double) (p.getLocation().getBlockZ() + 8));
 				final Location loc3 = new Location(p.getWorld(), (double) (p.getLocation().getBlockX() - 8),
-						(double) (p.getLocation().getBlockY() + 103), (double) (p.getLocation().getBlockZ() - 8));
+						(double) (p.getLocation().getBlockY() + 73), (double) (p.getLocation().getBlockZ() - 8));
 				if (Gladiator.lutando.containsKey(p) || Gladiator.lutando.containsKey(r)) {
 					p.sendMessage("§cVocê já esta no gladiator!");
 					return;

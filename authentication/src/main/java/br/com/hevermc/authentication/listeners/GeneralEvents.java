@@ -4,7 +4,9 @@ import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -38,6 +40,8 @@ import br.com.hevermc.authentication.score.ScoreboardManager;
 
 public class GeneralEvents implements Listener {
 
+	HashMap<String, Integer> type = new HashMap<String, Integer>();
+
 	private String getUrlContent(String url) {
 		try {
 			InputStream connection = new URL(url).openStream();
@@ -58,51 +62,67 @@ public class GeneralEvents implements Listener {
 		return getUrlContent("https://api.mojang.com/users/profiles/minecraft/" + player).length() > 0;
 	}
 
+	public void setAccountType(String name) {
+		if (!type.containsKey(name)) {
+			if (isPremium(name)) {
+				type.put(name, 1);// m.getBackend().getSql().updateInt("players", "accountType", "name",
+									// this.accountType, this.name)
+				if (Authentication.getManager().getSQLManager().checkString("players", "name", name.toLowerCase())) {
+					if (Authentication.getManager().getSQLManager().getInt("players", "name", "accountType",
+							name.toLowerCase()) == 2) {
+						Authentication.getManager().getSQLManager().updateInt("players", "accountType", "name", 1,
+								name.toLowerCase());
+						br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(name).setAccountType(1);
+						br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(name).forceUpdate();
+						Bukkit.getPlayer(name).kickPlayer(
+								"§6§lHEVER§f§lMC\n§f\n§fSua conta foi registrada como §aoriginal§,\n§fpor favor, relogue.\n§f\n§ahevermc.com.br");
+					}
+				}
+			} else {
+				type.put(name, 0);
+				if (Authentication.getManager().getSQLManager().checkString("players", "name", name.toLowerCase())) {
+					if (Authentication.getManager().getSQLManager().getInt("players", "name", "accountType",
+							name.toLowerCase()) == 2) {
+						Authentication.getManager().getSQLManager().updateInt("players", "accountType", "name", 0,
+								name.toLowerCase());
+
+						br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(name).setAccountType(0);
+						br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(name).forceUpdate();
+					}
+				}
+			}
+		}
+	}
+
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
 		e.setJoinMessage(null);
 		final Player p = e.getPlayer();
 		ReflectionAPI.tab(p, "\n§6§lHEVER§f§lMC\n",
-				"\n§fSite: §ehevermc.com.br\n§fTwitter: §e@HeverNetwork_\n§fDiscord: §ediscord.hevermc.com.br\n§fCaso tenha algum problema visite nosso §eDiscord§f!\n");
-
+				"\n§fTwitter: §e@_HeverMC\n§fSite: §ehevermc.com.br\n§fLoja: §eloja.hevermc.com.br\n§fDiscord: §ediscord.hevermc.com.br\n");
+		setAccountType(p.getName());
 		final LoginPlayer lp = new PlayerLoader(p).load().lp();
 		for (int i = 0; i < 100; i++)
 			p.sendMessage(" ");
-		if (!Authentication.getManager().getSQLManager().checkString("hever_accounts", "name", p.getName())) {
-			if (isPremium(p.getName())) {
-				Authentication.getManager().getSQLManager().insertOriginal(p.getName(), 1);
-				
-				System.out.print("[DEBUG] entrou primeira vez - original");
-				p.kickPlayer("§6§lHEVER§f§lMC\n§7\n§aSua conta foi registrada.\n§7Entre novamente!");
-				return;
-			} else {
-				System.out.print("[DEBUG] entrou primeira vez - pirata");
-				Authentication.getManager().getSQLManager().insertOriginal(p.getName(), 0);
-			}
-		} else {
-			if (Authentication.getManager().getSQLManager().getInt("hever_accounts", "name", "original", p.getName()) == 1) {
-				lp.setCaptcha(true);
-				lp.setLogged(true);
-				System.out.print("[DEBUG] entrou como original");
-				p.sendMessage("§aVocê foi autenticado como jogador original, portanto não foi necessário fazer login!");
-				new BukkitRunnable() {
 
-					@Override
-					public void run() {
-						if (!p.isOnline() || p == null) {
-							cancel();
-							System.out.println("[DEBUG] redirect to lobby canceled");
-							return;
-						}
-						p.sendMessage("§aVocê está sendo conectado ao §blobby§a!");
-						new BungeeChannelApi(Authentication.getInstance()).connect(p, "lobby");
+		if (type.get(p.getName()) == 1) {
+			lp.setCaptcha(true);
+			lp.setLogged(true);
+			p.sendMessage("§aVocê foi autenticado como jogador original, portanto não foi necessário fazer login!");
+			new BukkitRunnable() {
+
+				@Override
+				public void run() {
+					if (!p.isOnline() || p == null) {
+						cancel();
+						return;
 					}
-				}.runTaskTimer(Authentication.getInstance(), 0, 35L);
-			} else {
-				System.out.print("[DEBUG] entrou como pirtata");
-			}
+					p.sendMessage("§aVocê está sendo conectado ao §blobby§a!");
+					new BungeeChannelApi(Authentication.getInstance()).connect(p, "lobby");
+				}
+			}.runTaskTimer(Authentication.getInstance(), 0, 35L);
 		}
-		
+
 		new ScoreboardManager().build(p);
 		p.teleport(p.getWorld().getSpawnLocation());
 		p.getInventory().clear();

@@ -32,7 +32,13 @@
 			<version>1.18.10</version>
 			<scope>provided</scope>
 		</dependency>
-
+		<dependency>
+			<groupId>hevermc</groupId>
+			<artifactId>commons</artifactId>
+			<version>1.0</version>
+			<scope>system</scope>
+			<systemPath>C:\Users\mathe\git\HeverMC\commons\target\commons.jar</systemPath>
+		</dependency>
 
 	</dependencies>
 

@@ -19,10 +19,10 @@ public class Selector {
 
 	public Selector(Player p, int page) {
 		Inventory inv = null;
-		HeverPlayer hp = PlayerLoader.getHP(p);
+		HeverPlayer hp = PlayerLoader.getHP(p.getName());
 
 		if (page == 1) {
-			inv = Bukkit.createInventory(null, 6 * 9, "§eSeletor de Kits §7(1/2)");
+			inv = Bukkit.createInventory(null, 6 * 9, "§eSeletor de Kits §7(1/3)");
 			inv.setItem(3, new ItemConstructor(new ItemStack(Material.CHEST), "§aSeletor de Kits").create());
 			inv.setItem(5, new ItemConstructor(new ItemStack(Material.COMPASS), "§7Warps").create());
 			inv.setItem(27,
@@ -40,18 +40,25 @@ public class Selector {
 											hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName()
 													: "§cKit " + kits.getName(), // PvP
 											Arrays.asList("", "§e" + kits.getDesc(), "")).create());
+						} else {
+						
+							inv.setItem(slots[i],
+									new ItemConstructor(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14),
+											hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName()
+													: "§cKit " + kits.getName(), // PvP
+											Arrays.asList("", "§e" + kits.getDesc(), "")).create());
 						}
 					}
 				}
 			}
 		} else if (page == 2) {
-			inv = Bukkit.createInventory(null, 6 * 9, "§eSeletor de Kits §7(2/2)");
+			inv = Bukkit.createInventory(null, 6 * 9, "§eSeletor de Kits §7(2/3)");
 			inv.setItem(3, new ItemConstructor(new ItemStack(Material.CHEST), "§aSelector de Kits").create());
 			inv.setItem(5, new ItemConstructor(new ItemStack(Material.COMPASS), "§7Warps").create());
 			inv.setItem(27,
 					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 10), "§7Página anterior").create());
 			inv.setItem(35,
-					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 8), "§aPróxima página").create());
+					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 10), "§aPróxima página").create());
 			int i = 0;
 			for (int a = slots.length; a < Kits.values().length; a++) {
 				Kits kits = Kits.getKits(a);
@@ -64,6 +71,47 @@ public class Selector {
 						if (hp.groupIsLarger(kits.getGroup())) {
 							inv.setItem(slots[i],
 									new ItemConstructor(new ItemStack(kits.getMaterial()),
+											hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName()
+													: "§cKit " + kits.getName(), // PvP
+											Arrays.asList("", "§e" + kits.getDesc(), "")).create());
+						}  else {
+							inv.setItem(slots[i],
+									new ItemConstructor(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14),
+											hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName()
+													: "§cKit " + kits.getName(), // PvP
+											Arrays.asList("", "§e" + kits.getDesc(), "")).create());
+						}
+					}
+
+				}
+			}
+		}else if (page == 3) {
+			inv = Bukkit.createInventory(null, 6 * 9, "§eSeletor de Kits §7(3/3)");
+			inv.setItem(3, new ItemConstructor(new ItemStack(Material.CHEST), "§aSelector de Kits").create());
+			inv.setItem(5, new ItemConstructor(new ItemStack(Material.COMPASS), "§7Warps").create());
+			inv.setItem(27,
+					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 10), "§7Página anterior").create());
+			inv.setItem(35,
+					new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 8), "§aPróxima página").create());
+			int i = 0;
+			for (int a = slots.length + slots.length; a < Kits.values().length; a++) {
+				Kits kits = Kits.getKits(a);
+				if (kits == null) {
+					return;
+				}
+				if (kits.getMaterial() != Material.AIR) {
+					i++;
+					if (!(i >= slots.length)) {
+						if (hp.groupIsLarger(kits.getGroup())) {
+							inv.setItem(slots[i],
+									new ItemConstructor(new ItemStack(kits.getMaterial()),
+											hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName()
+													: "§cKit " + kits.getName(), // PvP
+											Arrays.asList("", "§e" + kits.getDesc(), "")).create());
+						}  else {
+					
+							inv.setItem(slots[i],
+									new ItemConstructor(new ItemStack(Material.STAINED_GLASS_PANE, 1, (short) 14),
 											hp.groupIsLarger(kits.getGroup()) ? "§aKit " + kits.getName()
 													: "§cKit " + kits.getName(), // PvP
 											Arrays.asList("", "§e" + kits.getDesc(), "")).create());

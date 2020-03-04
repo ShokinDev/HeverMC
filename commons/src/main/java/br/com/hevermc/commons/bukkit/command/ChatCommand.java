@@ -25,7 +25,7 @@ public class ChatCommand extends HeverCommand {
 					if (chat) {
 						p.sendMessage("§cO chat já está ativado!");
 					} else {
-						p.sendMessage("§aVocê §bativou §fo chat!");
+						p.sendMessage("§aVocê §bativou §ao chat!");
 						chat = true;
 					}
 

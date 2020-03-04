@@ -32,11 +32,9 @@ public class TagCommand extends HeverCommand {
 						if (hp.getGroup() == tags.getGroup()) {
 							TextComponent msg_a = new TextComponent(tags.getColor() + "§l" + tags.toString() + "§f");
 							msg_a.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/tag " + tags.toString()));
-							msg_a.setHoverEvent(
-									new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(("§7Exemplo: " + tags.getPrefix() + " "
-													+ tags.getColor() + p.getName() + " " + hp.getSuffix()))
-															.create()));
+							msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+									new ComponentBuilder(("§7Exemplo: " + tags.getPrefix() + " " + tags.getColor()
+											+ p.getName() + " " + hp.getSuffix())).create()));
 							a.addExtra(msg_a);
 							continue;
 						}
@@ -55,11 +53,9 @@ public class TagCommand extends HeverCommand {
 						} else {
 							TextComponent msg_a = new TextComponent(tags.getColor() + "§l" + tags.toString() + "§f, ");
 							msg_a.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/tag " + tags.toString()));
-							msg_a.setHoverEvent(
-									new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§7Exemplo: " + tags.getPrefix() + " "
-													+ tags.getColor() + p.getName() + " " + hp.getSuffix())
-															.create()));
+							msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+									new ComponentBuilder("§7Exemplo: " + tags.getPrefix() + " " + tags.getColor()
+											+ p.getName() + " " + hp.getSuffix()).create()));
 							a.addExtra(msg_a);
 						}
 					}
@@ -69,18 +65,17 @@ public class TagCommand extends HeverCommand {
 				Tags tag = Tags.getTags(Groups.getGroup(args[0]));
 				if (tag == null) {
 					p.sendMessage("§cEsta tag não existe!");
-				} else
-				if (tag.isExclusive() && !(hp.groupIsLarger(Groups.GERENTE) || hp.groupIsLarger(tag.getGroup()))) {
+				} else if (tag.isExclusive()
+						&& !(hp.groupIsLarger(Groups.GERENTE) || hp.groupIsLarger(tag.getGroup()))) {
 					p.sendMessage("§cEsta tag é exclusiva!");
 				} else if (hp.getTag() == tag) {
 					p.sendMessage("§cVocê já está utilizando esta tag!");
-				} else 
-					if (hasGroup(p, tag.getGroup(), true)) {
-						hp.setTag(tag);
-						p.sendMessage("§aVocê alterou sua tag para " + tag.getColor() + tag.getGroup().getName() + "§a!");
-					}
+				} else if (hasGroup(p, tag.getGroup(), true)) {
+					toHeverPlayer(p).setTag(tag);
+					p.sendMessage("§aVocê alterou sua tag para " + tag.getColor() + tag.getGroup().getName() + "§a!");
 				}
 			}
+		}
 		return false;
 	}
 

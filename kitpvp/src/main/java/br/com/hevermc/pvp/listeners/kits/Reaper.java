@@ -22,11 +22,14 @@ public class Reaper implements Listener {
 		if (e.getRightClicked() instanceof Player) {
 			Player d = (Player) e.getRightClicked();
 			Player p = e.getPlayer();
-			kit_api.setPlayer(d);
+			kit_api.setPlayer(p);
+			if (kit_api.verifyCooldown() == true) 
+				p.sendMessage("§cAguarde, você está em cooldown!");
+	
 			if (kit_api.usingKit() && kit_api.isItem() && kit_api.verifyCooldown() == false) {
-				p.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 8, 1));
+				d.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 80, 1));
 				Calendar c= Calendar.getInstance();
-				c.add(Calendar.SECOND, 7);
+				c.add(Calendar.SECOND, 15);
 				kit_api.setCooldown(new Date(c.getTimeInMillis()));
 
 			}

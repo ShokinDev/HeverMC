@@ -12,6 +12,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import br.com.hevermc.commons.bukkit.api.ItemConstructor;
 import br.com.hevermc.pvp.api.PlayerLoader;
@@ -62,7 +64,26 @@ public class Switcher implements Listener {
 				p.getInventory().addItem(new ItemConstructor(new ItemStack(Material.SNOW_BALL), "§eSwitcher §fitem").create());
 				p.updateInventory();
 			}
+			return;
 		}
+		
+		HeverKit kit = new HeverKit(Kits.COOKIEMONSTER);
+		kit.setPlayer(p);
+		if (kit.usingKit() && kit.isItem()) {
+
+			if (kit.verifyCooldown() == true) {
+				e.setCancelled(true);
+				p.updateInventory();
+				p.sendMessage("§cAguarde, você está em cooldown!");
+			} else {
+				Calendar c = Calendar.getInstance();
+				c.add(Calendar.SECOND, 20);
+				kit.setCooldown(new Date(c.getTimeInMillis()));
+				p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 120, 1));
+				p.sendMessage("§aSeu cookie lhe deu força!");
+			}
+		}
+		
 	}
 
 }

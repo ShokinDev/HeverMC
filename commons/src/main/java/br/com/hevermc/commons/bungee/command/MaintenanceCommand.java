@@ -4,6 +4,7 @@ import br.com.hevermc.commons.bungee.Commons;
 import br.com.hevermc.commons.bungee.command.common.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
@@ -22,6 +23,12 @@ public class MaintenanceCommand extends HeverCommand {
 					if (requiredGroup(p, Groups.DIRETOR, true)) {
 						Commons.getManager().setMaintenance(!Commons.getManager().isMaintenance() ? true : false);
 						p.sendMessage(TextComponent.fromLegacyText("§eVocê " + (Commons.getManager().isMaintenance() ? "§aativou" : "§cdesativou") + " §ea manutenção!"));
+						ProxyServer.getInstance().getPlayers().forEach(ps -> {
+							if (!toHeverPlayer(ps).groupIsLarger(Groups.TRIAL)) {
+								ps.disconnect(TextComponent.fromLegacyText("§4§lWHITELIST\n\n§fEstamos em manutenção, tente novamente mais tarde!"
+										+ "\n\n§fEntre em nosso §3§lDISCORD§f!\n§ediscord.hevermc.com.br"));
+							}
+						});
 					}
 				} 
 			}

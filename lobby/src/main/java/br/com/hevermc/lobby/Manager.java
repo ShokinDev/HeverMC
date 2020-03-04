@@ -11,6 +11,8 @@ public class Manager {
 	public ArrayList<Player> dj = new ArrayList<Player>();
 	public ArrayList<Player> hide_players = new ArrayList<Player>();
 	public HashMap<Player, Integer> npc = new HashMap<Player, Integer>();
+	public HashMap<Player, Integer> npc2 = new HashMap<Player, Integer>();
+	public HashMap<Player, Integer> npc3 = new HashMap<Player, Integer>();
 	public HashMap<String, Location> npc_loc = new HashMap<String, Location>();
 	public HashMap<String, Location> h_loc = new HashMap<String, Location>();
 	

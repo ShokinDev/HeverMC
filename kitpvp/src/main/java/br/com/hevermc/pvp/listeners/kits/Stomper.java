@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import org.bukkit.Effect;
 import org.bukkit.Location;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -38,7 +37,6 @@ public class Stomper implements Listener {
 			Double x = Double.valueOf(p.getLocation().getX());
 			Double y = Double.valueOf(p.getLocation().getY());
 			Double z = Double.valueOf(p.getLocation().getZ());
-			p.getWorld().playSound(new Location(w, x, y, z), Sound.EXPLODE, 5.0F, 5.0F);
 			p.getWorld().playEffect(new Location(w, x + 1, y - 1, z), Effect.MOBSPAWNER_FLAMES, 100, 100);
 			p.getWorld().playEffect(new Location(w, x - 1, y - 1, z), Effect.MOBSPAWNER_FLAMES, 100, 100);
 			p.getWorld().playEffect(new Location(w, x + 2, y - 1, z), Effect.MOBSPAWNER_FLAMES, 100, 100);
@@ -48,7 +46,7 @@ public class Stomper implements Listener {
 			p.getWorld().playEffect(new Location(w, x, y - 1, z + 2), Effect.MOBSPAWNER_FLAMES, 100, 100);
 			p.getWorld().playEffect(new Location(w, x, y - 1, z - 2), Effect.MOBSPAWNER_FLAMES, 100, 100);
 		}
-		for (Entity stompada : p.getNearbyEntities(5.0D, 2.0D, 5.0D)) {
+		for (Entity stompada : p.getNearbyEntities(1.5D, 2.0D, 1.5D)) {
 			if (!(stompada instanceof Player)) {
 				return;
 			}

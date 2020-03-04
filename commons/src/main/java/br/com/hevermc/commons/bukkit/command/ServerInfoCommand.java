@@ -9,10 +9,10 @@ import br.com.hevermc.commons.enums.Groups;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
 
-public class VersionCommand extends HeverCommand {
+public class ServerInfoCommand extends HeverCommand {
 
-	public VersionCommand() {
-		super("vs");
+	public ServerInfoCommand() {
+		super("serverinfo");
 	}
 
 	@SuppressWarnings("unchecked")
@@ -23,7 +23,16 @@ public class VersionCommand extends HeverCommand {
 			if (hasGroup(p, Groups.ADMIN, true)) {
 				int a = 0;
 				int b = 0;
+
+				int c = 0;
+				int d = 0;
+
 				for (Player ps : Bukkit.getOnlinePlayers()) {
+					if (toHeverPlayer(ps).getAccountType() == 1)
+						c++;
+					else
+						d++;
+
 					@SuppressWarnings("rawtypes")
 					ViaAPI api = Via.getAPI();
 					if (api.getPlayerVersion(ps) < 47)
@@ -31,8 +40,14 @@ public class VersionCommand extends HeverCommand {
 					else
 						a++;
 				}
-				p.sendMessage("§aEstátisticas de versões dos jogadores no servidor atual: \n§2> 47 (maior que ou 1.8): "
-						+ a + "\n§c< 47 (menor que 1.8): " + b);
+				p.sendMessage("§aEstátisticas de jogadores no servidor atual: ");
+				p.sendMessage("");
+				p.sendMessage("§a1.8+ - §7" + a);
+				p.sendMessage("§c1.8- - §7" + b);
+				p.sendMessage("");
+				p.sendMessage("§aOriginal - §7" + c);
+				p.sendMessage("§cPirata - §7" + d);
+				p.sendMessage("");
 			}
 		}
 		return false;

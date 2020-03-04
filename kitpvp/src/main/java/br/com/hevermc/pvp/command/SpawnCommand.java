@@ -13,6 +13,7 @@ import br.com.hevermc.pvp.KitPvP;
 import br.com.hevermc.pvp.api.PvPPlayer;
 import br.com.hevermc.pvp.enums.Kits;
 import br.com.hevermc.pvp.enums.Warps;
+import br.com.hevermc.pvp.onevsone.Eventos1v1;
 import br.com.hevermc.pvp.score.ScoreboardManager;
 
 public class SpawnCommand extends HeverCommand {
@@ -31,6 +32,7 @@ public class SpawnCommand extends HeverCommand {
 			if (pvp.isCombat()) {
 				p.sendMessage("§cVocê está em combate!");
 			} else {
+				p.setAllowFlight(false);
 				new ScoreboardManager().build(p);
 				p.setFoodLevel(20);
 				p.getInventory().clear();
@@ -49,8 +51,13 @@ public class SpawnCommand extends HeverCommand {
 				new ScoreboardManager().build(p);
 				p.setHealth(20);
 				p.sendMessage("§aVocê voltou para o spawn!");
-				if (KitPvP.getManager().inEvent.contains(p))
+				if (KitPvP.getManager().inEvent.contains(p)) {
 					KitPvP.getManager().inEvent.remove(p);
+					KitPvP.getManager().killsInEvent.remove(p);
+				}
+				if (Eventos1v1.firstMatch == p.getUniqueId()) {
+					Eventos1v1.firstMatch = null;
+				}
 			}
 
 		}

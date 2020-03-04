@@ -19,7 +19,7 @@ public class Profile {
 
 	public Profile(Player p) {
 		Inventory inv = Bukkit.createInventory(null, 4 * 9, "§ePerfil");
-		HeverPlayer hp = PlayerLoader.getHP(p);
+		HeverPlayer hp = PlayerLoader.getHP(p.getName());
 		@SuppressWarnings("deprecation")
 		ItemStack skull = new ItemStack(397, 1, (short) 3);
 		SkullMeta skullm = (SkullMeta) skull.getItemMeta();
@@ -34,8 +34,11 @@ public class Profile {
 						Arrays.asList(" ", "§fSuas estatísticas nesse modo de jogo são: ", " ",
 								" §aKills: §2" + hp.getPvp_kills() + " ", " §cDeaths: §c" + hp.getPvp_deaths() + " ",
 								" §eKillStreak: §6" + hp.getPvp_ks() + " ", " ", "§apvp.hevermc.com.br")).create());
-		inv.setItem(20, new ItemConstructor(new ItemStack(Material.PAPER), "§c§k§lHunger-Games").create());
-		inv.setItem(21, new ItemConstructor(new ItemStack(Material.PAPER), "§c§k§lGladiator").create());
+		inv.setItem(20,
+				new ItemConstructor(new ItemStack(Material.MUSHROOM_SOUP), "§a§lHardcoreGames",
+						Arrays.asList(" ", "§fSuas estatísticas nesse modo de jogo são: ", " ",
+								" §aKills: §2" + hp.getHg_kills() + " ", " §cDeaths: §c" + hp.getHg_deaths() + " ",
+								" §eWins: §6" + hp.getHg_wins() + " ", " ", "§ahg.hevermc.com.br")).create());
 		inv.setItem(25,
 				new ItemConstructor(new ItemStack(Material.BOOK), "§e§lInformações sobre sua conta",
 						Arrays.asList(" ", "§fTodas informações sobre sua conta: ", " ",
@@ -45,5 +48,4 @@ public class Profile {
 
 		p.openInventory(inv);
 	}
-
 }

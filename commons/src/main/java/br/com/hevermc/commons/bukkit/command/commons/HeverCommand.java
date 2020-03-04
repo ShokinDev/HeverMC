@@ -34,7 +34,7 @@ public abstract class HeverCommand extends Command {
 	}
 
 	public boolean hasGroup(Player p, Groups group, boolean b) {
-		HeverPlayer hp = PlayerLoader.getHP(p);
+		HeverPlayer hp = PlayerLoader.getHP(p.getName());
 
 		if (hp.getGroup().ordinal() >= group.ordinal()) {
 			return true;
@@ -56,7 +56,7 @@ public abstract class HeverCommand extends Command {
 	}
 
 	public HeverPlayer toHeverPlayer(Player p) {
-		return PlayerLoader.getHP(p);
+		return PlayerLoader.getHP(p.getName());
 	}
 
 }

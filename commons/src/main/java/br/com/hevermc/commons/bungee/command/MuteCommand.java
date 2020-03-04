@@ -29,7 +29,7 @@ public class MuteCommand extends HeverCommand implements TabExecutor {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.TRIAL, true)) {
-				if (args.length < 3) {
+				if (args.length < 2) {
 					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/mute <nickname> <reason>"));
 				} else {
 					String target = args[0];
@@ -46,73 +46,134 @@ public class MuteCommand extends HeverCommand implements TabExecutor {
 							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode mutar este jogador!"));
 						} else if (target.toLowerCase().equals(p.getName().toLowerCase())) {
 							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode se auto-mutar!"));
+						} else if (targethp.isMuted()) {
+							p.sendMessage(TextComponent.fromLegacyText("§cEsse jogador já está mutado!"));
 						} else {
 
-							targethp.setMuted(true);
-							targethp.setMute_author(p.getName());
-							targethp.setMute_time(0);
-							targethp.setMute_reason(reason);
-							targethp.mute(reason, p.getName(), 0);
+							targethp.mute(reason, p.getName(), 0l);
 
 							Commons.getInstance().getProxy().getPlayers().forEach(players -> {
-								HeverPlayer t = PlayerLoader.getHP(players);
-								if (!t.groupIsLarger(players, Groups.MODPLUS)) {
+								HeverPlayer t = PlayerLoader.getHP(players.getName());
+								if (!t.groupIsLarger(Groups.MODPLUS)) {
 									TextComponent msg_a = new TextComponent(
 											"§c[O jogador " + targetp.getName() + " foi mutado]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder("§cInformações sobre este mutamento:\n§fMotivo: "
-													+ reason + "\n§fDuração: §4permanentemente").create()));
+											new ComponentBuilder("§cInformações sobre este mute:\n§fMotivo: " + reason
+													+ "\n§fDuração: §4§lPERMANENTE").create()));
 									players.sendMessage(msg_a);
 								} else {
 									TextComponent msg_a = new TextComponent(
 											"§c[O jogador " + targetp.getName() + " foi mutado]");
-									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-											new ComponentBuilder(""
-													+ "§cInformações sobre este mutamento:\n§fMotivo: "
-													+ reason + "\n§fPor: " + p.getName()
-													+ "\n§fDuração: §4permanentemente").create()));
+									msg_a.setHoverEvent(
+											new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+													new ComponentBuilder(""
+															+ "§cInformações sobre este mute:\n§fMotivo: " + reason
+															+ "\n§fPor: " + p.getName() + "\n§fDuração: §4§lPERMANENTE")
+																	.create()));
 									players.sendMessage(msg_a);
 								}
 							});
-							p.sendMessage(TextComponent.fromLegacyText("§aVocê mutou §e" + targetp.getName() + "§a com sucesso!"));
+							p.sendMessage(TextComponent
+									.fromLegacyText("§aVocê mutou §e" + targetp.getName() + "§a com sucesso!"));
 						}
 
 					} else {
-						targethp.setMuted(true);
-						targethp.setMute_author(p.getName());
-						targethp.setMute_time(0);
-						targethp.setMute_reason(reason);
+
 						targethp.mute(reason, p.getName(), 0);
 
 						Commons.getInstance().getProxy().getPlayers().forEach(players -> {
-							HeverPlayer t = PlayerLoader.getHP(players);
-							if (!t.groupIsLarger(players, Groups.TRIAL)) {
-								TextComponent msg_a = new TextComponent(
-										"§c[O jogador " + target + " foi mutado]");
+							HeverPlayer t = PlayerLoader.getHP(players.getName());
+							if (!t.groupIsLarger(Groups.TRIAL)) {
+								TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi mutado]");
 								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-										new ComponentBuilder("§cInformações sobre este mutamento:\n§fMotivo: "
-												+ reason + "\n§fDuração: §4permanentemente").create()));
+										new ComponentBuilder("§cInformações sobre este mute:\n§fMotivo: " + reason
+												+ "\n§fDuração: §4§lPERMANENTE").create()));
 								players.sendMessage(msg_a);
 							} else {
-								TextComponent msg_a = new TextComponent(
-										"§c[O jogador " + target + " foi mutado]");
+								TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi mutado]");
 								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-										new ComponentBuilder("§cInformações sobre este mutamento:\n§fMotivo: "
-												+ reason + "\n§fPor: " + p.getName()
-												+ "\n§fDuração: §4permanentemente").create()));
+										new ComponentBuilder("§cInformações sobre este mute:\n§fMotivo: " + reason
+												+ "\n§fPor: " + p.getName() + "\n§fDuração: §4§lPERMANENTE").create()));
 								players.sendMessage(msg_a);
 							}
 						});
 						p.sendMessage(TextComponent.fromLegacyText("§aVocê mutou §e" + target + "§a com sucesso!"));
-			
+
 					}
 				}
 
 			}
-		}
+		} else {
+			if (args.length < 3) {
+				sender.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/mute <nickname> <reason>"));
+			} else {
+				String target = args[0];
+				String reason;
+				StringBuilder sb = new StringBuilder();
+				for (int i = 1; i < args.length; i++)
+					sb.append(args[i]).append(" ");
+				reason = sb.toString();
+				ProxiedPlayer targetp = Commons.getInstance().getProxy().getPlayer(target);
+				HeverPlayer targethp = PlayerLoader.getHP(target);
+				if (targetp != null) {
+					 if (targethp.isMuted()) {
+						sender.sendMessage(TextComponent.fromLegacyText("§cEsse jogador já está mutado!"));
+					} else {
 
+						targethp.mute(reason, sender.getName(), 0l);
+
+						Commons.getInstance().getProxy().getPlayers().forEach(players -> {
+							HeverPlayer t = PlayerLoader.getHP(players.getName());
+							if (!t.groupIsLarger(Groups.MODPLUS)) {
+								TextComponent msg_a = new TextComponent(
+										"§c[O jogador " + targetp.getName() + " foi mutado]");
+								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+										new ComponentBuilder("§cInformações sobre este mute:\n§fMotivo: " + reason
+												+ "\n§fDuração: §4§lPERMANENTE").create()));
+								players.sendMessage(msg_a);
+							} else {
+								TextComponent msg_a = new TextComponent(
+										"§c[O jogador " + targetp.getName() + " foi mutado]");
+								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+										new ComponentBuilder("" + "§cInformações sobre este mute:\n§fMotivo: " + reason
+												+ "\n§fPor: " + sender.getName() + "\n§fDuração: §4§lPERMANENTE").create()));
+								players.sendMessage(msg_a);
+							}
+						});
+						sender.sendMessage(TextComponent
+								.fromLegacyText("§aVocê mutou §e" + targetp.getName() + "§a com sucesso!"));
+					}
+
+				} else {
+
+					targethp.mute(reason, sender.getName(), 0);
+
+					Commons.getInstance().getProxy().getPlayers().forEach(players -> {
+						HeverPlayer t = PlayerLoader.getHP(players.getName());
+						if (!t.groupIsLarger(Groups.TRIAL)) {
+							TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi mutado]");
+							msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+									new ComponentBuilder("§cInformações sobre este mute:\n§fMotivo: " + reason
+											+ "\n§fDuração: §4§lPERMANENTE").create()));
+							players.sendMessage(msg_a);
+						} else {
+							TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi mutado]");
+							msg_a.setHoverEvent(
+									new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+											new ComponentBuilder("§cInformações sobre este mute:\n§fMotivo: " + reason
+													+ "\n§fPor: " + sender.getName() + "\n§fDuração: §4§lPERMANENTE")
+															.create()));
+							players.sendMessage(msg_a);
+						}
+					});
+					sender.sendMessage(TextComponent.fromLegacyText("§aVocê mutou §e" + target + "§a com sucesso!"));
+
+				}
+			}
+
+		}
 	}
-	
+
 	public Iterable<String> onTabComplete(CommandSender cs, String[] args) {
 		if ((args.length > 2) || (args.length == 0)) {
 			return ImmutableSet.of();

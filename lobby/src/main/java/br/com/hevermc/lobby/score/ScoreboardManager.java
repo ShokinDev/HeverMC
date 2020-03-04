@@ -88,7 +88,7 @@ public class ScoreboardManager {
 
 		add.addLine("  ", "§f              ", " ", 9);
 		add.addLine(" ", "§fGrupo: ", "", 8);
-		add.addLine(" §fRank:", " ", "", 7);
+		add.addLine(" §fRank:", "§7] ", "", 7);
 		add.addLine("  ", "§f       §a   ", " ", 6);
 		add.addLine(" ", "§fCash: ", "", 5);
 		add.addLine(" ", "§fXP: ", "", 4);
@@ -130,13 +130,15 @@ public class ScoreboardManager {
 	String htext = "§a...";
 
 	public void updateInfos(Player p) {
-		HeverPlayer hp = PlayerLoader.getHP(p);
+		HeverPlayer hp = PlayerLoader.getHP(p.getName());
 		Scoreboard score = p.getScoreboard();
+		hp.updateRank();
 
 		Team group = score.getTeam("line8");
 		group.setSuffix(Tags.getTags(hp.getGroup()).getColor() + "§l" + hp.getGroup().getName().toUpperCase());
 
 		Team rank = score.getTeam("line7");
+		rank.setPrefix(" §fRank: §7[" + hp.getRank().getColor() + hp.getRank().getSymbol());
 		rank.setSuffix((hp.getRank().getColor() + hp.getRank().getName()));
 
 		Team cash = score.getTeam("line5");
@@ -146,7 +148,9 @@ public class ScoreboardManager {
 		xp.setSuffix("§a" + hp.getXp());
 
 		Team online = score.getTeam("line2");
-		htext = "§a" + Commons.getManager().getRedis().get("all").replace("on:", "");
+		htext = "§a" + (Commons.getManager().getBackend().getRedis().get("all") != null
+				? Commons.getManager().getBackend().getRedis().get("all").replace("on:", "")
+				: 0);
 		online.setSuffix(htext);
 	}
 
