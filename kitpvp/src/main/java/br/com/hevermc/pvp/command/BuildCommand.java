@@ -23,10 +23,10 @@ public class BuildCommand extends HeverCommand {
 
 				if (build.containsKey(p) ? !build.get(p) : !build.containsKey(p)) {
 					build.put(p, true);
-					p.sendMessage("§aVocê ativou o build!");
+					p.sendMessage("§e§lBUILD §fVocê §a§lATIVOU §fo build!");
 				} else {
 					build.put(p, false);
-					p.sendMessage("§cVocê desativou o build!");
+					p.sendMessage("§e§lBUILD §fVocê §c§lDESATIVOU §fo build!");
 				}
 			}
 

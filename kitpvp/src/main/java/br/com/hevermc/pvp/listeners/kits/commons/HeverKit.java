@@ -25,15 +25,21 @@ public class HeverKit {
 
 	public boolean usingKit() {
 		PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
-		if (pvp.getKit() == kit)
+		if (pvp.getKit() == kit || pvp.getKit2() == kit)
 			return true;
 		return false;
 	}
 
 	public boolean isItem() {
 		PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
-		if (pvp.getKit().getMaterial() == p.getItemInHand().getType())
-			return true;
+		if (pvp.getKit() == kit) {
+			if (pvp.getKit().getItem() == p.getItemInHand().getType())
+				return true;
+		}
+		if (pvp.getKit2() == kit) {
+			if (pvp.getKit2().getItem() == p.getItemInHand().getType())
+				return true;
+		}
 		return false;
 	}
 

@@ -28,13 +28,13 @@ public class Timelord implements Listener {
 		kit.setPlayer(p);
 		if (kit.usingKit() && kit.isItem()) {
 			if (kit.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 			Calendar c = Calendar.getInstance();
 			c.add(Calendar.SECOND, 20);
 			kit.setCooldown(c.getTime());
-			p.sendMessage("§eVocê usou seu §atimelord§e!");
+			p.sendMessage("§e§lKIT §fVocê usou seu §6§lTIMELORD§f!");
 			p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
 			p.playSound(p.getLocation(), Sound.EXPLODE, 1.0F, 1.0F);
 			for (Entity ent : p.getNearbyEntities(5D, 3D, 5D)) {
@@ -44,7 +44,7 @@ public class Timelord implements Listener {
 						return;
 					}
 					istimelord.add(t);
-					t.sendMessage("§eVocê foi §acongelado§e!");
+					t.sendMessage("§fVocê foi congelado por um §6§lTIMELORD§f!");
 					t.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
 					t.setAllowFlight(true);
 					Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), new Runnable() {
@@ -53,7 +53,7 @@ public class Timelord implements Listener {
 							if (istimelord.contains(t)) {
 								t.setAllowFlight(false);
 								istimelord.remove(t);
-								t.sendMessage("§eVocê foi §adescongelado§e!");
+								t.sendMessage("§FVocê foi §6§DESCONGELADO§F!");
 							}
 
 						}

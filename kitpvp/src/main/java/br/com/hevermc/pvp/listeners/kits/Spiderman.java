@@ -39,11 +39,11 @@ public class Spiderman implements Listener {
 				Calendar c = Calendar.getInstance();
 				c.add(Calendar.SECOND, 10);
 				kit.setCooldown(c.getTime());
-				p.sendMessage("§eVocê usou sua §ateia§e!");
+				p.sendMessage("§e§lKIT §fVocê utilizou sua §ateia§e!");
 				p.playSound(p.getLocation(), Sound.IRONGOLEM_THROW, 1.0F, 1.0F);
 				return;
 			} else {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");;
 			}
 		}
 	}

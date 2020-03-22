@@ -36,10 +36,10 @@ public class ClearGladCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			if (hasGroup(p, Groups.BUILDER, true)) {
 				if (args.length == 0) {
-					p.sendMessage("§aVocê deve usar §e/clearglad <raio>");
+					p.sendMessage("§3§lCLEARGLAD §fVocê deve utilizar §b/clearglad <raio>");
 				} else {
 					if (!isInt(args[0])) {
-						p.sendMessage("§aVocê deve usar §e/clearglad <raio>");
+						p.sendMessage("§3§lCLEARGLAD §fVocê deve utilizar §b/clearglad <raio>");
 					} else {
 						for (Block b : getNearbyBlocks(p.getLocation(), Integer.parseInt(args[0]))) {
 							if (b.getType() == Material.GLASS) {

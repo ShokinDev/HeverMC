@@ -31,12 +31,11 @@ public class Monk implements Listener {
 					int a = new Random().nextInt(target.getInventory().getSize());
 					ItemStack b = target.getItemInHand();
 					target.getInventory().setItemInHand(target.getInventory().getItem(a));
-					target.getInventory().setItem(a,
-							b);
-					p.sendMessage("§aVocê §abagunçou §ao inventario de §e" + target.getName() + "§a!");
-					target.sendMessage("§cSeu inventario foi bagunçado por §4" + p.getName() + "§c!");
+					target.getInventory().setItem(a, b);
+					p.sendMessage("§e§lKIT §fVocê §c§lBAGUNÇOU §fo inventario de §b§l" + target.getName() + "§f!");
+					p.sendMessage("§e§lKIT §b§l" + p.getName() + " §c§lBAGUNÇOU §fseu inventario!");
 				} else {
-					p.sendMessage("§cAguarde, você está em cooldown!");
+					p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				}
 			}
 

@@ -16,7 +16,7 @@ public class Warps {
 	int[] slots = { 20, 21, 23, 24 };
 
 	public Warps(Player p) {
-		Inventory inv = Bukkit.createInventory(null, 4 * 9, "§eWarps");
+		Inventory inv = Bukkit.createInventory(null, 4 * 9, "§aWarps");
 		inv.setItem(3, new ItemConstructor(new ItemStack(Material.CHEST), "§7Seletor de Kits").create());
 		inv.setItem(5, new ItemConstructor(new ItemStack(Material.COMPASS), "§aWarps").create());
 
@@ -25,10 +25,10 @@ public class Warps {
 					&& warps != br.com.hevermc.pvp.enums.Warps.OVPOS1
 					&& warps != br.com.hevermc.pvp.enums.Warps.OVPOS1) {
 				inv.setItem(slots[warps.ordinal()],
-						new ItemConstructor(new ItemStack(warps.getMaterial(), new WarpsAPI(warps).getINWarp()),
+						new ItemConstructor(new ItemStack(warps.getMaterial(), (new WarpsAPI(warps).getINWarp() == 0 ? 1 : new WarpsAPI(warps).getINWarp())),
 								"§aWarp " + warps.getName(),
-								Arrays.asList("", "§e" + warps.getDesc(), "",
-										"§aHá §e" + new WarpsAPI(warps).getINWarp() + " §ajogadores nesta warp"))
+								Arrays.asList("", "§f" + warps.getDesc(), "",
+										"§fHá §a" + new WarpsAPI(warps).getINWarp() + " §fjogadores nesta warp"))
 												.create());
 			}
 		}

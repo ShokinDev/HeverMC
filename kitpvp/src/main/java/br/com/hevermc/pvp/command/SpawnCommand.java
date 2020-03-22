@@ -37,20 +37,26 @@ public class SpawnCommand extends HeverCommand {
 				p.setFoodLevel(20);
 				p.getInventory().clear();
 				p.getInventory().setArmorContents(null);
-				p.getInventory().setItem(3, new ItemConstructor(new ItemStack(Material.CHEST),
-						"§eSeletor de kits §7(Abra com o botão direito)").create());
-				p.getInventory().setItem(5,
-						new ItemConstructor(new ItemStack(Material.COMPASS), "§eWarps §7(Abra com o botão direito)")
+				p.getInventory().setItem(0, new ItemConstructor(new ItemStack(Material.CHEST),
+						"§aSeletor de kits §7(Abra com o botão direito)").create());
+				p.getInventory().setItem(1, new ItemConstructor(new ItemStack(Material.CHEST),
+						"§aSeletor de kits 2 §7(Abra com o botão direito)").create());
+
+				p.getInventory().setItem(4,
+						new ItemConstructor(new ItemStack(Material.COMPASS), "§aWarps §7(Abra com o botão direito)")
 								.create());
+				new ScoreboardManager().build(p);
+				
 				p.teleport(p.getWorld().getSpawnLocation());
 				p.updateInventory();
 				pvp.setProtectArea(true);
 				pvp.setKit(Kits.NENHUM);
+				pvp.setKit2(Kits.NENHUM);
 				pvp.setCombat(false);
 				pvp.setWarp(Warps.SPAWN);
 				new ScoreboardManager().build(p);
 				p.setHealth(20);
-				p.sendMessage("§aVocê voltou para o spawn!");
+				p.sendMessage("§3§lWARP §fVocê voltou para o spawn!");
 				if (KitPvP.getManager().inEvent.contains(p)) {
 					KitPvP.getManager().inEvent.remove(p);
 					KitPvP.getManager().killsInEvent.remove(p);

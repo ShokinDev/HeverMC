@@ -36,7 +36,7 @@ public class Kangaroo implements Listener {
 			if (kit.isItem()) {
 				event.setCancelled(true);
 				if (pvp.isCombat()) {
-					p.sendMessage("§cVocê não pode usar o kangaroo em combate!");
+					p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 					return;
 				}
 				if (event.getAction() == Action.LEFT_CLICK_AIR || event.getAction() == Action.LEFT_CLICK_BLOCK

@@ -32,8 +32,8 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.TRIAL, true)) {
 				if (args.length < 3) {
-					p.sendMessage(
-							TextComponent.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+					p.sendMessage(TextComponent
+							.fromLegacyText("§3§lMUTE §fVocê deve utilizar §b/tempmute <nickname> <time> <reason>"));
 				} else {
 					String target = args[0];
 					HeverPlayer hp = toHeverPlayer(p);
@@ -47,13 +47,17 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 					HeverPlayer targethp = PlayerLoader.getHP(target);
 					if (targetp != null) {
 						if (targethp.getGroup().ordinal() > hp.getGroup().ordinal()) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode mutar este jogador!"));
+							p.sendMessage(
+									TextComponent.fromLegacyText("§3§lMUTE §fVocê §4§lNÃO§f pode mutar este jogador!"));
 						} else if (target.toLowerCase().equals(p.getName().toLowerCase())) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode se auto-mutar!"));
+							TextComponent.fromLegacyText("§3§lMUTE §fVocê não pode se §4§lAUTO-MUTAR§f!");
+						} else if (targethp.isMuted()) {
+							p.sendMessage(
+									TextComponent.fromLegacyText("§3§lMUTE §fEste jogador já está §3§lMUTADO§f!"));
 						} else if (!isInt(time.replace("d", "").replace("h", "").replace("s", "").replace("m", "")
 								.replace("y", ""))) {
-							p.sendMessage(TextComponent
-									.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+							p.sendMessage(TextComponent.fromLegacyText(
+									"§3§lMUTE §fVocê deve utilizar §b/tempmute <nickname> <time> <reason>"));
 						} else {
 							int timeint = Integer.valueOf(time.replace("d", "").replace("h", "").replace("m", "")
 									.replace("s", "").replace("y", ""));
@@ -93,15 +97,16 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 								}
 							});
 							p.sendMessage(TextComponent.fromLegacyText(
-									"§aVocê mutou §e" + targetp.getName() + "§a temporariamente com sucesso!"));
+									"§3§lMUTE §fVocê mutou §b§l" + targetp.getName() + "§f com sucesso!"));
 						}
 
 					} else {
 						if (targethp.getGroup().ordinal() > hp.getGroup().ordinal()) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode mutar este jogador!"));
+							p.sendMessage(
+									TextComponent.fromLegacyText("§3§lMUTE §fVocê §4§lNÃO§f pode mutar este jogador!"));
 						} else if (!isInt(time.replace("d", "").replace("s", "").replace("m", "").replace("y", ""))) {
-							p.sendMessage(TextComponent
-									.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+							p.sendMessage(TextComponent.fromLegacyText(
+									"§3§lMUTE §fVocê deve utilizar §b/tempmute <nickname> <time> <reason>"));
 						} else {
 							int timeint = Integer
 									.valueOf(time.replace("d", "").replace("m", "").replace("s", "").replace("y", ""));
@@ -136,8 +141,8 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 									players.sendMessage(msg_a);
 								}
 							});
-							p.sendMessage(TextComponent
-									.fromLegacyText("§aVocê mutou §e" + target + "§a temporariamente com sucesso!"));
+							p.sendMessage(TextComponent.fromLegacyText(
+									"§3§lMUTE §fVocê mutou §b§l" + target + "§f com sucesso!"));
 						}
 					}
 				}
@@ -145,7 +150,8 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 			}
 		} else {
 			if (args.length < 3) {
-				sender.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
+				sender.sendMessage(
+						TextComponent.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
 			} else {
 				String target = args[0];
 				String reason;
@@ -157,8 +163,8 @@ public class TempMuteCommand extends HeverCommand implements TabExecutor {
 				ProxiedPlayer targetp = Commons.getInstance().getProxy().getPlayer(target);
 				HeverPlayer targethp = PlayerLoader.getHP(target);
 				if (targetp != null) {
-				 if (!isInt(time.replace("d", "").replace("h", "").replace("s", "").replace("m", "")
-							.replace("y", ""))) {
+					if (!isInt(time.replace("d", "").replace("h", "").replace("s", "").replace("m", "").replace("y",
+							""))) {
 						sender.sendMessage(TextComponent
 								.fromLegacyText("§aVocê deve usar §e/tempmute <nickname> <time> <reason>"));
 					} else {

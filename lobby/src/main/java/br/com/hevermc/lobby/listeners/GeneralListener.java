@@ -38,10 +38,10 @@ import br.com.hevermc.lobby.Lobby;
 import br.com.hevermc.lobby.api.NPC;
 import br.com.hevermc.lobby.api.PacketReader;
 import br.com.hevermc.lobby.command.BuildCommand;
-import br.com.hevermc.lobby.gui.HardcoreGames;
 import br.com.hevermc.lobby.gui.Profile;
 import br.com.hevermc.lobby.gui.Servers;
 import br.com.hevermc.lobby.score.ScoreboardManager;
+import net.md_5.bungee.api.chat.TextComponent;
 import us.myles.ViaVersion.api.Via;
 import us.myles.ViaVersion.api.ViaAPI;
 
@@ -62,11 +62,11 @@ public class GeneralListener implements Listener {
 		});
 
 		p.getInventory().setItem(0,
-				new ItemConstructor(new ItemStack(Material.COMPASS), "§eServidores §7(Abra com o botão direito)")
+				new ItemConstructor(new ItemStack(Material.COMPASS), "§aServidores §7(Abra com o botão direito)")
 						.create());
 
 		p.getInventory().setItem(1,
-				new ItemConstructor(new ItemStack(Material.ENDER_CHEST), "§eColetáveis §7(Abra com o botão direito)")
+				new ItemConstructor(new ItemStack(Material.ENDER_CHEST), "§aColetáveis §7(Abra com o botão direito)")
 						.create());
 		@SuppressWarnings("rawtypes")
 		ViaAPI api = Via.getAPI();
@@ -78,7 +78,7 @@ public class GeneralListener implements Listener {
 		ItemStack skull = new ItemStack(397, 1, (short) 3);
 		SkullMeta skullm = (SkullMeta) skull.getItemMeta();
 		skullm.setOwner(p.getName());
-		skullm.setDisplayName("§ePerfil §7(Abra com o botão direito)");
+		skullm.setDisplayName("§aPerfil §7(Abra com o botão direito)");
 		skull.setItemMeta((ItemMeta) skullm);
 
 		p.getInventory().setItem(7, skull);
@@ -89,7 +89,7 @@ public class GeneralListener implements Listener {
 		p.sendMessage(" ");
 		p.setAllowFlight(true);
 
-		ReflectionAPI.sendTitle(p, "§e§lLOBBY", "§fSeja bem-vindo ao §6§lHever§f§lMC§f!", 10, 10, 10);
+		ReflectionAPI.sendTitle(p, "§a§lLOBBY", "§fSeja bem-vindo ao §a§lNESTY§f§lMC§f!", 10, 10, 10);
 
 		p.teleport(p.getWorld().getSpawnLocation());
 		p.setGameMode(GameMode.SURVIVAL);
@@ -106,7 +106,7 @@ public class GeneralListener implements Listener {
 		npc = new NPC("§aClique aqui", l);
 
 		npc.spawn(p);
-		npc.headRotation(-180.0f, 1.6f);
+		npc.headRotation(0, 0);
 		npc.changeSkin(
 				"eyJ0aW1lc3RhbXAiOjE1ODI5OTk1MjM2MjEsInByb2ZpbGVJZCI6ImJhOTcxY2EwZjcyZjRiOWRiMmZlNDM0MGU2NzY3OTZiIiwicHJvZmlsZU5hbWUiOiJpTHVjYXNVUyIsInNpZ25hdHVyZVJlcXVpcmVkIjp0cnVlLCJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjlhYjgwODcyMDI5N2FhMjI4YmEyYzUzNWFhMzZmYmI2NDI5MTY3YTdkMjM2MmJjM2JlOTIyMTBmNjA0YTc4NCJ9fX0=",
 				"MmuK79hTlRHjxzWODt4cpHgea8KOcB94oZJLUjviyM42PJfix1sKhvPKUDclXP9K99zBQeUQ0qNoZZIOnmheIbTXfvlF4iCIFW5RdRR2gUhqEL4fVB2Ydn8q4994BdNsqttDwiku8SOmIf4mzTjbbEFROudWkA5yGs7E1+2s3N3FqeYQPMYM15/3iUhgXXJodP60tW8dGJ7qzsUSOX5wJPkXk6G+iQXQOIo67cw2iBnJGvk0RzbkM3BKi1dCtEchAx3vdigltZRk60hCo/74pvvzVvzkNNxYjGwQ6g+EskB/GmgvV4E3mmwR9hjb8iv26kSKwBS3zE8VTIhF34PIAQ828WJWjVdi0xk+RFuNCd7l4Pd/NBLTl0lrb+eDiClucU2quPY42+6sF7B9DXFiuw7oOxXhLOj+O0Jw22iSFru9816VXdVVGu70aEZFaCw266rqRjOIycivwU3T7SVYsyxpv1kAVWRx6eqETVETg6onkhRmflHaSxtkWXxuHkFfnNB667mmcVrP43d6OIT6kdB98vbrIEJE74vLEh6HPwZy2c1cyeREpTv0ehqcvSzTfX0WkaRW8BqKpMX/IVjLu3C8c+RfANXvPSQvbEC+iG1uuON2Z6B8Q2ZF91GxEIXkz4tlSNtU3Kr3qHHCuieIEBpPt6mN1Nc0lkrqisXhNTQ=");
@@ -136,8 +136,8 @@ public class GeneralListener implements Listener {
 		npc3.spawn(p);
 		npc3.headRotation(-180.0f, 1.6f);
 		npc3.changeSkin(
-				"eyJ0aW1lc3RhbXAiOjE1ODI5OTk3NDgyNTEsInByb2ZpbGVJZCI6IjY1N2YzNDU2MDk5MDQwNDM4NTRhNjU5MGY2YzJlNmZlIiwicHJvZmlsZU5hbWUiOiJTcGFydGV5eHoiLCJzaWduYXR1cmVSZXF1aXJlZCI6dHJ1ZSwidGV4dHVyZXMiOnsiU0tJTiI6eyJ1cmwiOiJodHRwOi8vdGV4dHVyZXMubWluZWNyYWZ0Lm5ldC90ZXh0dXJlL2FjNzYxNDIzMWUxYTkxMjQ3ZjdhNjc4ODBlYThlZTU3ZGE3ZmI3MGJlNGExYzg0ODM5ZTc2ZjQyZjNkOTU0MmMifX19",
-				"tkjBvdJCuaWfD01dcS+o5zItulAHPhlO3GpD6XdNlLKdm1E+pY3cpQXGfpkoRKIkFKbZQMsoIyQ3xmYhDza/7sOmoiSna1n0Zp/mgdAAHZ4xsDhPoBjG/GlQsZT+CatWXREVpsqA9NBmvKnO5holAqOoCceNewy2UFMeJg4ntDcv0tDXAA7uoYTlM7TlRpw9xkWnkXHjDhDY/IMxgz3khGoJL3qHnCWhe8CRGtlJWZ0oe2oyw5S4GtfnronDykD+T/Tqe2muNUFl9aeDRxQl4pL1PehmOLv4LVmtfCiBeKUf+bsp2p2MLcTNMs5UvAqVH63b8uH8OnbSYgAcOpQ/hqmTesQtIjBtDgJYRcgioUFeMZHxt0wlP/CqkBuYHsf0kwNxOSKZmGZz+tSIPCkGiSD+VfTYrue/GJSagnrBG4fyiFd4TSZdT0+zgG5BfSX0hNQCgr5bpvDeTHrQ1ZtQSP9QVRnS52vrMgXx6Skod9KBSdZCHlE65azwI3tR3dAS8l2IqSj7v1d1ZDrPVvppc/zj9wAVpMhKppjahlDFJVSXpCc0lkZejgNGp5g/v/kusIuYSGsLajhtK76D6ZY3x3FKd+kPOHftXwikkrSrfbFx1G7WocGqCkhkzOyUZNTk+XJ4GI27jdIFS3gGzM0ebLV17vmqT1YwrQPCEyf0e5c=");
+				"yJ0aW1lc3RhbXAiOjE1ODM1MzE4ODMyMjMsInByb2ZpbGVJZCI6ImM3ZTE3NDY1ZDkzODQyNTBiM2IxYjg3ZjE0ODBmOGMxIiwicHJvZmlsZU5hbWUiOiJtb3phaWNvNDA0Iiwic2lnbmF0dXJlUmVxdWlyZWQiOnRydWUsInRleHR1cmVzIjp7IlNLSU4iOnsidXJsIjoiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83MGY4OGJiM2ZlMGIwYmQ1YmY4MzMwNDQ1ZjU2MmU4ODIwOWIwYmI2YmVmN2VkYjQwN2ZiOTFmMTlhNDQ5NmU1In19fQ==",
+				"MxbgYDvo7jyEgsspJyrxABH7xmIVYBqNNqnlwyZCa7o6jIZTaX553olCGRni1ORLOLroo/53ZU3qeaqY8GQ8uYsacCN9smciRpnL4TiTWXA/sSMld1XX26g4v7fcjEkfVzwQAWhY6uya/8Vs/OTawVYPQeoRk4CPerFbc6MgUED2PMODTAmJn3cS2hNRhYckTNB0jj+ypiaF05RLYitbei5VXEsnwoUUTAMNtIstN//0DNXDbU6ATRnzlbfllTVq8Y5F0vMx/FiSv6UvfNmUCZgH8B6xY1ZwpBgQC+xcrJC7aE6PIMZIN84e5Q7v6fKLbJQ0QbBLX0J/jlrnJAa13Uwz2f0BpP8saaYgwahP5Y5MwCOeOHAweiocNYsQSTNh+/w+hsF2xPZGW+sqfeEtLOFIDaxQ+Y8YpMvnvXziDpBJAV/OSdNgnmMWc8U9okz6adcI+VAenLGfZpoJuBASc/Ib+0BJ9Km4Xoe8Nz8WM2EDoMEoEzE85p5LRE9VVwf38v0nkIqodf7IhAl/fdc3uXz8c7G+1Bvq13uv+aqFoLVHgtdv2aMjTON+SWRyJ8BygH+4sDyxJ2xK3OodZRtTzOnzetBfCH963mJeoNgwDSjzZHc46WOfd2kgHFN7rgvgral8giHNqet6ymLiozMlPJFl8Y9pv4O/0Mv1KXQhxcg=");
 
 		new BukkitRunnable() {
 			@Override
@@ -172,27 +172,25 @@ public class GeneralListener implements Listener {
 		if (clicked != null) {
 			if (p.getGameMode() != GameMode.CREATIVE)
 				e.setCancelled(true);
-			if (title.startsWith("§eServidores")) {
+			if (title.startsWith("§a§lServers")) {
 				e.setCancelled(true);
 				if (clicked.getType() == Material.DIAMOND_SWORD) {
-					p.sendMessage("§aVocê está sendo conectado ao §eKitPvP§a!");
+					p.sendMessage("§b§lCONNECT §fVocê está sendo conectado ao §b§lKITPVP§f!");
 					Commons.getManager().getBungeeChannel().connect(p, "kitpvp");
 					p.closeInventory();
 				} else if (clicked.getType() == Material.MUSHROOM_SOUP) {
 					p.closeInventory();
 					if (!PlayerLoader.getHP(p).groupIsLarger(Groups.MOD)) {
-						p.sendMessage(
-								"§cEste modo está em desenvolvimento, portanto está disponível apenas para a equipe!");
+
+						p.sendMessage("§4§lPERMISSÃO§f Você não possui §c§lPERMISSÃO§F!");
 					} else {
-						//new HardcoreGames(p);
+						// new HardcoreGames(p);
 					}
 				}
-			} else if (title.startsWith("§eSalas de HardcoreGames")) {
+			} else if (title.startsWith("§3§lServers §a§l> Salas de HardcoreGames")) {
 				if (e.getCurrentItem() != null) {
 					if (e.getCurrentItem().getType() == Material.INK_SACK) {
-						p.sendMessage("§aTe conectando até §e"
-								+ e.getCurrentItem().getItemMeta().getDisplayName().replace("§aSala ", "").toLowerCase()
-								+ "§a!");
+						p.sendMessage("§b§lCONNECT §fVocê está sendo conectado ao §b§LHG-1§f!");
 						p.closeInventory();
 						Commons.getManager().getBungeeChannel().connect(p,
 								e.getCurrentItem().getItemMeta().getDisplayName().replace("§aSala ", "").toLowerCase());
@@ -233,11 +231,11 @@ public class GeneralListener implements Listener {
 				e.setCancelled(true);
 				new Servers(p);
 			} else if (p.getItemInHand().getItemMeta() != null && p.getItemInHand().getItemMeta().getDisplayName()
-					.equalsIgnoreCase("§ePerfil §7(Abra com o botão direito)")) {
+					.equalsIgnoreCase("§aPerfil §7(Abra com o botão direito)")) {
 				e.setCancelled(true);
 				new Profile(p);
 			} else if (p.getItemInHand().getType() == Material.ENDER_CHEST) {
-				p.sendMessage("§cOs coletáveis estão em desenvolvimento!");
+				p.sendMessage("§c§lERRO §fOs coletáveis estão em §3§lDESENVOLVIMENTO§f!");
 				e.setCancelled(true);
 			} else if (p.getItemInHand().getItemMeta().getDisplayName().equalsIgnoreCase("§7Jogadores: §aON")) {
 				if (inCooldown.contains(p)) {

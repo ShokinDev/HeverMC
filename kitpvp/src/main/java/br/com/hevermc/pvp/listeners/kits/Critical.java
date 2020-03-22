@@ -15,19 +15,20 @@ import br.com.hevermc.pvp.listeners.kits.commons.HeverKit;
 public class Critical implements Listener {
 
 	HeverKit kit_api = new HeverKit(Kits.CRITICAL);
-	
+
 	@EventHandler
 	public void kitBoxer(EntityDamageByEntityEvent e) {
 		if (e.getEntity() instanceof Player && e.getDamager() instanceof Player) {
 			Player d = (Player) e.getDamager();
 			kit_api.setPlayer(d);
-			if (kit_api.usingKit() && !new br.com.hevermc.pvp.api.PlayerLoader((Player)e.getEntity()).load().getPvPP().isProtectArea()) {
+			if (kit_api.usingKit() && !new br.com.hevermc.pvp.api.PlayerLoader((Player) e.getEntity()).load().getPvPP()
+					.isProtectArea()) {
 				if (new Random().nextInt(100) > 80) {
 					e.setDamage(e.getDamage() + 1.5);
 					d.getWorld().playEffect(e.getEntity().getLocation(), Effect.STEP_SOUND, Material.LAVA, 100);
-					d.sendMessage("§aVocê deu um dano §ecrítico§a!");
+					d.sendMessage("§4§lCRITICAL §fVocê deu um dano §c§lCRÍTICO§f!");
 				}
-			} 
+			}
 		}
 	}
 }

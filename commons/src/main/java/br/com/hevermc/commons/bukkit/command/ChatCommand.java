@@ -20,20 +20,20 @@ public class ChatCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			if (hasGroup(p, Groups.TRIAL, true)) {
 				if (args.length == 0) {
-					p.sendMessage("§aVocê deve usar §e/chat <on|off>");
+					p.sendMessage("§6§lCHAT §fVocê deve utilizar §b/chat <on|off>");
 				} else if (args[0].equalsIgnoreCase("on")) {
 					if (chat) {
-						p.sendMessage("§cO chat já está ativado!");
+						p.sendMessage("§6§lCHAT §fO chat já está §a§lATIVADO§f!");
 					} else {
-						p.sendMessage("§aVocê §bativou §ao chat!");
+						p.sendMessage("§6§lCHAT §fVocê §a§lATIVOU §fo chat!");
 						chat = true;
 					}
 
 				} else if (args[0].equalsIgnoreCase("off")) {
 					if (!chat) {
-						p.sendMessage("§cO chat já está desativado!");
+						p.sendMessage("§6§lCHAT §fO chat já está §4§lDEASATIVADO§f!");
 					} else {
-						p.sendMessage("§aVocê §cdesativou §ao chat!");
+						p.sendMessage("§6§lCHAT §fVocê §4§lDESATIVOU §fo chat!");
 						chat = false;
 					}
 

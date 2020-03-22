@@ -8,11 +8,11 @@ import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class StaffChatCommand extends HeverCommand {
-	
+
 	public StaffChatCommand() {
 		super("staffchat", "sc");
 	}
-	
+
 	@Override
 	public void execute(CommandSender sender, String[] args) {
 		if (isPlayer(sender)) {
@@ -20,10 +20,10 @@ public class StaffChatCommand extends HeverCommand {
 			if (requiredGroup(p, Groups.YOUTUBERPLUS, true)) {
 				if (Commons.getManager().staffchat.contains(p)) {
 					Commons.getManager().staffchat.remove(p);
-					p.sendMessage(new TextComponent("§cVocê saiu do §estaff-chat§c!"));
+					p.sendMessage(new TextComponent("§e§lSTAFFCHAT §fVocê §c§lSAIU §fdo §e§lSTAFFCHAT§f!"));
 				} else {
 					Commons.getManager().staffchat.add(p);
-					p.sendMessage(new TextComponent("§aVocê entrou no §estaff-chat§a!"));
+					p.sendMessage(new TextComponent("§e§lSTAFFCHAT §fVocê §a§lENTROU §fdo §e§lSTAFFCHAT§f!"));
 				}
 			}
 		}

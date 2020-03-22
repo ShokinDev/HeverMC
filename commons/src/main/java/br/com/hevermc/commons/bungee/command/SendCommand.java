@@ -25,34 +25,34 @@ public class SendCommand extends HeverCommand implements TabExecutor {
 			if (requiredGroup(p, Groups.MODGC, true)) {
 				if (!p.getServer().getInfo().getName().equals("login")) {
 					if (args.length < 2) {
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/send <player> <server>"));
+						p.sendMessage(TextComponent.fromLegacyText("§3§lSEND §fVocê deve utilizar §b/send <player> <server>"));
 					} else {
 						ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 						if (target == null) {
 							if (args[0].equalsIgnoreCase("all")) {
 								if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
-									p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+									p.sendMessage(TextComponent.fromLegacyText("§3§lSEND §fEste servidor §4§lNÃO §fexiste!"));
 								} else {
-									p.sendMessage(TextComponent.fromLegacyText("§aVocê enviou §btodos §apara §b"
+									p.sendMessage(TextComponent.fromLegacyText("§3§lSEND §fVocê enviou §b§lTODOS §fpara §b§l"
 											+ Commons.getInstance().getProxy().getServerInfo(args[1]).getName()
 													.toUpperCase()
-											+ " §acom sucesso!"));
+											+ " §fcom sucesso!"));
 									p.getServer().getInfo().getPlayers().forEach(ps -> {
 										ps.connect(Commons.getInstance().getProxy().getServerInfo(args[1]));
 									});
 								}
 							} else {
-								p.sendMessage(TextComponent.fromLegacyText("§cSeu alvo está offline!"));
+								p.sendMessage(TextComponent.fromLegacyText("§3§lSEND §fSeu alvo está §4§lOFFLINE§f!"));
 							}
 						} else if (Commons.getInstance().getProxy().getServerInfo(args[1]) == null) {
-							p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+							p.sendMessage(TextComponent.fromLegacyText("§3§lSEND §fEste servidor §4§lNÃO §fexiste!"));
 						} else {
 							target.connect(Commons.getInstance().getProxy().getServerInfo(args[1]));
 							p.sendMessage(
-									TextComponent.fromLegacyText("§aVocê enviou "
-											+ target.getName() + " §apara §b" + Commons.getInstance().getProxy()
+									TextComponent.fromLegacyText("§3§lSEND §fVocê enviou §b§l"
+											+ target.getName() + " §fpara §b§l" + Commons.getInstance().getProxy()
 													.getServerInfo(args[1]).getName().toUpperCase()
-											+ " §acom sucesso!"));
+											+ " §fcom sucesso!"));
 						}
 
 					}

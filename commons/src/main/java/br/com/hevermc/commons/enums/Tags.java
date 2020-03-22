@@ -7,10 +7,9 @@ public enum Tags {
 
 	MEMBRO("§7", "§7", "t", Groups.MEMBRO, false), 
 	PRO("§6§lPRO", "§6", "s", Groups.PRO, false),
-	LEGEND("§e§lLEGEND", "§E", "q", Groups.LEGEND, false), 
-	CRYSTAL("§d§LCRYSTAL", "§d", "p", Groups.CRYSTAL, false),
+	GANSO("§e§lGANSO", "§e", "p", Groups.GANSO, false),
+	NESTY("§5§lNESTY", "§5", "q", Groups.NESTY, false), 
 	BETA("§1§LBETA", "§1", "o", Groups.BETA, true),
-	YEAR("§b§L2020", "§b", "n", Groups.YEAR, false),
 	YOUTUBER("§b§lYT", "§b", "m", Groups.YOUTUBER, true),
 	YOUTUBERPLUS("§3§lYT+", "§3", "l", Groups.YOUTUBERPLUS, true),
 	DESIGNER("§2§lDESIGNER", "§2", "k", Groups.DESIGNER, true),

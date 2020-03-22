@@ -55,36 +55,36 @@ public class ReportCommand extends HeverCommand implements TabExecutor {
 						if (receive_report.contains(p)) {
 							receive_report.remove(p);
 							p.sendMessage(TextComponent.fromLegacyText(
-									"§aAgora você recebe todos reports!"));
+									"§4§lREPORT §fAgora você §a§lRECEBE §freports!"));
 						} else {
 							receive_report.add(p);
 							p.sendMessage(TextComponent.fromLegacyText(
-									"§cAgora você não recebe reports!"));
+									"§4§lREPORT §fAgora você §c§lNÃO §frecebe reports!"));
 
 						}
 					}
 				} else {
 
 					p.sendMessage(TextComponent
-							.fromLegacyText("§aVocê deve utilizar §e/report <acusado> <motivo>"));
+							.fromLegacyText("§4§lREPORT §fVocê deve utilizar §b/report <acusado> <motivo>"));
 				}
 					
 			} else
 			if (args.length < 2) {
 					p.sendMessage(TextComponent
-							.fromLegacyText("§aVocê deve utilizar §e/report <acusado> <motivo>"));
+							.fromLegacyText("§4§lREPORT §fVocê deve utilizar §b/report <acusado> <motivo>"));
 			} else {
 				ProxiedPlayer target = Commons.getInstance().getProxy().getPlayer(args[0]);
 				
 				if (inCoowdown(p)) {
-					p.sendMessage(TextComponent.fromLegacyText("§cAguarde para reportar novamente!"));
+					p.sendMessage(TextComponent.fromLegacyText("§4§lREPORT §fAguarde para §4§lREPORTAR§f novamente!"));
 					return;
 				}
 				
 				if (target == null) {
-					p.sendMessage(TextComponent.fromLegacyText("§cEste jogador está offline!"));
+					p.sendMessage(TextComponent.fromLegacyText("§4§lREPORT §fEste jogador está §4§lOFFLINE§f!"));
 				} else if (target == p) {
-					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode reportar este jogador!"));
+					p.sendMessage(TextComponent.fromLegacyText("§4§lREPORT §fVocê §c§lNÃO§f pode reportar este jogador!"));
 				} else {
 					StringBuilder sb = new StringBuilder();
 					for (int i = 1; i < args.length; ++i) {
@@ -106,7 +106,7 @@ public class ReportCommand extends HeverCommand implements TabExecutor {
 					});
 
 					p.sendMessage(TextComponent.fromLegacyText(
-							"§aVocê reportou o jogador §e" + target.getName() + " §fcom sucesso!"));
+							"§4§lREPORT §fVocê reportou o jogador §b§l" + target.getName() + " §fcom sucesso!"));
 					addCoowdown(p);
 				}
 

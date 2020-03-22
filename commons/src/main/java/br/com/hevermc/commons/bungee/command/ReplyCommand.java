@@ -24,21 +24,23 @@ public class ReplyCommand extends HeverCommand implements TabExecutor {
 		if (isPlayer(sender)) {
 			ProxiedPlayer p = toPlayer(sender);
 			if (args.length == 0) {
-				p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/r <mensagem>"));
+				p.sendMessage(TextComponent.fromLegacyText("§e§lREPLY §fVocê deve utilizar §b/r <mensagem>"));
 			} else {
 				if (!Commons.getManager().reply.containsKey(p)) {
-					p.sendMessage(TextComponent.fromLegacyText("§cNão há mensagens para você responder."));
+					p.sendMessage(
+							TextComponent.fromLegacyText("§e§lREPLY §fNão há §4§lMENSAGENS§f para você responder!"));
 				} else {
 					ProxiedPlayer t = Commons.getManager().reply.get(p);
 					if (t == null) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste jogador está offline."));
+						p.sendMessage(TextComponent.fromLegacyText("§e§lREPLY §fEste jogador está §4§lOFFLINE§f1"));
 					} else {
 						String message;
 						StringBuilder sb = new StringBuilder();
 						for (int i = 0; i < args.length; i++)
 							sb.append(args[i]).append(" ");
 						message = sb.toString();
-						if (message.contains(".com") || message.contains(". com") || message.contains(".cc") || message.contains(".tk")) {
+						if (message.contains(".com") || message.contains(". com") || message.contains(".cc")
+								|| message.contains(".tk")) {
 							Commons.getInstance().getProxy().getPlayers().forEach(ps -> {
 								HeverPlayer hp = toHeverPlayer(ps);
 								if (hp.groupIsLarger(Groups.MOD)) {

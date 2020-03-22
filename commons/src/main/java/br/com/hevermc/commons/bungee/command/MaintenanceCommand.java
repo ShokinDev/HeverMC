@@ -22,15 +22,18 @@ public class MaintenanceCommand extends HeverCommand {
 				if (args.length == 0) {
 					if (requiredGroup(p, Groups.DIRETOR, true)) {
 						Commons.getManager().setMaintenance(!Commons.getManager().isMaintenance() ? true : false);
-						p.sendMessage(TextComponent.fromLegacyText("§eVocê " + (Commons.getManager().isMaintenance() ? "§aativou" : "§cdesativou") + " §ea manutenção!"));
+						p.sendMessage(TextComponent.fromLegacyText("§4§lWHITELIST §fVocê "
+								+ (Commons.getManager().isMaintenance() ? "§a§lATIVOU" : "§c§lDESATIVOU")
+								+ " §fa manutenção!"));
 						ProxyServer.getInstance().getPlayers().forEach(ps -> {
 							if (!toHeverPlayer(ps).groupIsLarger(Groups.TRIAL)) {
-								ps.disconnect(TextComponent.fromLegacyText("§4§lWHITELIST\n\n§fEstamos em manutenção, tente novamente mais tarde!"
-										+ "\n\n§fEntre em nosso §3§lDISCORD§f!\n§ediscord.hevermc.com.br"));
+								ps.disconnect(TextComponent.fromLegacyText(
+										"§4§lWHITELIST\n\n§fEstamos em manutenção, tente novamente mais tarde!"
+												+ "\n\n§fEntre em nosso §3§lDISCORD§f!\n§ehttps://discord.gg/VgbDwqS"));
 							}
 						});
 					}
-				} 
+				}
 			}
 		}
 	}

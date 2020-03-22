@@ -26,7 +26,7 @@ public class TeleportCommand extends HeverCommand {
 
 					if (commandLabel.equalsIgnoreCase("tpall") && hasGroup(p, Groups.MODPLUS, true)) {
 						Bukkit.getOnlinePlayers().forEach(ps -> ps.teleport(p));
-						p.sendMessage("§aVocê teleportou todos até você");
+						p.sendMessage("§e§lTELEPORT §fVocê §a§lTELEPORTOU §ftodos até você!");
 						Bukkit.getOnlinePlayers().forEach(ps -> {
 							HeverPlayer hps = toHeverPlayer(ps);
 							if (hps.groupIsLarger(Groups.GERENTE)) {
@@ -35,21 +35,22 @@ public class TeleportCommand extends HeverCommand {
 						});
 					} else {
 
-						p.sendMessage("§aVocê deve utilizar §e/tp <target> §aou §e/tp <x> <y> <z>");
+						p.sendMessage("§e§lTELEPORT §fVocê deve utilizar §b/tp <target> §fou §b/tp <x> <y> <z>");
 					}
 				} else {
 
 					if (hasGroup(p, Groups.TRIAL, true)) {
 						if (args.length == 1) {
 							if (args[0].length() > 16 || args[0].length() < 3) {
-								p.sendMessage("§cO alvo informado não é valido!");
+								p.sendMessage("§e§lTELEPORT §fO alvo informado não é §c§lVALIDO§f!");
 							} else {
 								Player target = Bukkit.getPlayer(args[0]);
 								if (target == null) {
-									p.sendMessage("§cO alvo informado não está on-line!");
+									p.sendMessage("§e§lTELEPORT §fO alvo está §c§lOFFLINE§f!");
 								} else {
 									p.teleport(target);
-									p.sendMessage("§aVocê se teleportou para §e" + target.getName());
+									p.sendMessage("§e§lTELEPORT §fVocê se §a§lTELEPORTOU§f para §e§l" + target.getName()
+											+ "§f!");
 									Bukkit.getOnlinePlayers().forEach(ps -> {
 										HeverPlayer hps = toHeverPlayer(ps);
 										if (hps.groupIsLarger(Groups.GERENTE)) {
@@ -65,16 +66,16 @@ public class TeleportCommand extends HeverCommand {
 							if (hasGroup(p, Groups.TRIAL, true)) {
 								if (args[0].length() > 16 || args[0].length() < 3 || args[1].length() > 16
 										|| args[1].length() < 3) {
-									p.sendMessage("§cUm dos alvos informado não é valido!");
+									p.sendMessage("§e§lTELEPORT §fO alvo informado não é §c§lVALIDO§f!");
 								} else {
 									Player target = Bukkit.getPlayer(args[0]);
 									Player target2 = Bukkit.getPlayer(args[1]);
 									if (target == null || target2 == null) {
-										p.sendMessage("§cUm dos alvos informado não está on-line!");
+										p.sendMessage("§e§lTELEPORT §fO alvo está §c§lOFFLINE§f!");
 									} else {
 										target.teleport(target2);
-										p.sendMessage("§aVocê teleportou §e" + target.getName() + " §apara §e"
-												+ target2.getName() + "§a!");
+										p.sendMessage("§e§lTELEPORT §fVocê §a§lTELEPORTOU§f §e§l" + target.getName()
+												+ " §fpara §e§l" + target2.getName() + "§f!");
 										Bukkit.getOnlinePlayers().forEach(ps -> {
 											HeverPlayer hps = toHeverPlayer(ps);
 											if (hps.groupIsLarger(Groups.GERENTE)) {
@@ -90,13 +91,15 @@ public class TeleportCommand extends HeverCommand {
 						if (hasGroup(p, Groups.BUILDER, true)) {
 							if (args.length == 3) {
 								if (!(isInt(args[0]) || isInt(args[1]) || isInt(args[2]))) {
-									p.sendMessage("§cVocê deve utilizar apenas numeros!");
+									p.sendMessage("§e§lTELEPORT §fO alvo deve ser §c§lAPENAS§f numeros!");
+									return true;
 								}
 								double x = Double.valueOf(args[0]);
 								double y = Double.valueOf(args[1]);
 								double z = Double.valueOf(args[2]);
 								p.teleport(new Location(p.getWorld(), x, y, z));
-								p.sendMessage("§aVocê se teleportou para §eX: " + x + " Y:" + y + " Z:" + z + "§a!");
+								p.sendMessage("§e§lTELEPORT §fVocê se §a§lTELEPORTOU§f para §e§lX: " + x + " Y:" + y
+										+ " Z:" + z + "§f!");
 								Bukkit.getOnlinePlayers().forEach(ps -> {
 									HeverPlayer hps = toHeverPlayer(ps);
 									if (hps.groupIsLarger(Groups.GERENTE)) {

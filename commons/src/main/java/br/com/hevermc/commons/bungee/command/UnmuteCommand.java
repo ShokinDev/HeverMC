@@ -21,15 +21,16 @@ public class UnmuteCommand extends HeverCommand {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.GERENTE, true)) {
 				if (args.length == 0) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/unmute <nickname>"));
+					p.sendMessage(TextComponent.fromLegacyText("§3§lMUTE §fVocê deve usar §b/unmute <nickname>"));
 				} else {
 					HeverPlayer targethp = PlayerLoader.getHP(args[0]);
 					if (!targethp.isMuted()) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste jogador não está mutado!"));
+						p.sendMessage(TextComponent.fromLegacyText("§3§lMUTE §fEste jogador não está §3§lMUTADO§f!"));
 					} else {
 						Commons.getManager().getBackend().getSql().delete("mutes", "name", args[0].toLowerCase());
 						targethp.load();
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê desmutou §e" + targethp.getName() + "!"));
+						p.sendMessage(TextComponent
+								.fromLegacyText("§3§lMUTE §fVocê §3§lDESMUTOU §b" + targethp.getName() + "§f!"));
 					}
 				}
 

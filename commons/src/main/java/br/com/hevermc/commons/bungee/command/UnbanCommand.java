@@ -21,15 +21,15 @@ public class UnbanCommand extends HeverCommand {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.GERENTE, true)) {
 				if (args.length == 0) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/unban <nickname>"));
+					p.sendMessage(TextComponent.fromLegacyText("§4§lBAN §fVocê deve utilizar §b/unban <nickname>"));
 				} else {
 					HeverPlayer targethp = PlayerLoader.getHP(args[0]);
 					if (!targethp.isBanned()) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEsse jogador não está banido!"));
+						p.sendMessage(TextComponent.fromLegacyText("§4§lBAN §fEsse jogador §4§lNÃO§f está banido!"));
 					} else {
 						Commons.getManager().getBackend().getSql().delete("bans", "name", args[0].toLowerCase());
 						targethp.load();
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê desbaniu §e" + targethp.getName() + "!"));
+						p.sendMessage(TextComponent.fromLegacyText("§4§lBAN §fVocê desbaniu §b" + targethp.getName() + "§f!"));
 					}
 				}
 

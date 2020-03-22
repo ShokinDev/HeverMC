@@ -23,7 +23,7 @@ public class CookieMonster implements Listener {
 		if (kit.usingKit() && kit.isItem()) {
 			if (kit.verifyCooldown()) {
 				p.updateInventory();
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				e.setCancelled(true);
 				return;
 			} else {

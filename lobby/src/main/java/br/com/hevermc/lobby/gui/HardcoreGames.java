@@ -68,7 +68,7 @@ public class HardcoreGames {
 	}
 
 	public HardcoreGames(Player p) {
-		Inventory inv = Bukkit.createInventory(null, 3 * 9, "§eSalas de HardcoreGames");
+		Inventory inv = Bukkit.createInventory(null, 3 * 9, "§3§lServers §a§l> Salas de HardcoreGames");
 
 		for (int i = 1; i < slots.length + 1; i++) {
 			inv.setItem(slots[i - 1], new ItemConstructor(new ItemStack(Material.INK_SACK, 1, (short) 8),

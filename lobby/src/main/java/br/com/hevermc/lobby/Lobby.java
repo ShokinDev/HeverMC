@@ -82,19 +82,19 @@ public class Lobby extends JavaPlugin {
 						}
 
 						String ult2 = htext;
-						htext = "§fJogando: §a"
-								+ (Commons.getManager().getBackend().getRedis().get("hardcoregames") != null ? Commons
-										.getManager().getBackend().getRedis().get("hardcoregames").replace("on:", "")
-										: 0);
+						//htext = "§fJogando: §a"
+						//		+ (Commons.getManager().getBackend().getRedis().get("hardcoregames") != null ? Commons
+						//				.getManager().getBackend().getRedis().get("hardcoregames").replace("on:", "")
+						//				: 0);
 						if (!htext.equalsIgnoreCase(ult2)) {
 							h2.removeLine(2);
 							h2.appendTextLine(htext);
 						}
 
 						String ult3 = htext;
-						htext = "§fJogando: §a" + (Commons.getManager().getBackend().getRedis().get("gladiator") != null
-								? Commons.getManager().getBackend().getRedis().get("gladiator").replace("on:", "")
-								: 0);
+						//htext = "§fJogando: §a" + (Commons.getManager().getBackend().getRedis().get("gladiator") != null
+						//		? Commons.getManager().getBackend().getRedis().get("gladiator").replace("on:", "")
+						//		: 0);
 						if (!htext.equalsIgnoreCase(ult3)) {
 							h3.removeLine(2);
 							h3.appendTextLine(htext);

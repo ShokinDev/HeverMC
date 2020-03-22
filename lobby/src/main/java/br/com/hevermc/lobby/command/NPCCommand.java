@@ -18,25 +18,25 @@ public class NPCCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			if (hasGroup(p, Groups.DIRETOR, true)) {
 				if (args.length == 0) {
-					p.sendMessage("§aVocê deve usar §e/setnpc <npc>");
+					p.sendMessage("§a§lNPC §fVocê deve utilizar §b/setnpc <npc>");
 				} else if (args[0].equalsIgnoreCase("kitpvp")) {
 					Lobby.getInstance().getLocations().getConfig().set("npc.pvp.x", p.getLocation().getX());
 					Lobby.getInstance().getLocations().getConfig().set("npc.pvp.y", p.getLocation().getY());
 					Lobby.getInstance().getLocations().getConfig().set("npc.pvp.z", p.getLocation().getZ());
 					Lobby.getInstance().getLocations().save();
-					p.sendMessage("§aVocê definiu a localização de um npc!");
+					p.sendMessage("§a§lNPC §fVocê definiu a §3§lLOCALIZAÇÃO §fde um NPC!");
 				} else if (args[0].equalsIgnoreCase("hg")) {
 					Lobby.getInstance().getLocations().getConfig().set("npc.hg.x", p.getLocation().getX());
 					Lobby.getInstance().getLocations().getConfig().set("npc.hg.y", p.getLocation().getY());
 					Lobby.getInstance().getLocations().getConfig().set("npc.hg.z", p.getLocation().getZ());
 					Lobby.getInstance().getLocations().save();
-					p.sendMessage("§aVocê definiu a localização de um npc!");
+					p.sendMessage("§a§lNPC §fVocê definiu a §3§lLOCALIZAÇÃO §fde um NPC!");
 				} else if (args[0].equalsIgnoreCase("glad")) {
 					Lobby.getInstance().getLocations().getConfig().set("npc.glad.x", p.getLocation().getX());
 					Lobby.getInstance().getLocations().getConfig().set("npc.glad.y", p.getLocation().getY());
 					Lobby.getInstance().getLocations().getConfig().set("npc.glad.z", p.getLocation().getZ());
 					Lobby.getInstance().getLocations().save();
-					p.sendMessage("§aVocê definiu a localização de um npc!");
+					p.sendMessage("§a§lNPC §fVocê definiu a §3§lLOCALIZAÇÃO §fde um NPC!");
 				}
 			}
 		}

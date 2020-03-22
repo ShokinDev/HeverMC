@@ -47,12 +47,12 @@ public class Phantom implements Listener {
 			chestp111.setColor(Color.WHITE);
 			chest11.setItemMeta(chestp111);
 			if (new PlayerLoader(p).load().getPvPP().isProtectArea()) {
-				p.sendMessage("§cVocê está em uma área protegida, saia para usar o Phantom!");
+				p.sendMessage("§e§lKIT §fVocê está em uma área §c§lPROTEGIDA§f, saia para utilizar seu kit!");
 				return;
 			}
 			final Player p1 = event.getPlayer();
 			if (kit.verifyCooldown() == true) {
-				p1.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 

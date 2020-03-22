@@ -39,7 +39,7 @@ public class Ninja implements Listener {
 		kit_api.setPlayer(p);
 		if (kit_api.usingKit() && ninja.containsKey(p)) {
 			if (kit_api.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 			} else {
 				if (p.isSneaking()) {
 					Player t = ninja.get(p);
@@ -47,18 +47,18 @@ public class Ninja implements Listener {
 					if (tpvp.isProtectArea()) {
 						p.sendMessage("§cSeu alvo está em uma área protegida!");
 					} else if (t == null) {
-						p.sendMessage("§cSeu alvo está offline!");
+						p.sendMessage("§e§lKIT §fSeu alvo está §4§lOFFLINE§f!");
 					} else if (p.getLocation().distance(t.getLocation()) >= 50.0D) {
-						p.sendMessage("§cSeu alvo está muito longe!");
+						p.sendMessage("§e§lKIT §fSeu alvo está muito §4§lLONGE§f!");
 					} else if (Gladiator.lutando.containsKey(t) && Gladiator.lutando.get(t) != p) {
-						p.sendMessage("§cSeu alvo está batalhando em um gladiator com outra pessoa!");
+						p.sendMessage("§e§lKIT §fSeu alvo está batalhando em um §4§lGLADIATOR§f!");
 					} else {
 						p.teleport(t);
 						Calendar c = Calendar.getInstance();
 						c.add(Calendar.SECOND, 6);
 						Date d = new Date(c.getTimeInMillis());
 						kit_api.setCooldown(d);
-						p.sendMessage("§aVocê se teleportou para §e" + t.getName() + "§a!");
+						p.sendMessage("§e§lKIT §fVocê se teleportou até §b§l" + t.getName() + "§f!");
 						ninja.remove(p);
 					}
 

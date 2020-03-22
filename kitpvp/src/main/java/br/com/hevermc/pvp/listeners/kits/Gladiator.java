@@ -30,8 +30,8 @@ import br.com.hevermc.pvp.listeners.kits.commons.HeverKit;
 public class Gladiator implements Listener {
 
 	private List<Block> gladiatorbloco = new ArrayList<Block>();
-	private HashMap<Block, Player> gladblock= new HashMap<Block, Player>();
-	public static HashMap<Player, Player> lutando= new HashMap<Player, Player>();
+	private HashMap<Block, Player> gladblock = new HashMap<Block, Player>();
+	public static HashMap<Player, Player> lutando = new HashMap<Player, Player>();
 	private HashMap<Player, Location> lugar = new HashMap<Player, Location>();
 	private int glad1;
 	private int glad2;
@@ -54,7 +54,7 @@ public class Gladiator implements Listener {
 				final Location loc3 = new Location(p.getWorld(), (double) (p.getLocation().getBlockX() - 8),
 						(double) (p.getLocation().getBlockY() + 73), (double) (p.getLocation().getBlockZ() - 8));
 				if (Gladiator.lutando.containsKey(p) || Gladiator.lutando.containsKey(r)) {
-					p.sendMessage("§cVocê já esta no gladiator!");
+					p.sendMessage("§e§lKIT §fVocê já está em um §4§lDUELO§f!");
 					return;
 				}
 				final List<Location> cuboid = new ArrayList<Location>();
@@ -63,7 +63,7 @@ public class Gladiator implements Listener {
 						for (int bY = -1; bY <= 10; ++bY) {
 							final Block b = loc.clone().add((double) bX, (double) bY, (double) bZ).getBlock();
 							if (!b.isEmpty()) {
-								p.sendMessage("§cVocê não pode utilizar este kit aqui!");
+								p.sendMessage("§e§lKIT §fVocê não pode §a§lUTILIZAR §feste kit aqui!");
 								return;
 							}
 							if (bY == 10) {
@@ -139,7 +139,7 @@ public class Gladiator implements Listener {
 			final Player q = Bukkit.getPlayer(nome);
 			Gladiator.lutando.remove(p);
 			Gladiator.lutando.remove(q);
-			q.sendMessage("§cO jogador: " + p.getDisplayName() + " deslogou no gladiator!");
+			q.sendMessage("§e§lKIT §fO jogador no qual você duelava §c§lDESLOGOU§f!");
 			q.teleport((Location) this.lugar.get(q));
 			Bukkit.getScheduler().cancelTask(this.glad1);
 			Bukkit.getScheduler().cancelTask(this.glad2);
@@ -160,8 +160,6 @@ public class Gladiator implements Listener {
 		if (Gladiator.lutando.containsKey(p)) {
 			final String nome = Gladiator.lutando.get(p).getName();
 			final Player m = Bukkit.getPlayer(nome);
-			m.sendMessage("§aVocê ganhou a batalha no gladiator!");
-			p.sendMessage("§cVocê perdeu a batalha no gladiator!");
 			Gladiator.lutando.remove(p);
 			Gladiator.lutando.remove(m);
 			m.teleport((Location) this.lugar.get(m));
@@ -183,7 +181,7 @@ public class Gladiator implements Listener {
 		final Player p = e.getPlayer();
 		if (Gladiator.lutando.containsKey(p)) {
 			e.setCancelled(true);
-			p.sendMessage("§cSem comandos no gladiator!");
+			p.sendMessage("§E§lKIT §fVocê não pode utilizar §c§lCOMANDOS §fdentro do gladiator!");
 		}
 	}
 }

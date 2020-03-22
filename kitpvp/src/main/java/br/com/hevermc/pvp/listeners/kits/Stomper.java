@@ -58,8 +58,8 @@ public class Stomper implements Listener {
 				return;
 			if (kit_t.usingKit()) {
 				t.damage(0.0F);
-				p.sendMessage("§cVocê pisoteou um AntiStomper!");
-				t.sendMessage("§aSeu AntiStomper salvou sua vida!");
+				p.sendMessage("§e§lKIT §fVocê §4§lPISOTEOU§f um AntiStomper!");
+				t.sendMessage("§e§lKIT §fSeu AntiStomper §a§lSALVOU§f sua vida!");
 				return;
 			}
 			if (!t.isSneaking()) {

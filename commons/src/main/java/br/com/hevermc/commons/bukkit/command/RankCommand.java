@@ -20,7 +20,7 @@ public class RankCommand extends HeverCommand {
 		if (isPlayer(sender)) {
 			Player p = toPlayer(sender);
 			HeverPlayer hp = toHeverPlayer(p);
-			p.sendMessage("§fOs ranks do servidor são os seguintes:");
+			p.sendMessage("§c§lRANK §fOs ranks do servidor são os seguintes:");
 			for (Ranks rank : Ranks.values()) {
 				p.sendMessage(rank.getColor() + rank.getSymbol() + " " + rank.getName() + " - " + rank.getXp() + "XP");
 			}

@@ -95,7 +95,7 @@ public class Avatar implements Listener {
 			e.setCancelled(true);
 			p.updateInventory();
 			if (kit.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 			Calendar c = Calendar.getInstance();
@@ -137,7 +137,7 @@ public class Avatar implements Listener {
 			e.setCancelled(true);
 			p.updateInventory();
 			if (kit.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 			Calendar c = Calendar.getInstance();
@@ -178,7 +178,7 @@ public class Avatar implements Listener {
 			e.setCancelled(true);
 			p.updateInventory();
 			if (kit.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 			Calendar c = Calendar.getInstance();
@@ -222,7 +222,7 @@ public class Avatar implements Listener {
 			e.setCancelled(true);
 			p.updateInventory();
 			if (kit.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 			Calendar c = Calendar.getInstance();

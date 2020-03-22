@@ -17,8 +17,8 @@ public class ScoreboardManager {
 	int i = 0;
 
 	public String effect() {
-		String cor1 = "§6§l";
-		String cor2 = "§e§l";
+		String cor1 = "§b§l";
+		String cor2 = "§1§l";
 		String cor3 = "§f§l";
 		if (i == 0) {
 			i++;
@@ -125,7 +125,7 @@ public class ScoreboardManager {
 		Objective obj = score.registerNewObjective("lobby", "score");
 		HeverPlayer hp = PlayerLoader.getHP(p);
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.setDisplayName("§6§lHEVER§f§lMC");
+		obj.setDisplayName("§a§lNESTY§f§lMC");
 		LineAdder add = new LineAdder(score, obj);
 		if (!hp.groupIsLarger(Groups.MODGC)) {
 			add.addLine("  ", "§f              ", " ", 6);
@@ -141,7 +141,7 @@ public class ScoreboardManager {
 			add.addLine("  ", " §fVocê está no servidor  ", " ", 2);
 			add.addLine("  ", " §fde screenshare!  ", " ", 1);
 			add.addLine("  ", " §a  ", " ", 0);
-			add.addLine("§awww.", "hevermc", ".com.br ", -1);
+			add.addLine("§awww.", "nestymc", ".com.br ", -1);
 		}
 
 		p.setScoreboard(score);

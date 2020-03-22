@@ -33,7 +33,7 @@ public class Sumo implements Listener {
 				if (p.getItemInHand().getType() == Material.APPLE) {
 					e.setCancelled(true);
 					if (kit_api.verifyCooldown() == true) {
-						p.sendMessage("§cAguarde, você está em cooldown!");
+						p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 						return;
 					}
 					p.setVelocity(p.getVelocity().setY(2.0D));

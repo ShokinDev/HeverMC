@@ -23,35 +23,35 @@ public class RegisterCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			LoginPlayer lp = new PlayerLoader(p).load().lp();
 			if (lp.isLogged()) {
-				p.sendMessage("§cVocê já está logado");
+				p.sendMessage("§e§lLOGIN §fVocê já está §4§lLOGADO§f!");
 			} else if (args.length < 3) {
-				p.sendMessage("§aVocê deve usar §e/register <senha> <senha novamente> <pin de segurança>");
+				p.sendMessage("§e§lLOGIN §fVocê deve usar §e/register <senha> <senha novamente> <pin de segurança>");
 			} else {
 				if (!args[0].equals(args[1])) {
-					p.sendMessage("§cAs senhas não são iguais!");
-				} else if (!isInt(args[2]) && args[2].length() != 4){
-					p.sendMessage("§cO pin deve ter no 4 digitos e apenas numeros!");
+					p.sendMessage("§e§lLOGIN §fAs senhas §4§lNÃO§f são iguais!");
+				} else if (!isInt(args[2]) && args[2].length() != 4) {
+					p.sendMessage("§e§lLOGIN §fO pin deve ter no §4§l4 DIGITOS§f e apenas numeros!");
 				} else if (lp.isRegistred()) {
-					p.sendMessage("§cVocê já está registrado, use /login <senha>!");
+					p.sendMessage("§e§lLOGIN §fVocê já está §a§lREGISTRADO§f, use /login <senha>!");
 				} else {
-					
+
 					lp.setPassword(args[0]);
 					lp.setPin(Integer.parseInt(args[2]));
 					lp.setLogged(true);
 					lp.update();
-					BarUtil.updateBar(p, "§a§l§k!!!§f§l AGORA VOCÊ ESTÁ §e§lAUTENTICADO §a§l§k!!!", 50);
-					p.sendMessage("§aVocê foi registrado com sucesso!");
-					ReflectionAPI.sendTitle(p, "§3§lAUTENTICADO", "§fAgora você está §alogado§f!", 15, 15,15);
+					BarUtil.updateBar(p, "§a§l§k!!!§f§l AGORA VOCÊ ESTÁ §3§lAUTENTICADO §a§l§k!!!", 50);
+					p.sendMessage("§e§lLOGIN §fVocê foi §a§lREGISTRADO§f com sucesso!");
+					ReflectionAPI.sendTitle(p, "§3§lAUTENTICADO", "§fAgora você está §alogado§f!", 15, 15, 15);
 
 					new BukkitRunnable() {
-						
+
 						@Override
 						public void run() {
 							if (!p.isOnline() || p == null) {
 								cancel();
 								return;
 							}
-							p.sendMessage("§aVocê está sendo conectado ao §blobby§f!");
+							p.sendMessage("§b§lCONNECT §fVocê está sendo conectado ao §b§lLOBBY§f!");
 							Authentication.getManager().getBungeeChannel().connect(p, "lobby");
 						}
 					}.runTaskTimer(Authentication.getInstance(), 15L, 15L);
@@ -59,7 +59,7 @@ public class RegisterCommand extends HeverCommand {
 						@Override
 						public void run() {
 							BarUtil.removeBar(p);
-	
+
 						}
 					}.runTaskLater(Authentication.getInstance(), 30L);
 				}

@@ -14,7 +14,7 @@ public class DiscordCommand extends HeverCommand {
 	public void execute(CommandSender sender, String[] args) {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
-			p.sendMessage(TextComponent.fromLegacyText("§eO discord do servidor é §3discord.hevermc.com.br§e!"));
+			p.sendMessage(TextComponent.fromLegacyText("§3§lDISCORD §fO discord do servidor é §Ahttps://discord.gg/VgbDwqS§f!"));
 		}
 	}
 

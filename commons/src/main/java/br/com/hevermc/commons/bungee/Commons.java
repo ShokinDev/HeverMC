@@ -18,9 +18,9 @@ public class Commons extends Plugin {
 	static Commons instance;
 
 	String[] bcs = { "O servidor está em fase §9§lBETA§f, bugs podem ocorrer.",
-			"Entre em nosso §3§lDISCORD§f para ficar atento a todas novidades: §ediscord.hevermc.com.br",
-			"Acompanhe nosso servidor no Twitter: §3§l@_HeverMC", "Tendo problemas com §4§lHACKERS§f? Utilize §c§l/report§f!",
-			"Ganhe §3§lCASH §fao jogar na §21.8§f!" };
+			"Entre em nosso §3§lDISCORD§f para ficar atento a todas novidades: §ahttps://discord.gg/VgbDwqS",
+			"Acompanhe nosso servidor no Twitter: §b@NestyMCNetwork",
+			"Tendo problemas com §4§lHACKERS§f? Utilize §c/report§f!", "Ganhe §3§lCASH §fao jogar na §21.8§f!" };
 
 	@Override
 	public void onEnable() {
@@ -38,17 +38,13 @@ public class Commons extends Plugin {
 				tk.get(0) + "," + tk.get(1) + "," + tk.get(2) + "," + tk.get(3) + "," + tk.get(4) + "," + tk.get(5)
 						+ "," + tk.get(6) + "," + tk.get(7) + "," + tk.get(8) + "," + tk.get(9));
 		getManager().getBackend().getRedis().set("tdpvp",
-				td.get(0) + "," 
-		+ td.get(1) + "," + td.get(2) + "," + td.get(3) + "," + td.get(4) + "," 
-						+ td.get(5)+ "," + 
-						td.get(6) + "," + td.get(7) + "," + td.get(8) + "," + td.get(9));
-		
-		
+				td.get(0) + "," + td.get(1) + "," + td.get(2) + "," + td.get(3) + "," + td.get(4) + "," + td.get(5)
+						+ "," + td.get(6) + "," + td.get(7) + "," + td.get(8) + "," + td.get(9));
+
 		getManager().getBackend().getRedis().set("rank",
-				rankO.get(0) + "," 
-		+ rankO.get(1) + "," + rankO.get(2) + "," + rankO.get(3) + "," + rankO.get(4) + "," 
-						+ rankO.get(5)+ "," + 
-						rankO.get(6) + "," + rankO.get(7) + "," + rankO.get(8) + "," + rankO.get(9));
+				rankO.get(0) + "," + rankO.get(1) + "," + rankO.get(2) + "," + rankO.get(3) + "," + rankO.get(4) + ","
+						+ rankO.get(5) + "," + rankO.get(6) + "," + rankO.get(7) + "," + rankO.get(8) + ","
+						+ rankO.get(9));
 
 		List<String> tkhg = getManager().getBackend().getSql().getTopFive("hg", "kills");
 		List<String> tdhg = getManager().getBackend().getSql().getTopFive("hg", "deaths");
@@ -58,15 +54,8 @@ public class Commons extends Plugin {
 						+ tkhg.get(5) + "," + tkhg.get(6) + "," + tkhg.get(7) + "," + tkhg.get(8) + "," + tkhg.get(9));
 
 		getManager().getBackend().getRedis().set("tdhg",
-				tdhg.get(0) + "," + 
-		tdhg.get(1) + "," + 
-		tdhg.get(2) + "," +
-		tdhg.get(3) + "," +
-		tdhg.get(4) + "," + tdhg.get(5) + "," + 
-		tdhg.get(6) + "," + 
-		tdhg.get(7) + "," + 
-		tdhg.get(8) + "," + 
-		tdhg.get(9));
+				tdhg.get(0) + "," + tdhg.get(1) + "," + tdhg.get(2) + "," + tdhg.get(3) + "," + tdhg.get(4) + ","
+						+ tdhg.get(5) + "," + tdhg.get(6) + "," + tdhg.get(7) + "," + tdhg.get(8) + "," + tdhg.get(9));
 		getProxy().getScheduler().schedule(this, new Runnable() {
 
 			@Override
@@ -79,17 +68,15 @@ public class Commons extends Plugin {
 				getManager().getBackend().getRedis().del("rank");
 
 				getManager().getBackend().getRedis().set("rank",
-						rankO.get(0) + "," 
-				+ rankO.get(1) + "," + rankO.get(2) + "," + rankO.get(3) + "," + rankO.get(4) + "," 
-								+ rankO.get(5)+ "," + 
-								rankO.get(6) + "," + rankO.get(7) + "," + rankO.get(8) + "," + rankO.get(9));
+						rankO.get(0) + "," + rankO.get(1) + "," + rankO.get(2) + "," + rankO.get(3) + "," + rankO.get(4)
+								+ "," + rankO.get(5) + "," + rankO.get(6) + "," + rankO.get(7) + "," + rankO.get(8)
+								+ "," + rankO.get(9));
 				getManager().getBackend().getRedis().set("tkpvp",
 						tk2.get(0) + "," + tk2.get(1) + "," + tk2.get(2) + "," + tk2.get(3) + "," + tk2.get(4) + ","
 								+ tk2.get(5) + "," + tk2.get(6) + "," + tk2.get(7) + "," + tk2.get(8) + ","
 								+ tk2.get(9));
 				getManager().getBackend().getRedis().set("tdpvp",
-						td2.get(0) + "," + td2.get(1) + "," + td2.get(2) + "," + td2.get(3) + "," + td2.get(4) + 
-						","
+						td2.get(0) + "," + td2.get(1) + "," + td2.get(2) + "," + td2.get(3) + "," + td2.get(4) + ","
 								+ td2.get(5) + "," + td2.get(6) + "," + td2.get(7) + "," + td2.get(8) + ","
 								+ td2.get(9));
 
@@ -136,7 +123,7 @@ public class Commons extends Plugin {
 
 				for (ProxiedPlayer all : Commons.getInstance().getProxy().getPlayers()) {
 					all.sendMessage(TextComponent.fromLegacyText(""));
-					all.sendMessage(TextComponent.fromLegacyText("§6§lHEVER§f§lMC §f» §f" + bcs[i]));
+					all.sendMessage(TextComponent.fromLegacyText("§a§lNESTY§f§lMC §f» §f" + bcs[i]));
 					all.sendMessage(TextComponent.fromLegacyText(""));
 				}
 

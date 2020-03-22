@@ -58,7 +58,7 @@ public class Deshfire implements Listener {
 				p.playSound(p.getLocation(), Sound.ANVIL_LAND, 2.0F, 2.0F);
 			}
 			if (kit.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 			p.setVelocity(p.getEyeLocation().getDirection().multiply(this.boost).add(new Vector(0, 0, 0)));
@@ -71,7 +71,7 @@ public class Deshfire implements Listener {
 					if (pvpp.isProtectArea()) {
 						return;
 					}
-					perto.sendMessage("§cUm deshfire passou por perto!");
+					perto.sendMessage("§e§lKIT §fUm §c§lDESHFIRE §fpassou por perto!");
 					((Player) pertos).damage(10.0D);
 					pertos.setVelocity(new Vector(0.1D, 0.0D, 0.1D));
 					((Player) pertos).setFireTicks(150);

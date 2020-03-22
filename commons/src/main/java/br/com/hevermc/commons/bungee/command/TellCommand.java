@@ -24,13 +24,13 @@ public class TellCommand extends HeverCommand implements TabExecutor {
 		if (isPlayer(sender)) {
 			ProxiedPlayer p = toPlayer(sender);
 			if (args.length < 2) {
-				p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/tell <alvo> <mensagem>"));
+				p.sendMessage(TextComponent.fromLegacyText("§e§lTELL §fVocê deve utilizar §b/tell <alvo> <mensagem>"));
 			} else {
 				ProxiedPlayer t = Commons.getInstance().getProxy().getPlayer(args[0]);
 				if (t == null) {
-					p.sendMessage(TextComponent.fromLegacyText("§cEsse jogador está offline."));
+					p.sendMessage(TextComponent.fromLegacyText("§e§lTELL §fEsse jogador está §4§lOFFLINE§f!"));
 				} else if (p.getName().equalsIgnoreCase(args[0])) {
-					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode enviar tell para sí mesmo."));
+					p.sendMessage(TextComponent.fromLegacyText("§e§lTELL §fVocê não pode enviar mensagem privada para §c§lVOCÊ MESMOf!"));
 				} else {
 					String message;
 					StringBuilder sb = new StringBuilder();
@@ -41,7 +41,7 @@ public class TellCommand extends HeverCommand implements TabExecutor {
 						Commons.getInstance().getProxy().getPlayers().forEach(ps -> {
 							HeverPlayer hp = toHeverPlayer(ps);
 							if (hp.groupIsLarger(Groups.MOD)) {
-								ps.sendMessage(TextComponent.fromLegacyText("§7[O jogador " + p.getName()
+								ps.sendMessage(TextComponent.fromLegacyText("§7§o[O jogador " + p.getName()
 										+ " tentou enviar \"" + message + "\" para " + t.getName() + "]"));
 							}
 						});

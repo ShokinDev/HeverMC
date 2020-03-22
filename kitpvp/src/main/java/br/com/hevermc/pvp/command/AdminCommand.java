@@ -1,5 +1,6 @@
 package br.com.hevermc.pvp.command;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
@@ -21,7 +22,7 @@ import br.com.hevermc.pvp.api.PvPPlayer;
 public class AdminCommand extends HeverCommand {
 
 	public AdminCommand() {
-		super("admin");
+		super("admin", Arrays.asList("adm", "v"));
 	}
 
 	HashMap<Player, ItemStack[]> items = new HashMap<Player, ItemStack[]>();
@@ -34,7 +35,7 @@ public class AdminCommand extends HeverCommand {
 				PvPPlayer pvp = new PlayerLoader(p).load().getPvPP();
 				if (pvp.isAdminMode()) {
 					pvp.setAdminMode(false);
-					p.sendMessage("§cVocê saiu do modo ADMIN!");
+					p.sendMessage("§4§lAMDIN §fVocê §c§lSAIU §fdo modo ADMIN!");
 					p.setGameMode(GameMode.SURVIVAL);
 					KitPvP.getManager().online.add(p);
 					p.getInventory().clear();
@@ -42,7 +43,7 @@ public class AdminCommand extends HeverCommand {
 						p.getInventory().setContents(items.get(p));
 						items.remove(p);
 					}
-					
+
 					Bukkit.getOnlinePlayers().forEach(all -> {
 						HeverPlayer hp = toHeverPlayer(all);
 						all.showPlayer(p);
@@ -52,7 +53,7 @@ public class AdminCommand extends HeverCommand {
 					});
 				} else {
 					pvp.setAdminMode(true);
-					p.sendMessage("§aVocê entrou no modo ADMIN!");
+					p.sendMessage("§4§lAMDIN §fVocê §a§lENTROU§f no modo ADMIN!");
 					p.sendMessage("§dVocê está invisivel para " + toHeverPlayer(p).getGroup().getName() + " abaixo!");
 					AdminAPI.hideInAdminMode(p);
 					items.put(p, p.getInventory().getContents());

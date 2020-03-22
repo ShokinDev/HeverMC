@@ -14,12 +14,12 @@ import br.com.hevermc.commons.bukkit.api.ItemConstructor;
 public class Servers {
 
 	public Servers(Player p) {
-		Inventory inv = Bukkit.createInventory(null, 3 * 9, "§eServidores");
+		Inventory inv = Bukkit.createInventory(null, 3 * 9, "§a§lServers");
 		inv.setItem(11,
 				new ItemConstructor(new ItemStack(Material.DIAMOND_SWORD), "§aKitPvP",
-						Arrays.asList("", " §fModo §a§lKITPVP §fcom §6SIMULATOR§f, ",
+						Arrays.asList("", " §fModo §a§lKITPVP §fcom §6§lSIMULATOR§f, ",
 								" §ftreine suas habilidade com nossa warp §c§lLAVA§F!", " ",
-								"§e" + Commons.getManager().getBackend().getRedis().get("kitpvp").replace("on:", "") + " §fjogando agora!")).create());
+								"§3" + Commons.getManager().getBackend().getRedis().get("kitpvp").replace("on:", "") + " §fjogando agora!")).create());
 
 		inv.setItem(13,
 				new ItemConstructor(new ItemStack(Material.IRON_FENCE), "§cGladiator",

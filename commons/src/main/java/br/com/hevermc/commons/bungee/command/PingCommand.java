@@ -21,21 +21,23 @@ public class PingCommand extends HeverCommand implements TabExecutor {
 	public void execute(CommandSender sender, String[] args) {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer player = (ProxiedPlayer) sender;
-			
+
 			if (args.length == 0) {
-				sender.sendMessage(TextComponent.fromLegacyText("§aSeu ping é de §e" + player.getPing() + " §ams!"));
+				sender.sendMessage(
+						TextComponent.fromLegacyText("§a§lPING §fO seu ping é de §a" + player.getPing() + "§fms!"));
 			} else if (args.length >= 1) {
 				ProxiedPlayer target = ProxyServer.getInstance().getPlayer(args[0]);
 				if (target == null) {
-					sender.sendMessage(TextComponent.fromLegacyText("§cEste jogador se encontra offline!"));
+					sender.sendMessage(
+							TextComponent.fromLegacyText("§a§lPING §fEste jogador se encontra §4§lOFFLINE§f!"));
 					return;
 				}
 				sender.sendMessage(TextComponent.fromLegacyText(
-						"§aO ping do jogador §e" + target.getName() + "§a é de §e" + target.getPing() + " §ams!"));
+						"§a§lPING §fO ping de §a " + target.getName() + " §fé de §a" + player.getPing() + "§fms!"));
 			}
 		}
 	}
-	
+
 	public Iterable<String> onTabComplete(CommandSender cs, String[] args) {
 		if ((args.length > 2) || (args.length == 0)) {
 			return ImmutableSet.of();

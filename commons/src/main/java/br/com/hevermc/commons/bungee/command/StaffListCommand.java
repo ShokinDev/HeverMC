@@ -21,7 +21,7 @@ public class StaffListCommand extends HeverCommand {
 		if (isPlayer(sender)) {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.MOD, true)) {
-				p.sendMessage(TextComponent.fromLegacyText("§aLista de staffers online: "));
+				p.sendMessage(TextComponent.fromLegacyText("§e§lSTAFF-LIST §fLista de §a§lSTAFFERS §fonline: "));
 				Commons.getInstance().getProxy().getPlayers().forEach(ps -> {
 					HeverPlayer hps = PlayerLoader.getHP(ps.getName());
 					if (hps.groupIsLarger(Groups.TRIAL)) {

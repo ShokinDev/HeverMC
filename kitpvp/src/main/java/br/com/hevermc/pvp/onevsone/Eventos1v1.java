@@ -37,7 +37,7 @@ public final class Eventos1v1 implements Listener {
 	public static ItemStack searchingItem() {
 		ItemStack i = new ItemStack(Material.INK_SACK, 1, (byte) 10);
 		ItemMeta ik = i.getItemMeta();
-		ik.setDisplayName("§e1v1 Rapido §7(§aProcurando§7)");
+		ik.setDisplayName("§b1v1 Rapido §7(§aProcurando§7)");
 		i.setItemMeta(ik);
 		return i;
 	}
@@ -45,7 +45,7 @@ public final class Eventos1v1 implements Listener {
 	public static ItemStack customItem() {
 		ItemStack i = new ItemStack(Material.IRON_FENCE, 1, (byte) 0);
 		ItemMeta ik = i.getItemMeta();
-		ik.setDisplayName("§e1v1 Customizado §7(§fClique§7)");
+		ik.setDisplayName("§b1v1 Customizado §7(§fClique§7)");
 		i.setItemMeta(ik);
 		return i;
 	}
@@ -53,7 +53,7 @@ public final class Eventos1v1 implements Listener {
 	public static ItemStack backItem() {
 		ItemStack i = new ItemStack(Material.INK_SACK, 1, (byte) 8);
 		ItemMeta ik = i.getItemMeta();
-		ik.setDisplayName("§e1v1 Rapido §7(§cProcurando§7)");
+		ik.setDisplayName("§b1v1 Rapido §7(§cProcurando§7)");
 		i.setItemMeta(ik);
 		return i;
 	}
@@ -65,12 +65,13 @@ public final class Eventos1v1 implements Listener {
 	public static UUID firstMatch;
 	public static UUID secondMatch;
 	public static UUID thirdMatch;
+
 	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onInteract(final PlayerInteractEvent e) {
 		final ItemStack i = e.getPlayer().getItemInHand();
 		if (i.getType() == Material.getMaterial(351)) {
-			if (i.getItemMeta().getDisplayName().equals("§e1v1 Rapido §7(§cProcurando§7)")) {
+			if (i.getItemMeta().getDisplayName().equals("§b1v1 Rapido §7(§cProcurando§7)")) {
 				e.getPlayer().updateInventory();
 				e.getPlayer().setItemInHand(searchingItem());
 				e.getPlayer().updateInventory();
@@ -87,12 +88,14 @@ public final class Eventos1v1 implements Listener {
 					playerfigh.put(findToChallenge, e.getPlayer().getName());
 					batalhando.put(e.getPlayer(), findToChallenge.getName());
 					batalhando.put(findToChallenge, e.getPlayer().getName());
-					e.getPlayer().sendMessage("§aJogador encontrado: " + findToChallenge.getName() + "!");
-					findToChallenge.sendMessage("§aJogador encontrado: " + e.getPlayer().getName() + "!");
+					e.getPlayer()
+							.sendMessage("§6§lFAST1V1 §fJogador encontrado §b§l" + findToChallenge.getName() + "§f!");
+					findToChallenge
+							.sendMessage("§6§lFAST1V1 §fJogador encontrado §b§l" + e.getPlayer().getName() + "§f!");
 					firstMatch = null;
 					secondMatch = null;
 				}
-			} else if (i.getItemMeta().getDisplayName().equals("§e1v1 Rapido §7(§aProcurando§7)")) {
+			} else if (i.getItemMeta().getDisplayName().equals("§b1v1 Rapido §7(§aProcurando§7)")) {
 				firstMatch = null;
 				secondMatch = null;
 				e.getPlayer().setItemInHand(backItem());
@@ -113,9 +116,9 @@ public final class Eventos1v1 implements Listener {
 
 		if (eplayer.getWarp() == Warps.ONEVSONE && challengedp.getWarp() == Warps.ONEVSONE) {
 			if (e.getPlayer().getItemInHand().getType() == Material.BLAZE_ROD) {
-				if (i.getItemMeta().getDisplayName().equals("§e1v1 Normal §7(§fClique§7)")) {
+				if (i.getItemMeta().getDisplayName().equals("§b1v1 Normal §7(§fClique§7)")) {
 					if (cooldown.contains(e.getPlayer())) {
-						e.getPlayer().sendMessage("§cAguarde para desafiar novamente!");
+						e.getPlayer().sendMessage("§6§l1v1 §fAguarde para §c§lDESAFIAR §fnovamente!");
 						return;
 					}
 					if (challenge.containsKey(challenged) && challenge.get(challenged) == e.getPlayer()) {
@@ -132,8 +135,10 @@ public final class Eventos1v1 implements Listener {
 						playerfigh.put(challenged, e.getPlayer().getName());
 						batalhando.put(challenged, e.getPlayer().getName());
 						batalhando.put(e.getPlayer(), challenged.getName());
-						challenged.sendMessage("§aO jogador: " + e.getPlayer().getName() + " aceitou seu desafio!");
-						e.getPlayer().sendMessage("§aVocê aceitou o desafio do jogador: " + challenged.getName() + "!");
+						challenged.sendMessage(
+								"§6§l1V1 §fO jogador §b§l" + e.getPlayer().getName() + " §faceitou seu desafio!");
+						e.getPlayer().sendMessage(
+								"§6§l1V1 §fVocê aceitou o desafio do jogador §b§l" + challenged.getName() + "§f!");
 						challenge.remove(challenged);
 						if (challenge.containsKey(e.getPlayer())) {
 							challenge.remove(e.getPlayer());
@@ -143,10 +148,10 @@ public final class Eventos1v1 implements Listener {
 					if (playerfigh.containsKey(challenged)) {
 						return;
 					}
-					e.getPlayer().sendMessage(
-							"§aVocê desafiou o jogador: " + challenged.getName() + " para um " + "1v1 normal!");
-					challenged.sendMessage("§aVocê foi desafiado pelo jogador: " + e.getPlayer().getName() + " para um "
-							+ "1v1 normal!");
+					e.getPlayer().sendMessage("§6§l1V1 §fVocê desafiou o jogador §b§l" + challenged.getName()
+							+ " §fpara um " + "1v1 normal!");
+					challenged.sendMessage("§6§l1V1 §fVocê foi desafiado pelo jogador §b§l" + e.getPlayer().getName()
+							+ " §fpara um " + "1v1 normal!");
 					cooldown.add(e.getPlayer());
 					challenge.put(e.getPlayer(), challenged);
 					Bukkit.getScheduler().runTaskLater(KitPvP.getInstance(), new Runnable() {
@@ -163,9 +168,9 @@ public final class Eventos1v1 implements Listener {
 				}
 			}
 			if (e.getPlayer().getItemInHand().getType() == Material.IRON_FENCE) {
-				if (i.getItemMeta().getDisplayName().equals("§e1v1 Customizado §7(§fClique§7)")) {
+				if (i.getItemMeta().getDisplayName().equals("§b1v1 Customizado §7(§fClique§7)")) {
 					if (cooldown.contains(e.getPlayer())) {
-						e.getPlayer().sendMessage("§cAguarde para desafiar novamente!");
+						e.getPlayer().sendMessage("§6§l1V1 §fAguarde para §c§lDESAFIAR§f novamente!");
 						return;
 					}
 					if (challengec.containsKey(challenged) && challengec.get(challenged) == e.getPlayer()) {
@@ -182,8 +187,10 @@ public final class Eventos1v1 implements Listener {
 						playerfigh.put(challenged, e.getPlayer().getName());
 						batalhando.put(challenged, e.getPlayer().getName());
 						batalhando.put(e.getPlayer(), challenged.getName());
-						challenged.sendMessage("§aO jogador: " + e.getPlayer().getName() + " aceitou o seu desafio!");
-						e.getPlayer().sendMessage("§aVocê aceitou o desafio do jogador: " + challenged.getName() + "!");
+						challenged.sendMessage(
+								"§6§l1V1 §fO jogador §b§l" + e.getPlayer().getName() + "§f aceitou o seu desafio!");
+						e.getPlayer().sendMessage(
+								"§6§l1V1 §fVocê aceitou o desafio do jogador §b§l" + challenged.getName() + "§f!");
 						challengec.remove(challenged);
 						if (challengec.containsKey(e.getPlayer())) {
 							challengec.remove(e.getPlayer());
@@ -246,7 +253,6 @@ public final class Eventos1v1 implements Listener {
 		}
 	}
 
-
 	public static final ArrayList<Player> cooldown = new ArrayList<>();
 	public static final HashMap<Player, Player> challenge = new HashMap<>();
 
@@ -285,7 +291,7 @@ public final class Eventos1v1 implements Listener {
 		if (p2.getWarp() == Warps.ONEVSONE && Combate1.contains(p) && event.getMessage().startsWith("/")) {
 
 			p.playSound(p.getLocation(), Sound.CLICK, 15.0F, 1.0F);
-			event.getPlayer().sendMessage("§cVocê não pode utilizar comandos na warp 1v1!");
+			p.sendMessage("§E§lKIT §fVocê não pode utilizar §c§lCOMANDOS §fdentro da §6§l1V1§f!");
 			event.setCancelled(true);
 		}
 	}
@@ -307,7 +313,7 @@ public final class Eventos1v1 implements Listener {
 	public static void defaultItens(Player p) {
 		p.getInventory().clear();
 		p.getInventory().setArmorContents(null);
-		p.getInventory().setItem(2, newItem(Material.BLAZE_ROD, "§e1v1 Normal §7(§fClique§7)", 1, (byte) 0));
+		p.getInventory().setItem(2, newItem(Material.BLAZE_ROD, "§b1v1 Normal §7(§fClique§7)", 1, (byte) 0));
 		p.getInventory().setItem(4, customItem());
 		p.getInventory().setItem(6, backItem());
 		p.updateInventory();

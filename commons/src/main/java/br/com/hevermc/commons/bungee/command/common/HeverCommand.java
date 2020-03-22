@@ -69,8 +69,7 @@ public abstract class HeverCommand extends Command {
 			return true;
 
 		if (b)
-			p.sendMessage(TextComponent.fromLegacyText(
-					"§cVocê precisa do grupo §c§l" + group.getName() + " §cou superior para executar este comando!"));
+			p.sendMessage(TextComponent.fromLegacyText("§4§lPERMISSÃO§f Você não possui §c§lPERMISSÃO§F!"));
 		return false;
 
 	}

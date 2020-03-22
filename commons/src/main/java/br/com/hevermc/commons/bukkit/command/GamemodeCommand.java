@@ -24,7 +24,7 @@ public class GamemodeCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			if (hasGroup(p, Groups.BUILDER, true)) {
 				if (args.length == 0) {
-					p.sendMessage("§aVocê deve usar §e/gamemode <survival|creative>!");
+					p.sendMessage("§b§lGAMEMODE §fVocê deve utilizar §b/gamemode <survival|creative>");
 				} else {
 					GameMode gamemode = null;
 					switch (args[0].toLowerCase()) {
@@ -54,16 +54,16 @@ public class GamemodeCommand extends HeverCommand {
 						break;
 					}
 					if (gamemode == null) {
-						p.sendMessage("§aVocê deve usar §e/gamemode <survival|creative>!");
+						p.sendMessage("§b§lGAMEMODE §fVocê deve utilizar §b/gamemode <survival|creative>");
 					} else if (gamemode == p.getGameMode()) {
-						p.sendMessage("§cVocê já está utilizando este gamemode.");
+						p.sendMessage("§b§lGAMEMODE §fVocê já está §4§lUTILIZANDO§f este gamemode.");
 					} else {
 						p.setGameMode(gamemode);
-						p.sendMessage("§aVocê alterou seu gamemode para §b" + gamemode.toString() + "§a!");
+						p.sendMessage("§b§lGAMEMODE §fVocê §a§lALTEROU§f seu gamemode para §b§l" + gamemode.toString() + "§a!");
 						Bukkit.getOnlinePlayers().forEach(online_players -> {
 							HeverPlayer hp = PlayerLoader.getHP(online_players.getName());
 							if (hp.groupIsLarger(Groups.GERENTE))
-								online_players.sendMessage("§c[O staffer " + p.getName() + " alterou seu gamemode para "
+								online_players.sendMessage("§7§o[O staffer " + p.getName() + " alterou seu gamemode para "
 										+ p.getGameMode().toString() + "]");
 
 						});

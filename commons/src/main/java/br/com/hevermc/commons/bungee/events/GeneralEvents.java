@@ -38,11 +38,11 @@ public class GeneralEvents implements Listener {
 		if (Commons.getManager().isMaintenance()) {
 
 			sp.setDescription(
-					"          §4◄   §6§lHever§f§lMC §4♦ §7(§f1.7.X §7| §f1.15.X§7)   §4►\n   §4﹃ §4﹄ §7Os §6servidores §7estão em §Cmanutenção §4﹃ §4﹄");
+					"          §4◄   §a§lNESTY§f§lMC §4♦ §7(§f1.7.X §7| §f1.15.X§7)   §4►\n   §4﹃ §4﹄ §7Os §6servidores §7estão em §Cmanutenção §4﹃ §4﹄");
 		} else {
 
 			sp.setDescription(
-					"           §a►  §6§lHever§f§lMC §a♦ §7(§f1.7.X §7| §f1.15.X§7)  §a◄\n         §a﹃ §a﹄ §7Servidor em fase §9§lBETA §a﹃ §a﹄");
+					"           §a►  §a§lNESTY§f§lMC §a♦ §7(§f1.7.X §7| §f1.15.X§7)  §a◄\n         §a﹃ §a﹄ §7Servidor em fase §9§lBETA §a﹃ §a﹄");
 		}
 		sp.getPlayers().setSample(null);
 		sp.getPlayers().setMax(2020);
@@ -51,6 +51,11 @@ public class GeneralEvents implements Listener {
 
 	public static HashMap<String, Date> segs = new HashMap<String, Date>();
 	public static ArrayList<String> bypass = new ArrayList<String>();
+	public static ArrayList<String> bypass2 = new ArrayList<String>();
+
+	public static HashMap<String, Integer> checks = new HashMap<String, Integer>();
+	public static ArrayList<String> bypass3 = new ArrayList<String>();
+
 	public static ArrayList<String> cooldown = new ArrayList<String>();
 	public static ArrayList<String> qs = new ArrayList<String>();
 	public static ArrayList<String> ip = new ArrayList<String>();
@@ -66,7 +71,7 @@ public class GeneralEvents implements Listener {
 		if (Commons.getManager().isMaintenance()) {
 			if (!hp.groupIsLarger(Groups.TRIAL)) {
 				e.setCancelReason("§4§lWHITELIST\n\n§fEstamos em manutenção, tente novamente mais tarde!"
-						+ "\n\n§fEntre em nosso §3§lDISCORD§f!\n§ediscord.hevermc.com.br");
+						+ "\n\n§fEntre em nosso §3§lDISCORD§f!\n§ahttps://discord.gg/VgbDwqS");
 				e.setCancelled(true);
 			}
 		}
@@ -81,7 +86,7 @@ public class GeneralEvents implements Listener {
 					+ (hp.getBan_time() > 0 ? "temporariamente" : "permanentemente") + "!\n\n§fMotivo: §c"
 					+ hp.getBan_reason() + "\n§fPor: " + hp.getBan_author()
 					+ (hp.getBan_time() > 0 ? "\n§fAté: " + DateUtil.formatDifference(hp.getBan_time()) : "")
-					+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ediscord.hevermc.com.br");
+					+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ahttps://discord.gg/VgbDwqS");
 			e.setCancelled(true);
 		}
 	}
@@ -95,10 +100,10 @@ public class GeneralEvents implements Listener {
 		}
 		if (!bypass.contains(e.getConnection().getName())) {
 			if (!segs.containsKey(e.getConnection().getName())) {
-				e.setCancelReason("§cAguarde 10 segundos e tente novamente!");
+				e.setCancelReason("§cAguarde 3 segundos e tente novamente!");
 				e.setCancelled(true);
 				Calendar c = Calendar.getInstance();
-				c.add(Calendar.SECOND, 10);
+				c.add(Calendar.SECOND, 3);
 				segs.put(e.getConnection().getName(), c.getTime());
 				return;
 			} else {
@@ -111,19 +116,41 @@ public class GeneralEvents implements Listener {
 					return;
 				} else {
 					bypass.add(e.getConnection().getName());
+					bypass2.add(e.getConnection().getName());
 				}
 			}
 		}
-		if (!verificando.contains(e.getConnection().getName())) {
-			verificando.add(e.getConnection().getName());
-			e.setCancelReason("§6§lHEVER§f§lMC\n§f\n§aVocê foi verificado!\n§fEntre novamente!\n§f\n§ahevermc.com.br");
-			e.setCancelled(true);
-			return;
+		if (premium.containsKey(e.getConnection().getName()) && premium.get(e.getConnection().getName()) == 0) {
+			if (!bypass3.contains(e.getConnection().getName())) {
+				if (!bypass2.contains(e.getConnection().getName())) {
+					if (!verificando.contains(e.getConnection().getName())) {
+						if (checks.containsKey(e.getConnection().getName())) {
+							checks.put(e.getConnection().getName(), checks.get(e.getConnection().getName()) + 1);
+						} else {
+							checks.put(e.getConnection().getName(), 1);
+						}
+
+						if (checks.get(e.getConnection().getName()) > 2) {
+							bypass3.add(e.getConnection().getName());
+							return;
+						}
+
+						verificando.add(e.getConnection().getName());
+
+						e.setCancelReason("§a§lNESTY§f§lMC\n§f\n§aVocê foi verificado!\n§fEntre novamente!");
+						e.setCancelled(true);
+
+						return;
+					}
+				} else {
+					bypass2.remove(e.getConnection().getName());
+				}
+			}
 		}
 		if (cooldown.contains(e.getConnection().getName().toLowerCase())) {
 			e.setCancelled(true);
 			e.setCancelReason(
-					"§6§lHEVER§f§lMC\n§f\n§fSua conta ainda não foi descarregada da ultima vez em que você logou \n§fno servidor, tente novamente!\n§f\n§ahevermc.com.br");
+					"§a§lNESTY§f§lMC\n§f\n§fSua conta ainda não foi descarregada da ultima vez em que você logou \n§fno servidor, tente novamente!\n§f");
 			return;
 		}
 		if (!premium.containsKey(e.getConnection().getName())) {
@@ -204,7 +231,7 @@ public class GeneralEvents implements Listener {
 			Commons.getInstance().getProxy().getPlayers().forEach(alls -> {
 				HeverPlayer hp_all = PlayerLoader.getHP(alls.getName());
 				if (hp_all.groupIsLarger(Groups.YOUTUBERPLUS))
-					alls.sendMessage(TextComponent.fromLegacyText("§e§l[STAFF-CHAT] §f"
+					alls.sendMessage(TextComponent.fromLegacyText("§e§l[SC] §f"
 							+ Tags.getTags(hp.getGroup()).getPrefix() + " " + Tags.getTags(hp.getGroup()).getColor()
 							+ p.getName() + " §7» §f" + e.getMessage()));
 			});
@@ -242,7 +269,7 @@ public class GeneralEvents implements Listener {
 		}
 		if (message.contains("kitpvpEvent")) {
 			TextComponent msg_a = new TextComponent(
-					"§6§lHEVER§f§lMC §7» §fUm evento foi iniciado no KitPvP, entre clicando aqui e use §e/evento §fdentro do servidor!");
+					"§a§lNESTY§f§lMC §7» §fUm evento foi iniciado no KitPvP, entre clicando aqui e use §e/evento §fdentro do servidor!");
 			msg_a.setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/connect kitpvp"));
 			Commons.getInstance().getProxy().getPlayers().forEach(all -> {
 				all.sendMessage(msg_a);

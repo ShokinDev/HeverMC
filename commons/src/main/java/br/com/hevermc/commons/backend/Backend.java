@@ -19,7 +19,7 @@ public class Backend {
 	public Backend() {
 		if (bukkit == true) {
 			try {
-				redis = new Redis("191.232.247.83", 6379);
+				redis = new Redis("localhost", 6379);
 				log("Redis conectado!");
 			} catch (Exception e) {
 				log("Redis não conectado!");
@@ -27,7 +27,7 @@ public class Backend {
 		} else if (bungee = true) {
 			try {
 				sql = new SQLManager();
-				redis = new Redis("191.232.247.83", 6379);
+				redis = new Redis("localhost", 6379);
 				log("Redis & SQL conectados!");
 			} catch (Exception e) {
 				log("Redis & SQL não conectados!");

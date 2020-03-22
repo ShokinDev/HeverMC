@@ -1,11 +1,11 @@
 package br.com.hevermc.pvp.listeners.kits;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import br.com.hevermc.pvp.KitPvP;
@@ -26,23 +26,24 @@ public class Anchor implements Listener {
 				p.setVelocity(new Vector());
 				k.setVelocity(new Vector());
 				k.playSound(k.getLocation(), Sound.ANVIL_BREAK, 0.5F, 0.5F);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), (Runnable) new Runnable() {
+				new BukkitRunnable() {
+			
 					public void run() {
 						p.setVelocity(new Vector());
 					}
-				}, 1L);
+				}.runTaskLater(KitPvP.getInstance(), 1l);
 				return;
 			}
 			kit_api.setPlayer(k);
 			if (kit_api.usingKit()) {
 				k.setVelocity(new Vector());
 				k.playSound(k.getLocation(), Sound.ANVIL_BREAK, 0.5F, 0.5F);
-				Bukkit.getScheduler().scheduleSyncDelayedTask(KitPvP.getInstance(), (Runnable) new Runnable() {
+				new BukkitRunnable() {
 					public void run() {
 						p.setVelocity(new Vector());
 						k.setVelocity(new Vector());
 					}
-				}, 1L);
+				}.runTaskLater(KitPvP.getInstance(), 1l);
 				return;
 			}
 		}

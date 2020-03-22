@@ -13,7 +13,7 @@ import br.com.hevermc.commons.enums.Ranks;
 public class SQLManager extends SQL {
 
 	public SQLManager() {
-		super("191.232.235.215", 3306, "u37_gl4UEFeVDB", "9twa2TibYW9vGv7TpeoJ5tCC", "s37_gta");
+		super("localhost", 3306, "nesty90", "eusguri2402", "nesty");
 		tables();
 	}
 

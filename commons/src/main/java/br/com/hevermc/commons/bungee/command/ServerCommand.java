@@ -25,17 +25,20 @@ public class ServerCommand extends HeverCommand implements TabExecutor {
 			if (!p.getServer().getInfo().getName().equals("login")
 					&& !p.getServer().getInfo().getName().equals("screenshare")) {
 				if (args.length == 0) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve utilizar §e/server <servidor>"));
+					p.sendMessage(
+							TextComponent.fromLegacyText("§b§lCONNECT §fVocê deve utilizar §b/server <servidor>"));
 				} else {
 					if (Commons.getInstance().getProxy().getServerInfo(args[0]) == null) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste servidor não existe!"));
+						p.sendMessage(TextComponent.fromLegacyText("§b§lCONNECT §fEste servidor §4§lNÃO §fexiste!"));
 					} else if (args[0].equalsIgnoreCase("screenshare") && !requiredGroup(p, Groups.MODGC, false)) {
 					} else {
 						if (Commons.getInstance().getProxy().getServerInfo(args[0]) == p.getServer().getInfo()) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê já está conectado neste servidor!"));
-						} else {
 							p.sendMessage(TextComponent
-									.fromLegacyText("§aTe conectando até §e" + args[0].toUpperCase() + " §a!"));
+									.fromLegacyText("§b§lCONNECT §fVocê já está §c§lCONECTADO §fneste servidor!"));
+						} else {
+							p.sendMessage(TextComponent.fromLegacyText("§b§lCONNECT §fVocê está sendo conectado ao §b§l"
+									+ Commons.getInstance().getProxy().getServerInfo(args[0]).getName().toUpperCase()
+									+ "§f!"));
 							p.connect(Commons.getInstance().getProxy().getServerInfo(args[0]));
 
 						}

@@ -8,6 +8,7 @@ import br.com.hevermc.commons.bungee.account.HeverPlayer;
 import br.com.hevermc.commons.bungee.account.loader.PlayerLoader;
 import br.com.hevermc.commons.bungee.command.common.HeverCommand;
 import br.com.hevermc.commons.enums.Groups;
+import br.com.hevermc.commons.enums.Tags;
 import net.md_5.bungee.api.CommandSender;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -31,25 +32,27 @@ public class GroupSetCommand extends HeverCommand implements TabExecutor {
 			if (requiredGroup(p, Groups.GERENTE, true)) {
 				if (args.length < 2) {
 
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/groupset <nickname> <grupo>"));
+					p.sendMessage(
+							TextComponent.fromLegacyText("§6§lGROUP §fVocê deve usar §b/groupset <nickname> <grupo>"));
 				} else {
 					Groups togroup = Groups.getGroup(args[1]);
 					HeverPlayer htarget;
 					if (!(args[0].length() > 16)) {
 						htarget = PlayerLoader.getHP(args[0]);
 					} else {
-						p.sendMessage(TextComponent.fromLegacyText("§cNickname inválido!"));
+						p.sendMessage(TextComponent.fromLegacyText("§6§lGROUP §fEste nickname é §4§lINVALIDO§f!"));
 						return;
 					}
 					if (togroup == null) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste grupo não existe!"));
-					}else
-					if (!hp.groupIsLarger(togroup)) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste grupo é maior que o seu!"));
+						p.sendMessage(TextComponent.fromLegacyText("§6§lGROUP §fEste grupo §4§lNÃO §fexiste!"));
+					} else if (!hp.groupIsLarger(togroup)) {
+						p.sendMessage(TextComponent.fromLegacyText("§6§lGROUP §fEste grupo é §c§lMAIOR §fque o seu!"));
 					} else if (!hp.groupIsLarger(htarget.getGroup())) {
-						p.sendMessage(TextComponent.fromLegacyText("§cEste jogador possui um cargo maior que o seu!"));
+						p.sendMessage(TextComponent
+								.fromLegacyText("§6§lGROUP §fEste jogador possui um cargo §c§lMAIOR§f que o seu!"));
 					} else if (args[0].equalsIgnoreCase(p.getName())) {
-						p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode alterar seu propío grupo!"));
+						p.sendMessage(TextComponent
+								.fromLegacyText("§6§lGROUP §fVocê §4§lNÃO§f pode alterar seu propío grupo!"));
 					} else {
 						ProxiedPlayer t = Commons.getInstance().getProxy().getPlayer(args[0]);
 						if (t != null) {
@@ -58,16 +61,16 @@ public class GroupSetCommand extends HeverCommand implements TabExecutor {
 							htarget.update();
 							Commons.getManager().getBackend().getRedis()
 									.set(htarget.getName().toLowerCase() + ":update", "all");
-							p.sendMessage(
-									TextComponent.fromLegacyText("§aVocê alterou o cargo de §b" + htarget.getName()
-											+ " §apara §b" + htarget.getGroup().getName() + " §acom sucesso!"));
+							p.sendMessage(TextComponent.fromLegacyText("§6§lGROUP §fVocê alterou o cargo de §b§l"
+									+ htarget.getName() + " §fpara " + Tags.getTags(htarget.getGroup()).getColor()
+									+ htarget.getGroup().getName() + " §fcom sucesso!"));
 						} else {
 							htarget.setGroup(togroup);
 							htarget.setGroupExpireIn(0);
 							htarget.update();
-							p.sendMessage(
-									TextComponent.fromLegacyText("§aVocê alterou o cargo de §b" + htarget.getName()
-											+ " §apara §b" + htarget.getGroup().getName() + " §acom sucesso!"));
+							p.sendMessage(TextComponent.fromLegacyText("§6§lGROUP §fVocê alterou o cargo de §b§l"
+									+ htarget.getName() + " §fpara " + Tags.getTags(htarget.getGroup()).getColor()
+									+ htarget.getGroup().getName() + " §fcom sucesso!"));
 						}
 						Commons.getInstance().getProxy().getPlayers().forEach(players -> {
 							HeverPlayer t2 = PlayerLoader.getHP(players.getName());

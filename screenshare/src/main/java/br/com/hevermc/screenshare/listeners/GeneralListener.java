@@ -1,5 +1,6 @@
 package br.com.hevermc.screenshare.listeners;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -45,8 +46,7 @@ public class GeneralListener implements Listener {
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		e.setQuitMessage("§c" + e.getPlayer().getName() + " desconectou-se da screenshare!");
-		br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.unload(e.getPlayer().getName());
+		Bukkit.broadcastMessage("§c" + e.getPlayer().getName() + " desconectou-se da screenshare!");
 	}
 
 	@EventHandler

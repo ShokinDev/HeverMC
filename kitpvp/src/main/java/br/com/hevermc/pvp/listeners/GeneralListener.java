@@ -79,11 +79,14 @@ public class GeneralListener implements Listener {
 		p.setAllowFlight(false);
 		p.getInventory().clear();
 		p.getInventory().setArmorContents(null);
-		p.getInventory().setItem(3,
-				new ItemConstructor(new ItemStack(Material.CHEST), "§eSeletor de kits §7(Abra com o botão direito)")
+		p.getInventory().setItem(0,
+				new ItemConstructor(new ItemStack(Material.CHEST), "§aSeletor de kits §7(Abra com o botão direito)")
 						.create());
-		p.getInventory().setItem(5,
-				new ItemConstructor(new ItemStack(Material.COMPASS), "§eWarps §7(Abra com o botão direito)").create());
+		p.getInventory().setItem(1,
+				new ItemConstructor(new ItemStack(Material.CHEST), "§aSeletor de kits 2 §7(Abra com o botão direito)")
+						.create());
+		p.getInventory().setItem(4,
+				new ItemConstructor(new ItemStack(Material.COMPASS), "§aWarps §7(Abra com o botão direito)").create());
 		new ScoreboardManager().build(p);
 		p.teleport(p.getWorld().getSpawnLocation());
 		KitPvP.getManager().online.add(p);
@@ -99,37 +102,37 @@ public class GeneralListener implements Listener {
 	public void onSign(SignChangeEvent e) {
 		if (e.getLine(0).equalsIgnoreCase("soup")) {
 			e.setLine(0, "");
-			e.setLine(1, "§6§lHEVER§f§lMC");
+			e.setLine(1, "§a§lNESTY§f§lMC");
 			e.setLine(2, "§eSopas");
 			e.setLine(3, "");
 			sign.add(e.getBlock());
 		} else if (e.getLine(0).equalsIgnoreCase("recraft")) {
 			e.setLine(0, "");
-			e.setLine(1, "§6§lHEVER§f§lMC");
+			e.setLine(1, "§a§lNESTY§f§lMC");
 			e.setLine(2, "§eRecraft");
 			e.setLine(3, "");
 			sign.add(e.getBlock());
 		} else if (e.getLine(0).equalsIgnoreCase("lfacil")) {
 			e.setLine(0, "");
-			e.setLine(1, "§6§lHEVER§f§lMC");
+			e.setLine(1, "§a§lNESTY§f§lMC");
 			e.setLine(2, "§aFacil");
 			e.setLine(3, "");
 			sign.add(e.getBlock());
 		} else if (e.getLine(0).equalsIgnoreCase("lmedio")) {
 			e.setLine(0, "");
-			e.setLine(1, "§6§lHEVER§f§lMC");
+			e.setLine(1, "§a§lNESTY§f§lMC");
 			e.setLine(2, "§eMedio");
 			e.setLine(3, "");
 			sign.add(e.getBlock());
 		} else if (e.getLine(0).equalsIgnoreCase("ldificil")) {
 			e.setLine(0, "");
-			e.setLine(1, "§6§lHEVER§f§lMC");
+			e.setLine(1, "§a§lNESTY§f§lMC");
 			e.setLine(2, "§cDificil");
 			e.setLine(3, "");
 			sign.add(e.getBlock());
 		} else if (e.getLine(0).equalsIgnoreCase("lextremo")) {
 			e.setLine(0, "");
-			e.setLine(1, "§6§lHEVER§f§lMC");
+			e.setLine(1, "§a§lNESTY§f§lMC");
 			e.setLine(2, "§4Extremo");
 			e.setLine(3, "");
 			sign.add(e.getBlock());
@@ -152,7 +155,7 @@ public class GeneralListener implements Listener {
 
 		if (hp.isCombat()) {
 			PvPPlayer pvp = new PlayerLoader(hp.getInCombat()).load().getPvPP();
-			hp.getInCombat().sendMessage("§cSeu adversario deslogou em combate.");
+			hp.getInCombat().sendMessage("§4§lCOMBATLOG §fSeu adversario §c§lDESLOGOU §fem combate!");
 
 			if (KitPvP.getManager().inEvent.contains(p)
 					&& KitPvP.getManager().killsInEvent.containsKey(hp.getInCombat())) {
@@ -172,8 +175,8 @@ public class GeneralListener implements Listener {
 				Eventos1v1.firstMatch = null;
 			}
 			int xp = 2 + new Random().nextInt(10);
-			hp.getInCombat().sendMessage("§aVocê matou §e" + name + "§a!");
-			hp.getInCombat().sendMessage("§aForam adicionados §e" + xp + " §aXPS na sua conta!");
+			hp.getInCombat().sendMessage("§4§lKILL §fVocê matou §c" + name + "§f!");
+			hp.getInCombat().sendMessage("§4§lKILL §fForam adicionados §3" + xp + " XPS §fna sua conta!");
 			hp3.setXp(xp);
 			if (pvp.getWarp() == br.com.hevermc.pvp.enums.Warps.ONEVSONE) {
 				Eventos1v1.fighting.remove(hp.getInCombat());
@@ -199,11 +202,11 @@ public class GeneralListener implements Listener {
 					Eventos1v1.batalhando.remove(hp.getInCombat());
 				}
 
-				hp.getInCombat().sendMessage("§aVocê venceu o duelo contra §e" + p.getName() + " §acom: §e"
-						+ Eventos1v1.cora(hp.getInCombat()) + " corações §ae §e" + sopsK + " §asopas restantes!");
+				hp.getInCombat().sendMessage("§4§lKILL §fVocê venceu o duelo contra §3" + p.getName() + " §acom §3"
+						+ Eventos1v1.cora(hp.getInCombat()) + " corações §fe §3" + sopsK + " §fsopas restantes!");
 				hp.getInCombat().playSound(hp.getInCombat().getLocation(), Sound.ENDERDRAGON_GROWL, 2.0F, 1.0F);
-				p.sendMessage("§a" + hp.getInCombat().getName() + " §evenceu§a o §e1v1 §acom §e"
-						+ Eventos1v1.cora(hp.getInCombat()) + " corações§a e §e" + sopsK + " §asopas restantes!");
+				p.sendMessage("§4§lKILL §f" + hp.getInCombat().getName() + " §3venceu§f o §e1v1 §fcom §3"
+						+ Eventos1v1.cora(hp.getInCombat()) + " corações§f e §3" + sopsK + " §fsopas restantes!");
 				p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 2.0F, 1.0F);
 				hp.getInCombat().setHealth(20);
 				pvp.setCombat(false);
@@ -240,8 +243,9 @@ public class GeneralListener implements Listener {
 			if (new Location(e.getFrom().getWorld(), e.getFrom().getX(), e.getFrom().getY() - 1, e.getFrom().getZ())
 					.getBlock().getType() == Material.GRASS && pvpp.isProtectArea()) {
 				pvpp.setProtectArea(false);
-				p.sendMessage("§cVocê perdeu sua proteção.");
-				if (pvpp.getKit() == Kits.NENHUM)
+				p.sendMessage("§c§lPVP §fVocê perdeu sua §c§lPROTEÇÃO§f!");
+				pvpp.setKits(p);
+				if (pvpp.getKit() == Kits.NENHUM && pvpp.getKit2() == Kits.NENHUM)
 					pvpp.setKit(p, Kits.PVP);
 			}
 		} else if (pvpp.getWarp() == br.com.hevermc.pvp.enums.Warps.FPS) {
@@ -249,7 +253,7 @@ public class GeneralListener implements Listener {
 					.getBlock().getType() == Material.QUARTZ_BLOCK) {
 				if (pvpp.isProtectArea()) {
 					pvpp.setProtectArea(false);
-					p.sendMessage("§cVocê perdeu sua proteção.");
+					p.sendMessage("§c§lPVP §fVocê perdeu sua §c§lPROTEÇÃO§f!");
 					if (pvpp.getKit() != Kits.FPS)
 						pvpp.setKit(p, Kits.FPS);
 				}
@@ -286,10 +290,10 @@ public class GeneralListener implements Listener {
 				}
 			}
 			if (target == null) {
-				p.sendMessage("§cNão há jogadores em pvp!");
+				p.sendMessage("§4§lADMIN §fNão há jogadores em §3§lPVP§f!");
 			} else {
 				p.teleport(target);
-				p.sendMessage("§aVocê foi até §e" + target.getName() + "§a!");
+				p.sendMessage("§4§lADMIN §fVocê foi até §b" + target.getName() + "§f!");
 			}
 		}
 
@@ -380,7 +384,13 @@ public class GeneralListener implements Listener {
 						p.getInventory().remove(Material.BOWL);
 				}
 			} else if (e.getMaterial() == Material.CHEST) {
-				new Selector(p, 1);
+				if (e.getItem().getItemMeta().getDisplayName()
+						.equalsIgnoreCase("§aSeletor de kits §7(Abra com o botão direito)")) {
+					new Selector(p, 1, 1);
+				} else if (e.getItem().getItemMeta().getDisplayName()
+						.equalsIgnoreCase("§aSeletor de kits 2 §7(Abra com o botão direito)")) {
+					new Selector(p, 1, 2);
+				}
 			} else if (e.getMaterial() == Material.COMPASS && pvp.getWarp() == br.com.hevermc.pvp.enums.Warps.SPAWN) {
 				if (pvp.isProtectArea() && pvp.getKit() == Kits.NENHUM) {
 					new Warps(p);
@@ -398,10 +408,10 @@ public class GeneralListener implements Listener {
 						}
 					}
 					if (target == null) {
-						p.sendMessage("§cNenhum jogador encontrado!");
+						p.sendMessage("§3§lBUSSOLA §fNenhum jogador encontrado, apontando para o §3§lSPAWN§f!");
 						p.setCompassTarget(p.getWorld().getSpawnLocation());
 					} else {
-						p.sendMessage("§eBússola apontando para §a" + target.getName());
+						p.sendMessage("§3§lBUSSOLA §FSua bússola apontando para §3§l" + target.getName() + "§f!");
 						p.setCompassTarget(target.getLocation());
 
 					}
@@ -464,9 +474,9 @@ public class GeneralListener implements Listener {
 			int xp = 2 + new Random().nextInt(10);
 			hpkiller.setXp(hpkiller.getXp() + xp);
 
-			p.sendMessage("§cVocê morreu para " + killer.getName());
-			killer.sendMessage("§aVocê matou " + p.getName());
-			killer.sendMessage("§aForam adicionados §e" + xp + " §aXPS na sua conta!");
+			p.sendMessage("§4§lKILL §fVocê morreu para §b" + killer.getName() + "§f!");
+			killer.sendMessage("§4§lKILL §fVocê matou §b" + p.getName() + "§f!");
+			killer.sendMessage("§4§lKILL §fForam adicionados §b" + xp + " §fXPS na sua conta!");
 
 			pvpp.setCombat(false);
 			pvpkiller.setCombat(false);
@@ -498,11 +508,11 @@ public class GeneralListener implements Listener {
 					Eventos1v1.batalhando.remove(k2);
 				}
 
-				k2.sendMessage("§aVocê venceu o duelo contra §e" + p.getName() + " §acom: §e" + Eventos1v1.cora(k2)
-						+ " corações §ae §e" + sopsK + " §asopas restantes!");
+				k2.sendMessage("§4§lKILL §fVocê venceu o duelo contra §3" + p.getName() + " §acom §3"
+						+ Eventos1v1.cora(k2) + " corações §fe §3" + sopsK + " §fsopas restantes!");
 				k2.playSound(k2.getLocation(), Sound.ENDERDRAGON_GROWL, 2.0F, 1.0F);
-				p.sendMessage("§a" + k2.getName() + " §evenceu§a o §e1v1 §acom §e" + Eventos1v1.cora(k2)
-						+ " corações§a e §e" + sopsK + " §asopas restantes!");
+				p.sendMessage("§4§lKILL §f" + k2.getName() + " §3venceu§f o §e1v1 §fcom §3" + Eventos1v1.cora(k2)
+						+ " corações§f e §3" + sopsK + " §fsopas restantes!");
 				p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 2.0F, 1.0F);
 				AdminAPI.hideInAdminMode(k2);
 				AdminAPI.hideInAdminMode(p);
@@ -563,57 +573,167 @@ public class GeneralListener implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		if (e.getInventory().getName().startsWith("§eSeletor de Kits")) {
+		if (e.getInventory().getName().startsWith("§aSeletor de Kits")) {
 			e.setCancelled(true);
-			if (e.getCurrentItem() == null || e.getCurrentItem().getType() == Material.AIR)
-				return;
-
-			if (e.getCurrentItem().getType() == Material.COMPASS) {
-				p.closeInventory();
-				new Warps(p);
-			}
-			if (e.getInventory().getName().equalsIgnoreCase("§eSeletor de Kits §7(1/3)")) {
+			if (e.getInventory().getName().equalsIgnoreCase("§aSeletor de Kits 1 §7(1/3)")) {
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§7Página anterior")) {
+					return;
+				}
 				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§aPróxima página")) {
 					p.closeInventory();
-					new Selector(p, 2);
-				} else if (e.getCurrentItem().getType() == Material.COMPASS) {
-					p.closeInventory();
-					new Warps(p);
+					new Selector(p, 2, 1);
+					return;
 				}
-			} else if (e.getInventory().getName().equalsIgnoreCase("§eSeletor de Kits §7(2/3)")) {
-				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§7Página anterior")) {
-					p.closeInventory();
-					new Selector(p, 1);
-				} else if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§aPróxima página")) {
-					p.closeInventory();
-					new Selector(p, 3);
-				} else if (e.getCurrentItem().getType() == Material.COMPASS) {
-					p.closeInventory();
-					new Warps(p);
-				}
-			} else if (e.getInventory().getName().equalsIgnoreCase("§eSeletor de Kits §7(3/3)")) {
-				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§7Página anterior")) {
-					p.closeInventory();
-					new Selector(p, 2);
-				} else if (e.getCurrentItem().getType() == Material.COMPASS) {
-					p.closeInventory();
-					new Warps(p);
-				}
-			}
-			for (Kits kits : Kits.values()) {
-				if (kits.getMaterial() != Material.AIR) {
-					if (kits.getMaterial() == e.getCurrentItem().getType()) {
-						p.closeInventory();
-						e.setCancelled(true);
-						pvp.setKit(p, kits);
+				if (e.getCurrentItem().getType() != Material.AIR) {
+
+					if (pvp.getKit() != Kits.NENHUM) {
+						p.sendMessage("§e§lKIT §fVocê já está §a§lUTILIZANDO§f um kit!");
+						return;
+					}
+					for (Kits kits : Kits.values()) {
+						if (kits.getMaterial() == e.getCurrentItem().getType()) {
+
+							pvp.setKit(kits);
+							p.closeInventory();
+							p.sendMessage("§e§lKIT §fVocê selecionou o kit §b§l" + kits.getName() + "§f!");
+
+						}
 					}
 				}
+			} else if (e.getInventory().getName().equalsIgnoreCase("§aSeletor de Kits 1 §7(2/3)")) {
+
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§7Página anterior")) {
+					new Selector(p, 1, 1);
+					return;
+				}
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§aPróxima página")) {
+					p.closeInventory();
+					new Selector(p, 3, 1);
+					return;
+				}
+				if (e.getCurrentItem().getType() != Material.AIR) {
+
+					if (pvp.getKit() != Kits.NENHUM) {
+						p.sendMessage("§e§lKIT §fVocê já está §a§lUTILIZANDO§f um kit!");
+						return;
+					}
+					for (Kits kits : Kits.values()) {
+						if (kits.getMaterial() == e.getCurrentItem().getType()) {
+
+							pvp.setKit(kits);
+							p.closeInventory();
+							p.sendMessage("§e§lKIT §fVocê selecionou o kit §b§l" + kits.getName() + "§f!");
+						}
+					}
+				}
+
+			} else if (e.getInventory().getName().equalsIgnoreCase("§aSeletor de Kits 1 §7(3/3)")) {
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§7Página anterior")) {
+					new Selector(p, 2, 1);
+					return;
+				}
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§aPróxima página")) {
+					return;
+				}
+				if (e.getCurrentItem().getType() != Material.AIR) {
+
+					if (pvp.getKit() != Kits.NENHUM) {
+						p.sendMessage("§e§lKIT §fVocê já está §a§lUTILIZANDO§f um kit!");
+						return;
+					}
+					for (Kits kits : Kits.values()) {
+						if (kits.getMaterial() == e.getCurrentItem().getType()) {
+
+							pvp.setKit(kits);
+							p.closeInventory();
+							p.sendMessage("§e§lKIT §fVocê selecionou o kit §b§l" + kits.getName() + "§f!");
+
+						}
+					}
+				}
+
+			} else if (e.getInventory().getName().equalsIgnoreCase("§aSeletor de Kits 2 §7(1/3)")) {
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§7Página anterior")) {
+					return;
+				}
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§aPróxima página")) {
+					p.closeInventory();
+					new Selector(p, 2, 1);
+					return;
+				}
+				if (e.getCurrentItem().getType() != Material.AIR) {
+
+					if (pvp.getKit2() != Kits.NENHUM) {
+						p.sendMessage("§e§lKIT §fVocê já está §a§lUTILIZANDO§f um kit!");
+						return;
+					}
+					for (Kits kits : Kits.values()) {
+						if (kits.getMaterial() == e.getCurrentItem().getType()) {
+							pvp.setKit2(kits);
+							p.closeInventory();
+							p.sendMessage("§e§lKIT §fVocê selecionou o kit §b§l" + kits.getName() + "§f!");
+						}
+					}
+				}
+			} else if (e.getInventory().getName().equalsIgnoreCase("§aSeletor de Kits 2 §7(2/3)")) {
+
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§7Página anterior")) {
+					new Selector(p, 1, 1);
+					return;
+				}
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§aPróxima página")) {
+					p.closeInventory();
+					new Selector(p, 3, 1);
+					return;
+				}
+				if (e.getCurrentItem().getType() != Material.AIR) {
+
+					if (pvp.getKit2() != Kits.NENHUM) {
+						p.sendMessage("§e§lKIT §fVocê já está §a§lUTILIZANDO§f um kit!");
+						return;
+					}
+					for (Kits kits : Kits.values()) {
+
+						if (kits.getMaterial() == e.getCurrentItem().getType()) {
+							pvp.setKit2(kits);
+							p.closeInventory();
+							p.sendMessage("§e§lKIT §fVocê selecionou o kit §b§l" + kits.getName() + "§f!");
+						}
+					}
+				}
+
+			} else if (e.getInventory().getName().equalsIgnoreCase("§aSeletor de Kits 2 §7(3/3)")) {
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§7Página anterior")) {
+					new Selector(p, 2, 1);
+					return;
+				}
+				if (e.getCurrentItem().getItemMeta().getDisplayName().equalsIgnoreCase("§aPróxima página")) {
+					return;
+				}
+				if (e.getCurrentItem().getType() != Material.AIR) {
+
+					if (pvp.getKit2() != Kits.NENHUM) {
+						p.sendMessage("§e§lKIT §fVocê já está §a§lUTILIZANDO§f um kit!");
+						return;
+					}
+					for (Kits kits : Kits.values()) {
+						if (kits.getMaterial() == e.getCurrentItem().getType()) {
+
+								pvp.setKit2(kits);
+								p.closeInventory();
+								p.sendMessage("§e§lKIT §fVocê selecionou o kit §b§l" + kits.getName() + "§f!");
+							
+						}
+					}
+				}
+
 			}
-		} else if (e.getInventory().getName().equalsIgnoreCase("§eWarps")) {
+
+		} else if (e.getInventory().getName().equalsIgnoreCase("§aWarps")) {
 			e.setCancelled(true);
 			if (e.getCurrentItem().getType() == Material.CHEST) {
 				p.closeInventory();
-				new Selector(p, 1);
+				new Selector(p, 1, 1);
 			}
 			for (br.com.hevermc.pvp.enums.Warps warps : br.com.hevermc.pvp.enums.Warps.values()) {
 				if (warps.getMaterial() == e.getCurrentItem().getType() && warps.getMaterial() != Material.AIR) {
@@ -623,6 +743,7 @@ public class GeneralListener implements Listener {
 						return;
 					}
 					pvp.setKit(Kits.NENHUM);
+					pvp.setKit2(Kits.NENHUM);
 
 					if (KitPvP.getManager().inEvent.contains(p)) {
 						KitPvP.getManager().inEvent.remove(p);
@@ -634,12 +755,13 @@ public class GeneralListener implements Listener {
 					if (warps == br.com.hevermc.pvp.enums.Warps.EVENTO) {
 
 						if (KitPvP.getManager().startedEvent == false && KitPvP.getManager().eventOcurring == false) {
-							p.sendMessage("§cNão há nenhum evento ativo no momento");
+							p.sendMessage("§3§lWARPS §fNão há §c§lNENHUM §fevento ativo no momento!");
 							return;
 						} else {
 							if (KitPvP.getManager().joinInEvent == false) {
 								p.teleport(new WarpsAPI(br.com.hevermc.pvp.enums.Warps.SPECEVENTO).getLocation());
-								p.sendMessage("§eO evento já §ainiciou§e, você está na sala de espectadores!");
+								p.sendMessage(
+										"§3§lWARPS §fO evento já §a§lINICIOU§f, você está na sala de espectadores!");
 								pvp.setWarp(br.com.hevermc.pvp.enums.Warps.SPECEVENTO);
 								p.getInventory().clear();
 								new ScoreboardManager().build(p);
@@ -647,12 +769,13 @@ public class GeneralListener implements Listener {
 								pvp.setCombat(false);
 								pvp.setInCombat(null);
 								pvp.setKit(Kits.NENHUM);
+								pvp.setKit2(Kits.NENHUM);
 								pvp.setProtectArea(true);
 								KitPvP.getManager().specEvent.add(p);
 								new ScoreboardManager().build(p);
 							} else {
 								p.teleport(new WarpsAPI(br.com.hevermc.pvp.enums.Warps.EVENTO).getLocation());
-								p.sendMessage("§aVocê entrou na warp §eevento§a!");
+								p.sendMessage("§3§LWARPS §fVocê entrou na warp §e§lEVENTO§f!");
 								KitPvP.getManager().inEvent.add(p);
 								new ScoreboardManager().build(p);
 								KitPvP.getManager().killsInEvent.put(p, 0);
@@ -661,7 +784,8 @@ public class GeneralListener implements Listener {
 								p.setHealth(20);
 								pvp.setCombat(false);
 								pvp.setInCombat(null);
-								pvp.setKit(Kits.NENHUM);
+								pvp.setKit2(Kits.NENHUM);
+								pvp.setKit2(Kits.NENHUM);
 								pvp.setProtectArea(true);
 								pvp.setWarp(br.com.hevermc.pvp.enums.Warps.EVENTO);
 								new ScoreboardManager().build(p);
@@ -675,7 +799,8 @@ public class GeneralListener implements Listener {
 					p.teleport(new WarpsAPI(warps).getLocation());
 					pvp.setWarp(warps);
 					pvp.setProtectArea(true);
-					p.sendMessage("§eVocê está sendo teleportado até a warp §a" + warps.getName());
+					p.sendMessage(
+							"§3§lWARPS §fVocê está sendo §a§lTELEPORTADO §faté a warp §3" + warps.getName() + "§f!");
 					new ScoreboardManager().build(p);
 					if (warps == br.com.hevermc.pvp.enums.Warps.FPS) {
 						pvp.setKit(p, Kits.FPS);
@@ -907,7 +1032,8 @@ public class GeneralListener implements Listener {
 		if (ks == 5 || ks == 10 || ks == 20 || ks == 30 || ks == 40 || ks == 50 || ks == 60 || ks == 70 || ks == 80
 				|| ks == 90 || ks == 100) {
 			Bukkit.broadcastMessage("");
-			Bukkit.broadcastMessage("§aO jogador §e" + p.getName() + "§a atingiu um killstreak de §e" + ks + "§a!");
+			Bukkit.broadcastMessage(
+					"§3§lKILLSTREAK §fO jogador §b§l" + p.getName() + "§f atingiu um killstreak de §b§l" + ks + "§f!");
 			Bukkit.broadcastMessage("");
 		}
 	}

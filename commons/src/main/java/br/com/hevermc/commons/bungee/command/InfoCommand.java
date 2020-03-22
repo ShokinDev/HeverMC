@@ -36,7 +36,7 @@ public class InfoCommand extends HeverCommand {
 					else
 						a++;
 				}
-				sender.sendMessage(TextComponent.fromLegacyText("§aEstátisticas de jogadores no servidor: "));
+				sender.sendMessage(TextComponent.fromLegacyText("§3§lSTATUS §fEstátisticas de jogadores no servidor: "));
 				sender.sendMessage(TextComponent.fromLegacyText(""));
 				sender.sendMessage(TextComponent.fromLegacyText("§a1.8+ §7- " + a));
 				sender.sendMessage(TextComponent.fromLegacyText("§c1.7 §7- " + b));

@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public enum Groups {
 
-	MEMBRO("Membro", null), PRO("Pro", null), LEGEND("Legend", null), CRYSTAL("Crystal", null), BETA("Beta", null),
-	YEAR("2020", null), YOUTUBER("Youtuber", "Yt"), YOUTUBERPLUS("Ytplus", "Yt+"), DESIGNER("Designer", "Dzn"),
+	MEMBRO("Membro", null), PRO("Pro", null), NESTY("Nesty", null), GANSO("Ganso", null), BETA("Beta", null),
+	YOUTUBER("Youtuber", "Yt"), YOUTUBERPLUS("Ytplus", "Yt+"), DESIGNER("Designer", "Dzn"),
 	BUILDER("Builder", null), TRIAL("Trial", null), MOD("Mod", null), MODGC("ModGC", null), MODPLUS("Mod+", "ModPlus"),
 	GERENTE("Gerente", null), ADMIN("Admin", "adm"), DIRETOR("Diretor", null), DEV("Dev", "escravo"),
 	DONO("Dono", "owner");

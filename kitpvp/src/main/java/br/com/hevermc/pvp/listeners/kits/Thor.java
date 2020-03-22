@@ -33,11 +33,11 @@ public class Thor implements Listener{
 				return;
 			}
 			if (kit.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 			Calendar c = Calendar.getInstance();
-			c.add(Calendar.SECOND, 8);
+			c.add(Calendar.SECOND, 13);
 			kit.setCooldown(c.getTime());
 			HashSet<Byte> a = null;
 			Location thored = p.getTargetBlock(a, 15).getLocation();

@@ -25,7 +25,7 @@ public class TagCommand extends HeverCommand {
 			Player p = toPlayer(sender);
 			HeverPlayer hp = toHeverPlayer(p);
 			if (args.length == 0) {
-				TextComponent a = new TextComponent("§fSuas tags disponíveis são as seguintes: ");
+				TextComponent a = new TextComponent("§3§lTAGS §fSuas tags disponíveis são as seguintes: ");
 				a.setUnderlined(false);
 				for (Tags tags : Tags.values()) {
 					if (hp.groupIsLarger(tags.getGroup())) {
@@ -64,15 +64,16 @@ public class TagCommand extends HeverCommand {
 			} else {
 				Tags tag = Tags.getTags(Groups.getGroup(args[0]));
 				if (tag == null) {
-					p.sendMessage("§cEsta tag não existe!");
+					p.sendMessage("§3§lTAGS §fEsta tag §4§lNÃO §fexiste!");
 				} else if (tag.isExclusive()
 						&& !(hp.groupIsLarger(Groups.GERENTE) || hp.groupIsLarger(tag.getGroup()))) {
-					p.sendMessage("§cEsta tag é exclusiva!");
+					p.sendMessage("§3§lTAGS §fEsta tag é §c§lEXCLUSIVA§f!");
 				} else if (hp.getTag() == tag) {
-					p.sendMessage("§cVocê já está utilizando esta tag!");
+					p.sendMessage("§3§lTAGS §fVocê já está §a§lUTILIZANDO §festa tag!");
 				} else if (hasGroup(p, tag.getGroup(), true)) {
 					toHeverPlayer(p).setTag(tag);
-					p.sendMessage("§aVocê alterou sua tag para " + tag.getColor() + tag.getGroup().getName() + "§a!");
+					p.sendMessage("§3§lTAGS §fVocê §a§lALTEROU§F sua tag para " + tag.getColor()
+							+ tag.getGroup().getName() + "§a!");
 				}
 			}
 		}

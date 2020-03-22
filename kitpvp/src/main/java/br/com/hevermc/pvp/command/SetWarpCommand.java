@@ -25,9 +25,9 @@ public class SetWarpCommand extends HeverCommand {
 						|| args[0].equalsIgnoreCase("1v1pos2") || args[0].equalsIgnoreCase("specevento")
 						|| args[0].equalsIgnoreCase("evento")) {
 					new WarpsAPI(br.com.hevermc.pvp.enums.Warps.getWarps(args[0])).setLocation(p.getLocation());
-					p.sendMessage("§aVocê definiu uma warp!");
+					p.sendMessage("§3§lWARP §fVocê definiu a §3§lWARP§f: §3" + args[0].toUpperCase() + "§f!");
 				} else {
-					p.sendMessage("§cEsta warp não existe!");
+					p.sendMessage("§3§lWARP §fEsta warp §4§lNÃO§f existe!");
 				}
 			}
 

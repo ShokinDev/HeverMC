@@ -40,8 +40,8 @@ public class Switcher implements Listener {
 					Calendar c = Calendar.getInstance();
 					c.add(Calendar.SECOND, 8);
 					kit_api.setCooldown(new Date(c.getTimeInMillis()));
-					p.sendMessage("§aVocê trocou de lugar com §e" + shooter.getName() + "§a!");
-					shooter.sendMessage("§aVocê trocou de lugar com §e" + p.getName() + "§a!");
+					p.sendMessage("§e§lKIT §fVocê §e§lTROCOU §fde lugar com §e" + shooter.getName() + "§a!");
+					shooter.sendMessage("§e§lKIT §fVocê §e§lTROCOU §fde lugar com §e" + p.getName() + "§a!");
 				}
 			}
 		}
@@ -59,29 +59,12 @@ public class Switcher implements Listener {
 			if (kit_api.verifyCooldown() == true) {
 				e.setCancelled(true);
 				p.updateInventory();
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 			} else {
 				p.getInventory().addItem(new ItemConstructor(new ItemStack(Material.SNOW_BALL), "§eSwitcher §fitem").create());
 				p.updateInventory();
 			}
 			return;
-		}
-		
-		HeverKit kit = new HeverKit(Kits.COOKIEMONSTER);
-		kit.setPlayer(p);
-		if (kit.usingKit() && kit.isItem()) {
-
-			if (kit.verifyCooldown() == true) {
-				e.setCancelled(true);
-				p.updateInventory();
-				p.sendMessage("§cAguarde, você está em cooldown!");
-			} else {
-				Calendar c = Calendar.getInstance();
-				c.add(Calendar.SECOND, 20);
-				kit.setCooldown(new Date(c.getTimeInMillis()));
-				p.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 120, 1));
-				p.sendMessage("§aSeu cookie lhe deu força!");
-			}
 		}
 		
 	}

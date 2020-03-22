@@ -10,7 +10,7 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 public class LobbyCommand extends HeverCommand {
 
 	public LobbyCommand() {
-		super("lobby", "hub");
+		super("lobby", "l");
 	}
 
 	@Override
@@ -18,13 +18,17 @@ public class LobbyCommand extends HeverCommand {
 		if (sender instanceof ProxiedPlayer) {
 			ProxiedPlayer p = (ProxiedPlayer) sender;
 			if (!p.getServer().getInfo().getName().equals("login")) {
-				if (!p.getServer().getInfo().getName().equals("screenshare") && !requiredGroup(p, Groups.MODGC, false)) {
-					p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
+				if (!p.getServer().getInfo().getName().equals("screenshare")
+						&& !requiredGroup(p, Groups.MODGC, false)) {
+					p.sendMessage(TextComponent
+							.fromLegacyText("§b§lCONNECT §fVocê não pode §c§lUTILIZAR§f este comando aqui!"));
 
 				}
 				p.connect(Commons.getInstance().getProxy().getServerInfo("lobby"));
+				p.sendMessage(TextComponent.fromLegacyText("§b§lCONNECT §fVocê está sendo conectado ao §b§lLOBBY§f!"));
 			} else {
-				p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode executar esta ação neste servidor!"));
+				p.sendMessage(
+						TextComponent.fromLegacyText("§b§lCONNECT §fVocê não pode §c§lUTILIZAR§f este comando aqui!"));
 			}
 		}
 	}

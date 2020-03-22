@@ -6,7 +6,7 @@ import br.com.hevermc.pvp.KitPvP;
 
 public class EventoTimer {
 
-	static int timer = 0;
+	public static int timer = 0;
 
 	public static int getTime() {
 		return timer;

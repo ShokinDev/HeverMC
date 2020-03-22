@@ -36,21 +36,23 @@ public class HotPotato implements Listener {
 					return;
 				}
 				if (kit.verifyCooldown() == true) {
-					p.sendMessage("§cAguarde, você está em cooldown!");
+					p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				} else {
 					Calendar c = Calendar.getInstance();
 					c.add(Calendar.SECOND, 20);
 					kit.setCooldown(c.getTime());
 					cooldown2.add(k.getName());
-					p.sendMessage("§eVocê usou sua §abatata§e!");
-					k.sendMessage("§eVocê está com a §ctnt§e no seu inventario, §cexplodindo §eem §65§e segundos! (§6§lCLIQUE NELA COM O BOTÃO DIREITO§e)!");
-					k.getInventory().setHelmet(new ItemConstructor(new ItemStack(Material.TNT), "§cHotPotato").create());
+					p.sendMessage("§e§lKIT §fVocê §a§lUSOU§f sua batata!");
+
+					k.sendMessage("§e§lKIT §fHá uma §c§lTNT§f em sua cabeça!");
+					k.getInventory()
+							.setHelmet(new ItemConstructor(new ItemStack(Material.TNT), "§cHotPotato").create());
 					new BukkitRunnable() {
 
 						@Override
 						public void run() {
 							if (cooldown2.contains(k.getName())) {
-								k.sendMessage("§eVocê está com a §ctnt§e no seu inventario, §cexplodindo §eem §65§e segundos! (§6§lCLIQUE NELA COM O BOTÃO DIREITO§e)!");
+								k.sendMessage("§cTNT explodindo em 5 segundos!");
 							}
 
 						}
@@ -61,7 +63,8 @@ public class HotPotato implements Listener {
 						@Override
 						public void run() {
 							if (cooldown2.contains(k.getName())) {
-								k.sendMessage("§eVocê está com a §ctnt§e no seu inventario, §cexplodindo §eem §64§e segundos! (§6§lCLIQUE NELA COM O BOTÃO DIREITO§e)!");
+
+								k.sendMessage("§cTNT explodindo em 4 segundos!");
 							}
 
 						}
@@ -72,7 +75,8 @@ public class HotPotato implements Listener {
 						@Override
 						public void run() {
 							if (cooldown2.contains(k.getName())) {
-								k.sendMessage("§eVocê está com a §ctnt§e no seu inventario, §cexplodindo §eem §63§e segundos! (§6§lCLIQUE NELA COM O BOTÃO DIREITO§e)!");
+
+								k.sendMessage("§cTNT explodindo em 3 segundos!");
 							}
 
 						}
@@ -83,32 +87,32 @@ public class HotPotato implements Listener {
 						@Override
 						public void run() {
 							if (cooldown2.contains(k.getName())) {
-								k.sendMessage("§eVocê está com a §ctnt§e no seu inventario, §cexplodindo §eem §62§e segundos! (§6§lCLIQUE NELA COM O BOTÃO DIREITO§e)!");
+								k.sendMessage("§cTNT explodindo em 2 segundos!");
 							}
 
 						}
 					}.runTaskLater(KitPvP.getInstance(), 80L);
-					
+
 					new BukkitRunnable() {
 
 						@Override
 						public void run() {
 							if (cooldown2.contains(k.getName())) {
-								k.sendMessage("§eVocê está com a §ctnt§e no seu inventario, §cexplodindo §eem §61§e segundos! (§6§lCLIQUE NELA COM O BOTÃO DIREITO§e)!");
+								k.sendMessage("§cTNT explodindo em 1 segundo!");
 							}
 
 						}
 					}.runTaskLater(KitPvP.getInstance(), 100L);
-					
 
 					new BukkitRunnable() {
 						@Override
 						public void run() {
-							if (cooldown2.contains(k.getName()) && !new PlayerLoader(p).load().getPvPP().isProtectArea()) {
+							if (cooldown2.contains(k.getName())
+									&& !new PlayerLoader(p).load().getPvPP().isProtectArea()) {
 								k.getWorld().createExplosion(k.getLocation(), 3.0F, true);
 								k.getWorld().playEffect(k.getLocation(), Effect.EXPLOSION_HUGE, 20);
 								k.getWorld().playEffect(k.getLocation(), Effect.EXPLOSION_LARGE, 20, 20);
-								k.sendMessage("§eA §abatata§e explodiu!");
+								k.sendMessage("§e§lKIT §fA sua §4§lTNT §fda sua cabeça §c§lEXPLODIU§f!");
 								k.getInventory().setHelmet(null);
 								k.setLastDamage(9999.0D);
 								cooldown2.remove(k.getName());
@@ -129,7 +133,6 @@ public class HotPotato implements Listener {
 				if (cooldown2.contains(p.getName())) {
 					cooldown2.remove(p.getName());
 					p.playSound(p.getLocation(), Sound.FIRE_IGNITE, 2.0F, 2.0F);
-					p.sendMessage("§eVocê §cremoveu§e a §abatata§e!");
 					p.getInventory().setHelmet(null);
 					e.setCancelled(true);
 				}

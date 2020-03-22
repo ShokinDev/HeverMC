@@ -52,7 +52,7 @@ public class GeneralListeners implements Listener {
 			if (api.getPlayerVersion(e.getEntity().getKiller()) >= 47) {
 				PlayerLoader.getHP(e.getEntity().getKiller().getName())
 						.setCash(PlayerLoader.getHP(e.getEntity().getKiller().getName()).getCash() + 10);
-				e.getEntity().getKiller().sendMessage("§eVocê ganhou §310 cash's §epor jogar na §21.8+§e!");
+				e.getEntity().getKiller().sendMessage("§4§lKILL §fVocê ganhou §3§l10 cash's §fpor jogar na §21.8+§f!");
 			}
 		}
 	}
@@ -71,7 +71,7 @@ public class GeneralListeners implements Listener {
 			String cmd = e.getMessage().split(" ")[0];
 			HelpTopic topic = Bukkit.getServer().getHelpMap().getHelpTopic(cmd);
 			if (topic == null) {
-				player.sendMessage("§cEste comando não existe.");
+				player.sendMessage("§4§lERRO §fEste §4§LCOMANDO §fnão existe!");
 				e.setCancelled(true);
 			}
 		}
@@ -92,7 +92,7 @@ public class GeneralListeners implements Listener {
 							+ e.getMessage().replace("&", "§")));
 		} else {
 			if (!hp.groupIsLarger(Groups.TRIAL)) {
-				p.sendMessage("§cO chat está desabilitado!");
+				p.sendMessage("§6§lCHAT §fO chat está §c§lDESABILITADO§f!");
 			} else {
 				Bukkit.broadcastMessage((hp.getTag() == Tags.MEMBRO
 						? hp.getTag().getColor() + p.getName() + " §7[" + hp.getRank().getColor()

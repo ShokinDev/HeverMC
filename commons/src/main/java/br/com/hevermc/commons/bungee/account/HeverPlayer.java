@@ -454,7 +454,7 @@ public class HeverPlayer {
 			hg_wins = 0;
 
 		} catch (Exception e) {
-			Commons.getManager().log("N�o foi possivel atualizar a conta de " + this.name);
+			Commons.getManager().log("§4Não foi possivel atualizar a conta de " + this.name);
 		}
 	}
 

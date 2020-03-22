@@ -24,7 +24,7 @@ public class Reaper implements Listener {
 			Player p = e.getPlayer();
 			kit_api.setPlayer(p);
 			if (kit_api.verifyCooldown() == true) 
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 	
 			if (kit_api.usingKit() && kit_api.isItem() && kit_api.verifyCooldown() == false) {
 				d.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 80, 1));

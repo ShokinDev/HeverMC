@@ -54,13 +54,13 @@ public class PacketReader {
 			if (!buff.contains(player)) {
 				HeverPlayer hp = PlayerLoader.getHP(player);
 				if (Lobby.getManager().npc.get(player) == id) {
-					player.sendMessage("§aVocê está sendo conectado ao §eKitPvP§a!");
+					player.sendMessage("§b§lCONNECT §fVocê está sendo conectado ao §b§lKITPVP§f!");
 					Commons.getManager().getBungeeChannel().connect(player, "kitpvp");
 					buff.add(player);
 				}
 				if (Lobby.getManager().npc2.get(player) == id) {
 					if (hp.groupIsLarger(Groups.ADMIN)) {
-						player.sendMessage("§aVocê está sendo conectado ao §eHardCoreGames§a!");
+						player.sendMessage("§b§lCONNECT §fVocê está sendo conectado ao §b§lHG§f!");
 						Commons.getManager().getBungeeChannel().connect(player, "hg-1");
 					} else {
 						player.sendMessage("§aServidor em desenvolvimento!");
@@ -69,7 +69,7 @@ public class PacketReader {
 				}
 				if (Lobby.getManager().npc3.get(player) == id) {
 					if (hp.groupIsLarger(Groups.ADMIN)) {
-						player.sendMessage("§aVocê está sendo conectado ao §eGladiator§a!");
+						player.sendMessage("§b§lCONNECT §fVocê está sendo conectado ao §b§lGLADIATOR§f!");
 						Commons.getManager().getBungeeChannel().connect(player, "gladiator");
 					} else {
 						player.sendMessage("§aServidor em desenvolvimento!");

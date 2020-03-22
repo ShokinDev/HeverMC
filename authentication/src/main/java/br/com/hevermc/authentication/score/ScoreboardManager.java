@@ -14,8 +14,8 @@ public class ScoreboardManager {
 	int i = 0;
 
 	public String effect() {
-		String cor1 = "§6§l";
-		String cor2 = "§e§l";
+		String cor1 = "§2§l";
+		String cor2 = "§a§l";
 		String cor3 = "§f§l";
 		if (i == 0) {
 			i++;
@@ -78,17 +78,17 @@ public class ScoreboardManager {
 		Objective obj = score.registerNewObjective("lobby", "score");
 
 		obj.setDisplaySlot(DisplaySlot.SIDEBAR);
-		obj.setDisplayName("§6§lHEVER§f§lMC");
+		obj.setDisplayName("§a§lNESTY§f§lMC");
 		LineAdder add = new LineAdder(score, obj);
 
-		add.addLine("  ", "§f              ", " ", 6);
-		add.addLine("  ", " §fVocê está no servidor  ", " ", 5);
-		add.addLine("  ", " §fde autenticação, para  ", " ", 4);
-		add.addLine("  ", " §fprosseguir ao §alobby  ", " ", 3);
-		add.addLine("  ", " §fsiga os passos descritos ", " ", 2);
-		add.addLine("  ", " §fem seu chat! ", " ", 1);
-		add.addLine("  ", "§a  ", " ", 0);
-		add.addLine("§awww.", "hevermc", ".com.br ", -1);
+		add.addLine("  ", "§f              ", " ", 7);
+		add.addLine("  ", " §fVocê está no servidor  ", " ", 6);
+		add.addLine("  ", " §fde autenticação, para  ", " ", 5);
+		add.addLine("  ", " §fprosseguir ao §alobby  ", " ", 4);
+		add.addLine("  ", " §fsiga os passos descritos ", " ", 3);
+		add.addLine("  ", " §fem seu chat! ", " ", 2);
+		add.addLine("  ", "§a  ", " ", 1);
+		add.addLine("§awww.", "nestymc", ".com.br", 0);
 
 		p.setScoreboard(score);
 

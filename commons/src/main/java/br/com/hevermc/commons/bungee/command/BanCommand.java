@@ -30,7 +30,8 @@ public class BanCommand extends HeverCommand implements TabExecutor {
 			ProxiedPlayer p = toPlayer(sender);
 			if (requiredGroup(p, Groups.TRIAL, true)) {
 				if (args.length < 2) {
-					p.sendMessage(TextComponent.fromLegacyText("§aVocê deve usar §e/ban <nickname> <reason>"));
+					p.sendMessage(
+							TextComponent.fromLegacyText("§4§lBAN §fVocê deve utilizar §b/ban <nickname> <reason>"));
 				} else {
 					String target = args[0];
 					HeverPlayer hp = toHeverPlayer(p);
@@ -43,17 +44,18 @@ public class BanCommand extends HeverCommand implements TabExecutor {
 					HeverPlayer targethp = PlayerLoader.getHP(target);
 					if (targetp != null) {
 						if (targethp.getGroup().ordinal() > hp.getGroup().ordinal()) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode banir este jogador!"));
+							p.sendMessage(
+									TextComponent.fromLegacyText("§4§lBAN §fVocê não pode §4§lBANIR§f este jogador!"));
 						} else if (target.toLowerCase().equals(p.getName().toLowerCase())) {
-							p.sendMessage(TextComponent.fromLegacyText("§cVocê não pode se auto-banir!"));
+							p.sendMessage(TextComponent.fromLegacyText("§4§lBAN §fVocê não pode se §4§lAUTO-BANIR§f!"));
 						} else if (targethp.isBanned()) {
-							p.sendMessage(TextComponent.fromLegacyText("§cEsse jogador já está banido!"));
+							p.sendMessage(TextComponent.fromLegacyText("§4§lBAN §fEsse jogador já está §4§lBANIDO§f!"));
 						} else {
-							
+
 							targetp.disconnect(TextComponent
 									.fromLegacyText("§4§lBANIDO\n\n§fVocê foi banido permanentemente!\n\n§fMotivo: §c"
 											+ reason + "\n§fPor: " + p.getName()
-											+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ediscord.hevermc.com.br"));
+											+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ehttps://discord.gg/VgbDwqS"));
 
 							targethp.ban(reason, p.getName(), 0l);
 
@@ -61,14 +63,14 @@ public class BanCommand extends HeverCommand implements TabExecutor {
 								HeverPlayer t = PlayerLoader.getHP(players.getName());
 								if (!t.groupIsLarger(Groups.MODPLUS)) {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + targetp.getName() + " foi banido]");
+											"§7§o[O jogador " + targetp.getName() + " foi banido]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 											new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
 													+ reason + "\n§fDuração: §4permanentemente").create()));
 									players.sendMessage(msg_a);
 								} else {
 									TextComponent msg_a = new TextComponent(
-											"§c[O jogador " + targetp.getName() + " foi banido]");
+											"§7§o[O jogador " + targetp.getName() + " foi banido]");
 									msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 											new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: "
 													+ reason + "\n§fPor: " + p.getName()
@@ -77,7 +79,7 @@ public class BanCommand extends HeverCommand implements TabExecutor {
 								}
 							});
 							p.sendMessage(TextComponent
-									.fromLegacyText("§aVocê baniu §e" + targetp.getName() + "§a com sucesso!"));
+									.fromLegacyText("§4§lBAN §fVocê baniu §c" + targetp.getName() + "§f com sucesso!"));
 						}
 
 					} else {
@@ -87,13 +89,13 @@ public class BanCommand extends HeverCommand implements TabExecutor {
 						Commons.getInstance().getProxy().getPlayers().forEach(players -> {
 							HeverPlayer t = PlayerLoader.getHP(players.getName());
 							if (!t.groupIsLarger(Groups.TRIAL)) {
-								TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi banido]");
+								TextComponent msg_a = new TextComponent("§7§o[O jogador " + target + " foi banido]");
 								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 										new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: " + reason
 												+ "\n§fDuração: §4permanentemente").create()));
 								players.sendMessage(msg_a);
 							} else {
-								TextComponent msg_a = new TextComponent("§c[O jogador " + target + " foi banido]");
+								TextComponent msg_a = new TextComponent("§7§o[O jogador " + target + " foi banido]");
 								msg_a.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 										new ComponentBuilder("§cInformações sobre este banimento:\n§fMotivo: " + reason
 												+ "\n§fPor: " + p.getName() + "\n§fDuração: §4permanentemente")
@@ -101,7 +103,8 @@ public class BanCommand extends HeverCommand implements TabExecutor {
 								players.sendMessage(msg_a);
 							}
 						});
-						p.sendMessage(TextComponent.fromLegacyText("§aVocê baniu §e" + target + "§a com sucesso!"));
+						p.sendMessage(
+								TextComponent.fromLegacyText("§4§lBAN §fVocê baniu §c" + target + "§f com sucesso!"));
 
 					}
 				}
@@ -129,7 +132,7 @@ public class BanCommand extends HeverCommand implements TabExecutor {
 						targetp.disconnect(TextComponent
 								.fromLegacyText("§4§lBANIDO\n\n§fVocê foi banido permanentemente!\n\n§fMotivo: §c"
 										+ reason + "\n§fPor: " + sender.getName()
-										+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ediscord.hevermc.com.br"));
+										+ "\n\n§fAchou sua punição injusta? Contate-nós via §3§lDISCORD§f!\n§ehttps://discord.gg/VgbDwqS"));
 
 						targethp.ban(reason, sender.getName(), 0l);
 

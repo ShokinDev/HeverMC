@@ -21,7 +21,7 @@ public class WarpCommand extends HeverCommand {
 				new br.com.hevermc.pvp.gui.Warps(p);
 			} else {
 				p.setAllowFlight(false);
-				p.sendMessage("§cVocê está em combate!");
+				p.sendMessage("§4§lCOMBATLOG §cVocê está em combate!");
 			}
 		}
 		return false;

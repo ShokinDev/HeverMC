@@ -40,7 +40,7 @@ public class C4 implements Listener {
 				return;
 			}
 			if (kit_api.verifyCooldown() == true) {
-				p.sendMessage("§cAguarde, você está em cooldown!");
+				p.sendMessage("§e§lKIT §fAguarde, você está em §4§lCOOLDOWN§f!");
 				return;
 			}
 			Item C4bomb = p.getWorld().dropItem(p.getEyeLocation(), new ItemStack(Material.TNT));
@@ -58,9 +58,9 @@ public class C4 implements Listener {
 			p.getWorld().playEffect(C4bomb.getLocation(), Effect.EXPLOSION_LARGE, 20, 20);
 			inbomb.remove(p);
 			C4bomb.remove();
-			p.sendMessage("§cSua c4 foi desarmada!");
+			p.sendMessage("§e§lKIT §fSua §c§lC4§f foi §4§lDESARMADA§f, e §c§lEXPLODIU§f!");
 		} else {
-			p.sendMessage("§cVocê deve armar a c4 primeiro!");
+			p.sendMessage("§e§lKIT §fVocê deve armar sua §c§lC4§f primeiro!");
 		}
 	}
 

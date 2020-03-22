@@ -75,7 +75,7 @@ public class GeneralEvents implements Listener {
 						br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(name).setAccountType(1);
 						br.com.hevermc.commons.bukkit.account.loader.PlayerLoader.getHP(name).forceUpdate();
 						Bukkit.getPlayer(name).kickPlayer(
-								"§6§lHEVER§f§lMC\n§f\n§fSua conta foi registrada como §aoriginal§,\n§fpor favor, relogue.\n§f\n§ahevermc.com.br");
+								"§a§lNESTY§f§lMC\n§f\n§fSua conta foi registrada como §a§lORIGINAL§f,\n§fpor favor, relogue.\n§f\n§asite.nestymc..com.br");
 					}
 				}
 			} else {
@@ -98,8 +98,8 @@ public class GeneralEvents implements Listener {
 	public void onJoin(PlayerJoinEvent e) {
 		e.setJoinMessage(null);
 		final Player p = e.getPlayer();
-		ReflectionAPI.tab(p, "\n§6§lHEVER§f§lMC\n",
-				"\n§fTwitter: §e@_HeverMC\n§fSite: §ehevermc.com.br\n§fLoja: §eloja.hevermc.com.br\n§fDiscord: §ediscord.hevermc.com.br\n");
+		ReflectionAPI.tab(p, "\n§a§lNESTY§f§lMC\n",
+				"\n§fTwitter: §a@NestyNetwork\n§fSite: §asite.nestymc.com.br\n§fLoja: §aloja.nestymc.com.br\n§fDiscord: §ahttps://discord.gg/CqqTRv6\n");
 		setAccountType(p.getName());
 		final LoginPlayer lp = new PlayerLoader(p).load().lp();
 		for (int i = 0; i < 100; i++)
@@ -108,7 +108,8 @@ public class GeneralEvents implements Listener {
 		if (type.get(p.getName()) == 1) {
 			lp.setCaptcha(true);
 			lp.setLogged(true);
-			p.sendMessage("§aVocê foi autenticado como jogador original, portanto não foi necessário fazer login!");
+			p.sendMessage(
+					"§e§lLOGIN §fVocê foi autenticado como jogador §a§lORIGINAL§f, portanto não foi necessário fazer login!");
 			new BukkitRunnable() {
 
 				@Override
@@ -117,7 +118,7 @@ public class GeneralEvents implements Listener {
 						cancel();
 						return;
 					}
-					p.sendMessage("§aVocê está sendo conectado ao §blobby§a!");
+					p.sendMessage("§b§lCONNECT §fVocê está sendo conectado ao §b§lLOBBY§f!");
 					new BungeeChannelApi(Authentication.getInstance()).connect(p, "lobby");
 				}
 			}.runTaskTimer(Authentication.getInstance(), 0, 35L);
@@ -129,8 +130,8 @@ public class GeneralEvents implements Listener {
 		p.setGameMode(GameMode.SURVIVAL);
 		p.setMaxHealth(4);
 		p.setFoodLevel(20);
-		BarUtil.setBar(p, (lp.isRegistred() ? "§a§l§k!!!§f§l USE: §e§l/LOGIN <SENHA> §A§L§K!!!"
-				: "§a§l§k!!!§f§l USE: §e§l/REGISTER <SENHA> <SENHA> §A§L§K!!!"), 100);
+		BarUtil.setBar(p, (lp.isRegistred() ? "§a§l§k!!!§f§l USE: §3§l/LOGIN <SENHA> §A§L§K!!!"
+				: "§a§l§k!!!§f§l USE: §3§l/REGISTER <SENHA> <SENHA> §A§L§K!!!"), 100);
 		for (Entity entitys : p.getWorld().getEntities()) {
 			if (!(entitys instanceof Player)) {
 				entitys.remove();
@@ -148,14 +149,14 @@ public class GeneralEvents implements Listener {
 
 			public void run() {
 				if (!lp.isCaptcha()) {
-					p.kickPlayer("§cVocê demorou de mais para efetuar o captcha!");
+					p.kickPlayer("§4§lKICK\n§f\n§fVocê §4§lDEMOROU §fde mais para efetuar o captcha!");
 				} else {
 					new BukkitRunnable() {
 
 						@Override
 						public void run() {
 							if (!lp.isLogged())
-								p.kickPlayer("§cVocê demorou de mais para logar!");
+								p.kickPlayer("§4§lKICK\n§f\n§fVocê §4§lDEMOROU §fde mais para efetuar o login!");
 
 						}
 					}.runTaskLater(Authentication.getInstance(), 250L);
@@ -176,7 +177,7 @@ public class GeneralEvents implements Listener {
 		Player p = (Player) e.getPlayer();
 		LoginPlayer lp = new PlayerLoader(p).load().lp();
 		lp.getName();
-		if (e.getInventory().getTitle().equals("§eClique no §bBloco de Diamante") && !lp.isCaptcha()) {
+		if (e.getInventory().getTitle().equals("§eClique no §2Bloco Verde") && !lp.isCaptcha()) {
 			new BukkitRunnable() {
 
 				@Override
@@ -198,30 +199,32 @@ public class GeneralEvents implements Listener {
 		final LoginPlayer lp = new PlayerLoader(p).load().lp();
 		String title = e.getInventory().getTitle();
 		ItemStack clicked = e.getCurrentItem();
-		if (title.startsWith("§eClique no §bBloco de Diamante")) {
-			if (clicked.getType() == Material.DIAMOND_BLOCK) {
-				lp.setCaptcha(true);
-				p.closeInventory();
-				p.sendMessage("§aVocê acertou o captcha!");
+		if (title.startsWith("§eClique no §bBloco Verde")) {
+			if (clicked.getType() == Material.WOOL) {
+				if (clicked.getItemMeta().getDisplayName().equalsIgnoreCase("§aClique aqui!")) {
+					lp.setCaptcha(true);
+					p.closeInventory();
+					p.sendMessage("§e§lLOGIN §fVocê §a§lACERTOU§f o captcha!");
 
-				new BukkitRunnable() {
+					new BukkitRunnable() {
 
-					public void run() {
-						if (!lp.isLogged()) {
-							if (lp.isRegistred()) {
-								p.sendMessage("§eVocê deve se autenticar, use §b/login <senha>");
+						public void run() {
+							if (!lp.isLogged()) {
+								if (lp.isRegistred()) {
+									p.sendMessage("§e§lLOGIN §fVocê deve se §3§lAUTENTICAR§f, use §b/login <senha>");
+								} else {
+									p.sendMessage(
+											"§e§lLOGIN §FVocê deve se §c§lREGISTRAR§f, use §b/register <senha> <confirme sua senha> <pin de segurança>");
+								}
 							} else {
-								p.sendMessage(
-										"§eVocê deve se registrar, use §b/register <senha> <confirme sua senha> <pin de segurança>");
+								cancel();
 							}
-						} else {
-							cancel();
 						}
-					}
-				}.runTaskTimer(Authentication.getInstance(), 0, 30L);
+					}.runTaskTimer(Authentication.getInstance(), 0, 30L);
 
-			} else {
-				p.kickPlayer("§cVocê errou o captcha!");
+				} else {
+					p.kickPlayer("§e§lLOGIN §fVocê §4§lERROU §fo captcha!");
+				}
 			}
 		}
 	}
